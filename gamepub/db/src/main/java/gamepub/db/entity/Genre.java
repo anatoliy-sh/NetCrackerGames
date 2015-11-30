@@ -1,17 +1,17 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
-
-public class Country {
+public class Genre {
     int id;
     String name;
-    List<City> cities;
 
-    public Country() {
+    List<GameGenre> gameGenres;
+
+    public Genre() {
     }
 
     public int getId() {
@@ -30,22 +30,22 @@ public class Country {
         this.name = name;
     }
 
-    public List<City> getCities() {
-        return cities;
+    public List<GameGenre> getGameGenres() {
+        return gameGenres;
     }
 
-    public void setCities(List<City> cities) {
-        this.cities = cities;
+    public void setGameGenres(List<GameGenre> gameGenres) {
+        this.gameGenres = gameGenres;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Country)) return false;
+        if (!(o instanceof Genre)) return false;
 
-        Country country = (Country) o;
+        Genre genre = (Genre) o;
 
-        return id == country.id;
+        return id == genre.id;
 
     }
 
@@ -56,7 +56,7 @@ public class Country {
 
     @Override
     public String toString() {
-        return "Country{" +
+        return "Genre{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 '}';

@@ -1,4 +1,4 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 import java.util.Date;
 

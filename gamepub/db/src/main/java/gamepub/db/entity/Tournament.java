@@ -1,17 +1,15 @@
-package gamepub.db;
-
-import java.util.List;
+package gamepub.db.entity;
 
 /**
  * Created by roman on 30.11.15.
  */
-public class Genre {
+public class Tournament {
     int id;
     String name;
+    String link;
+    Game game;
 
-    List<GameGenre> gameGenres;
-
-    public Genre() {
+    public Tournament() {
     }
 
     public int getId() {
@@ -30,22 +28,30 @@ public class Genre {
         this.name = name;
     }
 
-    public List<GameGenre> getGameGenres() {
-        return gameGenres;
+    public String getLink() {
+        return link;
     }
 
-    public void setGameGenres(List<GameGenre> gameGenres) {
-        this.gameGenres = gameGenres;
+    public void setLink(String link) {
+        this.link = link;
+    }
+
+    public Game getGame() {
+        return game;
+    }
+
+    public void setGame(Game game) {
+        this.game = game;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Genre)) return false;
+        if (!(o instanceof Tournament)) return false;
 
-        Genre genre = (Genre) o;
+        Tournament that = (Tournament) o;
 
-        return id == genre.id;
+        return id == that.id;
 
     }
 
@@ -56,9 +62,11 @@ public class Genre {
 
     @Override
     public String toString() {
-        return "Genre{" +
+        return "Tournament{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", link='" + link + '\'' +
+                ", game=" + game +
                 '}';
     }
 }

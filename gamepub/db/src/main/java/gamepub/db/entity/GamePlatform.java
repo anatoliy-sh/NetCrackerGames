@@ -1,14 +1,14 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 /**
  * Created by roman on 30.11.15.
  */
-public class GameGenre {
+public class GamePlatform {
     int id;
     Game game;
-    Genre genre;
+    Platform platform;
 
-    public GameGenre() {
+    public GamePlatform() {
     }
 
     public int getId() {
@@ -27,22 +27,22 @@ public class GameGenre {
         this.game = game;
     }
 
-    public Genre getGenre() {
-        return genre;
+    public Platform getPlatform() {
+        return platform;
     }
 
-    public void setGenre(Genre genre) {
-        this.genre = genre;
+    public void setPlatform(Platform platform) {
+        this.platform = platform;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof GameGenre)) return false;
+        if (!(o instanceof GamePlatform)) return false;
 
-        GameGenre gameGenre = (GameGenre) o;
+        GamePlatform that = (GamePlatform) o;
 
-        return id == gameGenre.id;
+        return id == that.id;
 
     }
 
@@ -53,10 +53,10 @@ public class GameGenre {
 
     @Override
     public String toString() {
-        return "GameGenre{" +
+        return "GamePlatform{" +
                 "id=" + id +
                 ", game=" + game +
-                ", genre=" + genre +
+                ", platform=" + platform +
                 '}';
     }
 }

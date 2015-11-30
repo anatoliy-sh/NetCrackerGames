@@ -1,6 +1,5 @@
-package gamepub.db;
+package gamepub.db.entity;
 
-import javax.management.ListenerNotFoundException;
 import java.util.List;
 
 /**

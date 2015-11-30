@@ -1,18 +1,15 @@
-package gamepub.db;
-
-import java.util.Date;
+package gamepub.db.entity;
 
 /**
  * Created by roman on 30.11.15.
  */
-public class Screenshot {
+public class Comment {
     int id;
-    String link;
-    Date date;
-
+    String text;
     User user;
+    News news;
 
-    public Screenshot() {
+    public Comment() {
     }
 
     public int getId() {
@@ -23,20 +20,12 @@ public class Screenshot {
         this.id = id;
     }
 
-    public String getLink() {
-        return link;
+    public String getText() {
+        return text;
     }
 
-    public void setLink(String link) {
-        this.link = link;
-    }
-
-    public Date getDate() {
-        return date;
-    }
-
-    public void setDate(Date date) {
-        this.date = date;
+    public void setText(String text) {
+        this.text = text;
     }
 
     public User getUser() {
@@ -47,14 +36,22 @@ public class Screenshot {
         this.user = user;
     }
 
+    public News getNews() {
+        return news;
+    }
+
+    public void setNews(News news) {
+        this.news = news;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Screenshot)) return false;
+        if (!(o instanceof Comment)) return false;
 
-        Screenshot that = (Screenshot) o;
+        Comment comment = (Comment) o;
 
-        return id == that.id;
+        return id == comment.id;
 
     }
 
@@ -65,11 +62,11 @@ public class Screenshot {
 
     @Override
     public String toString() {
-        return "Screenshot{" +
+        return "Comment{" +
                 "id=" + id +
-                ", link='" + link + '\'' +
-                ", date=" + date +
+                ", text='" + text + '\'' +
                 ", user=" + user +
+                ", news=" + news +
                 '}';
     }
 }

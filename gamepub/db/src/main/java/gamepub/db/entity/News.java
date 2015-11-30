@@ -1,27 +1,21 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
-public class Mark {
+public class News {
     int id;
-    int mark;
+    String name;
     Date date;
-    String review;
+    String link;
     Game game;
-    User user;
 
-    public Mark() {
-    }
+    List<Comment> comments;
 
-    public int getMark() {
-        return mark;
-    }
-
-    public void setMark(int mark) {
-        this.mark = mark;
+    public News() {
     }
 
     public int getId() {
@@ -32,6 +26,14 @@ public class Mark {
         this.id = id;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public Date getDate() {
         return date;
     }
@@ -40,12 +42,12 @@ public class Mark {
         this.date = date;
     }
 
-    public String getReview() {
-        return review;
+    public String getLink() {
+        return link;
     }
 
-    public void setReview(String review) {
-        this.review = review;
+    public void setLink(String link) {
+        this.link = link;
     }
 
     public Game getGame() {
@@ -56,22 +58,22 @@ public class Mark {
         this.game = game;
     }
 
-    public User getUser() {
-        return user;
+    public List<Comment> getComments() {
+        return comments;
     }
 
-    public void setUser(User user) {
-        this.user = user;
+    public void setComments(List<Comment> comments) {
+        this.comments = comments;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Mark)) return false;
+        if (!(o instanceof News)) return false;
 
-        Mark mark = (Mark) o;
+        News news = (News) o;
 
-        return id == mark.id;
+        return id == news.id;
 
     }
 
@@ -82,13 +84,12 @@ public class Mark {
 
     @Override
     public String toString() {
-        return "Mark{" +
+        return "News{" +
                 "id=" + id +
-                ", mark=" + mark +
+                ", name='" + name + '\'' +
                 ", date=" + date +
-                ", review='" + review + '\'' +
+                ", link='" + link + '\'' +
                 ", game=" + game +
-                ", user=" + user +
                 '}';
     }
 }

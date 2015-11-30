@@ -1,21 +1,27 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 import java.util.Date;
-import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
-public class News {
+public class Mark {
     int id;
-    String name;
+    int mark;
     Date date;
-    String link;
+    String review;
     Game game;
+    User user;
 
-    List<Comment> comments;
+    public Mark() {
+    }
 
-    public News() {
+    public int getMark() {
+        return mark;
+    }
+
+    public void setMark(int mark) {
+        this.mark = mark;
     }
 
     public int getId() {
@@ -26,14 +32,6 @@ public class News {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
     public Date getDate() {
         return date;
     }
@@ -42,12 +40,12 @@ public class News {
         this.date = date;
     }
 
-    public String getLink() {
-        return link;
+    public String getReview() {
+        return review;
     }
 
-    public void setLink(String link) {
-        this.link = link;
+    public void setReview(String review) {
+        this.review = review;
     }
 
     public Game getGame() {
@@ -58,22 +56,22 @@ public class News {
         this.game = game;
     }
 
-    public List<Comment> getComments() {
-        return comments;
+    public User getUser() {
+        return user;
     }
 
-    public void setComments(List<Comment> comments) {
-        this.comments = comments;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof News)) return false;
+        if (!(o instanceof Mark)) return false;
 
-        News news = (News) o;
+        Mark mark = (Mark) o;
 
-        return id == news.id;
+        return id == mark.id;
 
     }
 
@@ -84,12 +82,13 @@ public class News {
 
     @Override
     public String toString() {
-        return "News{" +
+        return "Mark{" +
                 "id=" + id +
-                ", name='" + name + '\'' +
+                ", mark=" + mark +
                 ", date=" + date +
-                ", link='" + link + '\'' +
+                ", review='" + review + '\'' +
                 ", game=" + game +
+                ", user=" + user +
                 '}';
     }
 }

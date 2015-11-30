@@ -1,4 +1,4 @@
-package gamepub.db;
+package gamepub.db.entity;
 
 /**
  * Created by roman on 30.11.15.
