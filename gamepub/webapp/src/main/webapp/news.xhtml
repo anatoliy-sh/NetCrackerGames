@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<h:body>
+    <div id="title" align="center">
+        <h2>#{newsBean.news.title}</h2>
+    </div>
+    <div align="center">
+        <div id="text" style="text-align: left; max-width: 500px">
+            #{newsBean.news.text}
+            #{newsBean.news.date}
+        </div>
+    </div>
+    <div align="center">
+        <div id="comments">
+            <p:dataList value="#{newsBean.news.comments}" var="comment">
+                <f:facet name="header">
+                    <h1 align="center">Comments</h1>
+                </f:facet>
+                #{comment.user.login}
+                #{comment.text}
+                #{comment.date}
+            </p:dataList>
+        </div>
+    </div>
+</h:body>
+</html>

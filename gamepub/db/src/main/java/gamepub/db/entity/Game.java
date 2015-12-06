@@ -1,21 +1,36 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "GAME")
 public class Game {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "NAME", nullable = false)
     String name;
+    @Column(name = "LINK_TO_STEAM", nullable = true)
     String linkToSteam;
+    @Column(name = "LINK_TO_PLAYSTATION_STORE", nullable = true)
     String linkToSonyPlaystationStore;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<GamePlatform> gamePlatforms;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<GameGenre> gameGenres;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<Tournament> tournaments;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<Mark> marks;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<UserGame> userGames;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<News> newses;
 
 

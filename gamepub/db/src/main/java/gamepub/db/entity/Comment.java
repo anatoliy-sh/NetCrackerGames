@@ -1,12 +1,28 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
+import java.util.Date;
+
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "COMMENT")
 public class Comment {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "TEXT", nullable = false)
     String text;
+    @Column(name = "DATE", nullable = false)
+    Date date;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false)
     User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "NEWS_ID", nullable = false)
     News news;
 
     public Comment() {
@@ -44,6 +60,14 @@ public class Comment {
         this.news = news;
     }
 
+    public Date getDate() {
+        return date;
+    }
+
+    public void setDate(Date date) {
+        this.date = date;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -67,6 +91,7 @@ public class Comment {
                 ", text='" + text + '\'' +
                 ", user=" + user +
                 ", news=" + news +
+                ", date=" + date +
                 '}';
     }
 }

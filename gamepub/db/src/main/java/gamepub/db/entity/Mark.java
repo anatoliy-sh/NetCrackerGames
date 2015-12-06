@@ -1,16 +1,30 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "MARK")
 public class Mark {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "MARK", nullable = false)
     int mark;
+    @Column(name = "DATE", nullable = false)
     Date date;
+    @Column(name = "REVIEW", nullable = true)
     String review;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GAME_ID", nullable = false)
     Game game;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false)
     User user;
 
     public Mark() {

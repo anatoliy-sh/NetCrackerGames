@@ -1,15 +1,32 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "USER_GAME")
 public class UserGame {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "FAVORITE", nullable = false)
     boolean favorite;
+    @Column(name = "WANTED", nullable = false)
     boolean wanted;
+    @Column(name = "CAN_EXCHANGE", nullable = false)
     boolean canExchange;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false)
     User user;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GAME_ID", nullable = false)
     Game game;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GAME_STATUS_ID", nullable = false)
     GameStatus gameStatus;
 
     public UserGame() {

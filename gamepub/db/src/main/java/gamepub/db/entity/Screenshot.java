@@ -1,15 +1,25 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "SCREENSHOT")
 public class Screenshot {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "LINK", nullable = false)
     String link;
+    @Column(name = "DATE", nullable = false)
     Date date;
 
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false)
     User user;
 
     public Screenshot() {

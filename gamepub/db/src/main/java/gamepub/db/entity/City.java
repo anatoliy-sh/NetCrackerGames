@@ -1,15 +1,26 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "CITY")
 public class City {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "NAME", nullable = false)
     String name;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "COUNTRY_ID", nullable = false)
     Country country;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "city")
     List<User> users;
 
     public City() {

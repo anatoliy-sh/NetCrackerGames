@@ -1,28 +1,55 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "USER")
 public class User {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "LOGIN", nullable = false)
     String login;
+    @Column(name = "PASSWORD", nullable = false)
     String password;
+    @Column(name = "EMAIL", nullable = false)
     String email;
+    @Column(name = "AVATAR_URL", nullable = false)
     String avatarUrl;
+    @Column(name = "VK_INFO", nullable = true)
     String vkInfo;
+    @Column(name = "STEAM_INFO", nullable = true)
     String steamInfo;
+    @Column(name = "FB_INFO", nullable = true)
     String fbInfo;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ROLE_ID", nullable = false)
     UserRole userRole;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "CITY_ID", nullable = false)
     City city;
 
-    List<PrivateMessage> privateMessages;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "sender")
+    List<PrivateMessage> sendedPrivateMessages;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "receiver")
+    List<PrivateMessage> receivedPrivateMessages;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subscribedTo")
     List<Friend> subscribers;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "subscriber")
     List<Friend> subscribeTo;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<Screenshot> screenshots;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<Mark> marks;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<UserGame> userGames;
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<Comment> comments;
 
     public User() {
@@ -108,12 +135,20 @@ public class User {
         this.city = city;
     }
 
-    public List<PrivateMessage> getPrivateMessages() {
-        return privateMessages;
+    public List<PrivateMessage> getSendedPrivateMessages() {
+        return sendedPrivateMessages;
     }
 
-    public void setPrivateMessages(List<PrivateMessage> privateMessages) {
-        this.privateMessages = privateMessages;
+    public void setSendedPrivateMessages(List<PrivateMessage> sendedPrivateMessages) {
+        this.sendedPrivateMessages = sendedPrivateMessages;
+    }
+
+    public List<PrivateMessage> getReceivedPrivateMessages() {
+        return receivedPrivateMessages;
+    }
+
+    public void setReceivedPrivateMessages(List<PrivateMessage> receivedPrivateMessages) {
+        this.receivedPrivateMessages = receivedPrivateMessages;
     }
 
     public List<Friend> getSubscribers() {

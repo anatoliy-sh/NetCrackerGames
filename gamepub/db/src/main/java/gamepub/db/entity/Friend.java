@@ -1,12 +1,24 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "FRIEND")
 public class Friend {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SUBSCRIBER_ID", nullable = false)
     User subscriber;
-    User subscribeTo;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "SUBSCRIBED_TO_ID", nullable = false)
+    User subscribedTo;
 
     public Friend() {
     }
@@ -27,12 +39,12 @@ public class Friend {
         this.subscriber = subscriber;
     }
 
-    public User getSubscribeTo() {
-        return subscribeTo;
+    public User getSubscribedTo() {
+        return subscribedTo;
     }
 
-    public void setSubscribeTo(User subscribeTo) {
-        this.subscribeTo = subscribeTo;
+    public void setSubscribedTo(User subscribedTo) {
+        this.subscribedTo = subscribedTo;
     }
 
     @Override
@@ -56,7 +68,7 @@ public class Friend {
         return "Friend{" +
                 "id=" + id +
                 ", subscriber=" + subscriber +
-                ", subscribeTo=" + subscribeTo +
+                ", subscribedTo=" + subscribedTo +
                 '}';
     }
 }

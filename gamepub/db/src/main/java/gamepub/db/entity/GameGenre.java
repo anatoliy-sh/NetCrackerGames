@@ -1,11 +1,22 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "GAME_GENRE")
 public class GameGenre {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GAME_ID", nullable = false)
     Game game;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GENRE_ID", nullable = false)
     Genre genre;
 
     public GameGenre() {

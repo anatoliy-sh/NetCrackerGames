@@ -1,12 +1,24 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
+
 /**
  * Created by roman on 30.11.15.
  */
+@Entity
+@Table(name = "TOURNAMENT")
 public class Tournament {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "NAME", nullable = false)
     String name;
+    @Column(name = "LINK", nullable = false)
     String link;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "GAME_ID", nullable = false)
     Game game;
 
     public Tournament() {

@@ -1,0 +1,23 @@
+package gamepub.db.dao;
+
+import gamepub.db.entity.User;
+
+import java.util.List;
+
+/**
+ * Created by roman on 05.12.15.
+ */
+public interface UserDao extends BaseDao<User, Integer> {
+    public User getUserById(Integer id);
+    public User getUserByLogin(String login);
+    public User getUserByLoginAndPassword(String login, String password);
+    public User getUserByEmail(String email);
+
+    public User getUserByVkInfo(String vkInfo);
+    public User getUserBySteamInfo(String steamInfo);
+    public User getUserByFbInfo(String fbInfo);
+
+    public List<User> getUsersByUserRoleId(Integer id);
+    public List<User> getUsersByCityId(Integer id);
+    public List<User> getUsersByCountryId(Integer id);
+}

@@ -1,14 +1,22 @@
 package gamepub.db.entity;
 
+import javax.persistence.*;
 import java.util.List;
 
 /**
  * Created by roman on 30.11.15.
  */
-
+@Entity
+@Table(name = "COUNTRY")
 public class Country {
+    @Id
+    @Column(name = "ID", nullable = false)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
+    @Column(name = "NAME", nullable = false)
     String name;
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "country")
     List<City> cities;
 
     public Country() {

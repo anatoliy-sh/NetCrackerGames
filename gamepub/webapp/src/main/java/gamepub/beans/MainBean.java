@@ -32,10 +32,14 @@ public class MainBean {
     //Метод используемый нами в качестве простейшей авторизации, проверяет имя и пароль пользователя и возвращает имя страницы на которую произойдет переход
     public String checkUser(){
         if(this.user.equals("user") && this.password.equals("123")){
-            return "success";
+            return "success?faces-redirect=true";
         }else{
-            return "loginfailed";
+            return "loginfailed?faces-redirect=true";
         }
+    }
+
+    public String goToNews() {
+        return "allNews?faces-redirect=true";
     }
 
 
