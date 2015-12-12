@@ -3,7 +3,10 @@ package gamepub.beans;
 import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.News;
+import gamepub.db.service.GameService;
+import gamepub.db.service.NewsService;
 
+import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.SessionScoped;
@@ -20,39 +23,13 @@ public class AllNewsBean {
 
     List<News> newses;
 
+    @EJB
+    NewsService newsService;
+
+    @EJB
+    GameService gameService;
     public List<News> getNewses() {
-        List<News> newses = new ArrayList<News>();
-        News news = new News();
-        news.setId(1);
-        news.setLink("qqqq");
-        news.setDate(new Date());
-        news.setName("News");
-        Game game = new Game();
-        game.setName("Game 1");
-        news.setGame(game);
-        newses.add(news);
-
-        news = new News();
-        news.setId(2);
-        news.setLink("qqqq");
-        news.setDate(new Date());
-        news.setName("News");
-        game = new Game();
-        game.setName("Game 1");
-        news.setGame(game);
-        newses.add(news);
-
-        news = new News();
-        news.setId(3);
-        news.setLink("qqqq");
-        news.setDate(new Date());
-        news.setName("News");
-        game = new Game();
-        game.setName("Game 2");
-        news.setGame(game);
-        newses.add(news);
-
-        return newses;
+        return newsService.findAll();
     }
 
     public String goToConcreteNews() {

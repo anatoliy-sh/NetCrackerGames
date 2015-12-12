@@ -20,6 +20,9 @@ public class Game {
     @Column(name = "LINK_TO_PLAYSTATION_STORE", nullable = true)
     String linkToSonyPlaystationStore;
 
+    @Column(name = "STEAM_ID", nullable = true)
+    int steamId;
+
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
     List<GamePlatform> gamePlatforms;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "game")
@@ -115,6 +118,14 @@ public class Game {
 
     public void setNewses(List<News> newses) {
         this.newses = newses;
+    }
+
+    public int getSteamId() {
+        return steamId;
+    }
+
+    public void setSteamId(int steamId) {
+        this.steamId = steamId;
     }
 
     @Override

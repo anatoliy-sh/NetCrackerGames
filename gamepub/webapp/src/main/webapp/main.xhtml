@@ -27,7 +27,7 @@
                             <f:param name="productId" value="10"/>
                         </p:button>
                         <p:button value="Registr" icon="ui-icon-star">
-
+                            <f:param name="productId" value="10"/>
                         </p:button>
                     </h:panelGrid>
                 </h:form>
@@ -45,9 +45,7 @@
                         <p:button value="Extended serach" icon="ui-icon-star">
                             <f:param name="productId" value="10"/>
                         </p:button>
-                        <p:button outcome="main" value="Main" icon="ui-icon-star">
 
-                        </p:button>
                     </h:panelGrid>
                 </h:form>
             </div>
@@ -57,23 +55,40 @@
 
             <div class="container">
                 <div class="content">
-                    <h:form id="newses">
-                        <p:dataList value="#{allNewsBean.newses}" var="news">
-                            <f:facet name="header">
-                                <h1 align="center">News</h1>
-                            </f:facet>
-                            #{news.game.name}
-                            <h:link outcome="news" value="#{news.name} #{news.id}" includeViewParams="true">
-                                <f:param value="#{news.id}" name="id"/>
-                            </h:link>
-                            #{news.date}
-                        </p:dataList>
+                    <h:form id="form">
+                        <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
+                                    rows="12" paginator="true" id="cars"
+                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    >
+                            <strong>Content:</strong>
+
+
+                                <f:facet name="header">
+                                    <h1 align="center">Hot games</h1>
+                                </f:facet>
+
+                            <p:panel header="#{car.id}" style="text-align:center">
+                                <h:panelGrid columns="1" style="width:100%">
+                                    <p:graphicImage name="images/#{car.brand}.gif"/>
+
+                                    <h:outputText value="#{car.year}"/>
+
+                                    <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()"
+                                                   title="View Detail">
+                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;"/>
+                                        <f:setPropertyActionListener value="#{car}"
+                                                                     target="#{dataGridView.selectedCar}"/>
+                                    </p:commandLink>
+                                </h:panelGrid>
+                            </p:panel>
+
+                        </p:dataGrid>
                     </h:form>
                 </div><!-- .content-->
             </div><!-- .container-->
 
             <div class="left-sidebar">
-                <h1 align="center">Top of the week</h1>
+                    <h1 align="center">Top of the week</h1>
                 <h:form id="formLeft">
                     <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
                         <f:facet name="header">
@@ -103,5 +118,6 @@
         </div><!-- .footer -->
 
     </div><!-- .wrapper -->
+
 </h:body>
 </html>

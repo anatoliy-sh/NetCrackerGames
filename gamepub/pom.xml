@@ -11,6 +11,7 @@
     <modules>
         <module>db</module>
         <module>webapp</module>
+        <module>console</module>
     </modules>
 
 

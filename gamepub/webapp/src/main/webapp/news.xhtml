@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
         "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
@@ -6,27 +6,112 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
+<link rel="stylesheet" href="style.css" type="text/css"/>
+<h:head>
+</h:head>
 <h:body>
-    <div id="title" align="center">
-        <h2>#{newsBean.news.title}</h2>
-    </div>
-    <div align="center">
-        <div id="text" style="text-align: left; max-width: 500px">
-            #{newsBean.news.text}
-            #{newsBean.news.date}
-        </div>
-    </div>
-    <div align="center">
-        <div id="comments">
-            <p:dataList value="#{newsBean.news.comments}" var="comment">
-                <f:facet name="header">
-                    <h1 align="center">Comments</h1>
-                </f:facet>
-                #{comment.user.login}
-                #{comment.text}
-                #{comment.date}
-            </p:dataList>
-        </div>
-    </div>
+    <div class="wrapper">
+
+        <div class="header">
+
+
+            <div style="display: inline; float: right;">
+                <h:form>
+                    <p:growl id="msgs" showDetail="true"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:autoComplete id="login" value="#{autoCompleteView.txt1}"
+                                        completeMethod="#{autoCompleteView.completeText}"/>
+                        <p:password id="password" value="#{passwordView.password4}" feedback="true" inline="true"/>
+
+                        <p:button value="OK" icon="ui-icon-star">
+                            <f:param name="productId" value="10"/>
+                        </p:button>
+                        <p:button value="Registr" icon="ui-icon-star">
+                            <f:param name="productId" value="10"/>
+                        </p:button>
+                    </h:panelGrid>
+                </h:form>
+            </div>
+
+            <div align="left" style="display: inline; float: left;">
+                <h:form>
+                    <p:growl id="msgs1" showDetail="true"/>
+                    <h:panelGrid columns="6" cellpadding="5">
+                        <p:autoComplete id="search" value="#{autoCompleteView.txt1}"
+                                        completeMethod="#{autoCompleteView.completeText}"/>
+                        <p:button outcome="allNews" value="Last News" icon="ui-icon-star">
+
+                        </p:button>
+                        <p:button value="Extended serach" icon="ui-icon-star">
+                            <f:param name="productId" value="10"/>
+                        </p:button>
+                        <p:button outcome="main" value="Main" icon="ui-icon-star">
+
+                        </p:button>
+
+                    </h:panelGrid>
+                </h:form>
+            </div>
+        </div><!-- .header-->
+
+        <div class="middle">
+
+            <div class="container">
+                <div class="content">
+                    <div id="title" align="center">
+                        <h2>#{newsBean.news.title}</h2>
+                    </div>
+                    <div align="center">
+                        <div id="text" style="text-align: left; max-width: 500px">
+                            #{newsBean.news.text}
+                            #{newsBean.news.date}
+                        </div>
+                    </div>
+                    <div align="center">
+                        <div id="comments">
+                            <p:dataList value="#{newsBean.news.comments}" var="comment">
+                                <f:facet name="header">
+                                    <h1 align="center">Comments</h1>
+                                </f:facet>
+                                #{comment.user.login}
+                                #{comment.text}
+                                #{comment.date}
+                            </p:dataList>
+                        </div>
+                    </div>
+                </div><!-- .content-->
+            </div><!-- .container-->
+
+            <div class="left-sidebar">
+                <h1 align="center">Top of the week</h1>
+                <h:form id="formLeft">
+                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                        <f:facet name="header">
+                            Basic
+                        </f:facet>
+                        #{car.brand}, #{car.year}
+                    </p:dataList>
+                </h:form>
+            </div><!-- .left-sidebar -->
+
+            <div class="right-sidebar">
+                <h1 align="center">Tournaments</h1>
+                <h:form id="formRight">
+                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                        <f:facet name="header">
+                            Basic
+                        </f:facet>
+                        #{car.brand}, #{car.year}
+                    </p:dataList>
+                </h:form>
+            </div><!-- .right-sidebar -->
+
+        </div><!-- .middle-->
+
+        <div class="footer">
+            <strong>Contact information</strong>
+        </div><!-- .footer -->
+
+    </div><!-- .wrapper -->
 </h:body>
 </html>
