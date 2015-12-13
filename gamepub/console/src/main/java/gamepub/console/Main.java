@@ -36,7 +36,7 @@ public class Main {
           game = new Game();
           game.setName(jsonArray.getJSONObject(i).getString("name"));
           game.setSteamId(jsonArray.getJSONObject(i).getInt("appid"));
-          game.setLinkToSteam("http://store.steampowered.com/app/" + game.getId());
+          game.setLinkToSteam("http://store.steampowered.com/app/" + game.getSteamId());
           game.setName(jsonArray.getJSONObject(i).getString("name"));
           gameDaoImplementation.create(game);
         }
