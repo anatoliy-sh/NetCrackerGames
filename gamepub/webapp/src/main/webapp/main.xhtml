@@ -6,118 +6,43 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<link rel="stylesheet" href="style.css" type="text/css"/>
 <h:head>
 </h:head>
 <h:body>
-    <div class="wrapper">
 
-        <div class="header">
+        <ui:composition template="/Template/template.xhtml">
 
+            <ui:define name="content">
 
-            <div style="display: inline; float: right;">
-                <h:form>
-                    <p:growl id="msgs" showDetail="true"/>
-                    <h:panelGrid columns="6" cellpadding="5">
-                        <p:autoComplete id="login" value="#{autoCompleteView.txt1}"
-                                        completeMethod="#{autoCompleteView.completeText}"/>
-                        <p:password id="password" value="#{passwordView.password4}" feedback="true" inline="true"/>
-
-                        <p:button value="OK" icon="ui-icon-star">
-                            <f:param name="productId" value="10"/>
-                        </p:button>
-                        <p:button value="Registr" icon="ui-icon-star">
-                            <f:param name="productId" value="10"/>
-                        </p:button>
-                    </h:panelGrid>
-                </h:form>
-            </div>
-
-            <div align="left" style="display: inline; float: left;">
-                <h:form>
-                    <p:growl id="msgs1" showDetail="true"/>
-                    <h:panelGrid columns="6" cellpadding="5">
-                        <p:autoComplete id="search" value="#{autoCompleteView.txt1}"
-                                        completeMethod="#{autoCompleteView.completeText}"/>
-                        <p:button outcome="allNews" value="Last News" icon="ui-icon-star">
-
-                        </p:button>
-                        <p:button value="Extended serach" icon="ui-icon-star">
-                            <f:param name="productId" value="10"/>
-                        </p:button>
-
-                    </h:panelGrid>
-                </h:form>
-            </div>
-        </div><!-- .header-->
-
-        <div class="middle">
-
-            <div class="container">
-                <div class="content">
-                    <h:form id="form">
-                        <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
-                                    rows="12" paginator="true" id="cars"
-                                    paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                    >
-                            <strong>Content:</strong>
-
-
-                                <f:facet name="header">
-                                    <h1 align="center">Hot games</h1>
-                                </f:facet>
-
-                            <p:panel header="#{car.id}" style="text-align:center">
-                                <h:panelGrid columns="1" style="width:100%">
-                                    <p:graphicImage name="images/#{car.brand}.gif"/>
-
-                                    <h:outputText value="#{car.year}"/>
-
-                                    <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()"
-                                                   title="View Detail">
-                                        <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;"/>
-                                        <f:setPropertyActionListener value="#{car}"
-                                                                     target="#{dataGridView.selectedCar}"/>
-                                    </p:commandLink>
-                                </h:panelGrid>
-                            </p:panel>
-
-                        </p:dataGrid>
-                    </h:form>
-                </div><!-- .content-->
-            </div><!-- .container-->
-
-            <div class="left-sidebar">
-                    <h1 align="center">Top of the week</h1>
-                <h:form id="formLeft">
-                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                <h:form id="form">
+                    <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
+                                rows="12" paginator="true" id="cars"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                    >
+                        <strong>Content:</strong>
                         <f:facet name="header">
-                            Basic
+                            <h1 align="center">Hot games</h1>
                         </f:facet>
-                        #{car.brand}, #{car.year}
-                    </p:dataList>
+
+                        <p:panel header="#{car.id}" style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <p:graphicImage name="images/#{car.brand}.gif"/>
+
+                                <h:outputText value="#{car.year}"/>
+
+                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()"
+                                               title="View Detail">
+                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;"/>
+                                    <f:setPropertyActionListener value="#{car}"
+                                                                 target="#{dataGridView.selectedCar}"/>
+                                </p:commandLink>
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </p:dataGrid>
                 </h:form>
-            </div><!-- .left-sidebar -->
-
-            <div class="right-sidebar">
-                <h1 align="center">Tournaments</h1>
-                <h:form id="formRight">
-                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
-                        <f:facet name="header">
-                            Basic
-                        </f:facet>
-                        #{car.brand}, #{car.year}
-                    </p:dataList>
-                </h:form>
-            </div><!-- .right-sidebar -->
-
-        </div><!-- .middle-->
-
-        <div class="footer">
-            <strong>Contact information</strong>
-        </div><!-- .footer -->
-
-    </div><!-- .wrapper -->
+            </ui:define>
+        </ui:composition>
 
 </h:body>
 </html>
