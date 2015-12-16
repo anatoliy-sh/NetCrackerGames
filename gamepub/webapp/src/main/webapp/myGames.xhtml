@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <h:head>
+    </h:head>
+    <h:body>
+        <ui:composition template="/Template/template.xhtml">
+            <ui:define name="content">
+                <h:form>
+                    <p:dataGrid var="game" value="#{myGamesBean.myGames}" columns="3" layout="grid"
+                                rows="12" paginator="true" id="myGames"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                rowsPerPageTemplate="6,12,18">
+
+                        <f:facet name="header">
+                            My Games
+                        </f:facet>
+
+                        <p:panel style="text-align:center">
+                            <h:panelGrid columns="1" style="width:100%">
+                                <p:graphicImage name="demo/images/car/#{car.brand}.gif"/> 
+                                <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                                    <f:param value="#{game.id}" name="id"/>
+                                </h:link>
+                            </h:panelGrid>
+                        </p:panel>
+
+                    </p:dataGrid>
+                </h:form>     
+            </ui:define>
+        </ui:composition>
+    </h:body>
+</html>
