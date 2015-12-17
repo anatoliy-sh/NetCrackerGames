@@ -17,7 +17,7 @@ public class Mark {
     int mark;
     @Column(name = "DATE", nullable = false)
     Date date;
-    @Column(name = "REVIEW", nullable = true)
+    @Column(name = "REVIEW", columnDefinition = "TEXT", nullable = true)
     String review;
 
     @ManyToOne(fetch = FetchType.EAGER)

@@ -44,7 +44,7 @@ public class User {
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "subscriber")
     List<Friend> subscribeTo;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
-    List<Screenshot> screenshots;
+    List<UserScreenshot> userScreenshots;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
     List<Mark> marks;
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
@@ -167,12 +167,12 @@ public class User {
         this.subscribeTo = subscribeTo;
     }
 
-    public List<Screenshot> getScreenshots() {
-        return screenshots;
+    public List<UserScreenshot> getUserScreenshots() {
+        return userScreenshots;
     }
 
-    public void setScreenshots(List<Screenshot> screenshots) {
-        this.screenshots = screenshots;
+    public void setUserScreenshots(List<UserScreenshot> userScreenshots) {
+        this.userScreenshots = userScreenshots;
     }
 
     public List<Mark> getMarks() {

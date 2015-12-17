@@ -13,6 +13,20 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
         super(Platform.class);
     }
 
+    public Platform getPlatformByName(String name) {
+        String jpa = "SELECT p FROM Platform p WHERE p.name= :name";
+        HashMap<String,Object> parameters = new HashMap<String, Object>();
+        parameters.put("name",name);
+        try
+        {
+            return this.ExecuteQuery(jpa, parameters).get(0);
+        }catch (Exception e)
+        {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
     public Platform getPlatformById(Integer id) {
         String jpa = "SELECT p FROM Platform p WHERE p.id= :id";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
@@ -25,5 +39,7 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
             e.printStackTrace();
             return null;
         }
+
+
     }
 }

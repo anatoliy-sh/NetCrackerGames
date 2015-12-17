@@ -17,25 +17,10 @@
         <ui:define name="content">
             <div class="middledata">
                 <div id="title" align="center">
-                    <h2>#{newsBean.news.title}</h2>
+                    <h2>#{newsBean.news.name}</h2>
                 </div>
                 <div align="center">
-                    <div id="text" style="text-align: left; max-width: 500px">
-                        #{newsBean.news.text}
-                        #{newsBean.news.date}
-                    </div>
-                </div>
-                <div align="center">
-                    <div id="comments">
-                        <p:dataList value="#{newsBean.news.comments}" var="comment">
-                            <f:facet name="header">
-                                <h1 align="center">Comments</h1>
-                            </f:facet>
-                            #{comment.user.login}
-                            #{comment.text}
-                            #{comment.date}
-                        </p:dataList>
-                    </div>
+                    <iframe src="#{newsBean.news.link}" width="800" height="400"></iframe>
                 </div>
             </div>
         </ui:define>

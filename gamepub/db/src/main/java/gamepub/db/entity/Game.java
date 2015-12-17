@@ -19,6 +19,10 @@ public class Game {
     String linkToSteam;
     @Column(name = "LINK_TO_PLAYSTATION_STORE", nullable = true)
     String linkToSonyPlaystationStore;
+    @Column(name="DESCRIPTION", columnDefinition = "TEXT", nullable = false)
+    String description;
+    @Column(name = "POSTER", nullable = false)
+    String poster;
 
     @Column(name = "STEAM_ID", nullable = true)
     int steamId;
@@ -118,6 +122,22 @@ public class Game {
 
     public void setNewses(List<News> newses) {
         this.newses = newses;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public String getPoster() {
+        return poster;
+    }
+
+    public void setPoster(String poster) {
+        this.poster = poster;
     }
 
     public int getSteamId() {

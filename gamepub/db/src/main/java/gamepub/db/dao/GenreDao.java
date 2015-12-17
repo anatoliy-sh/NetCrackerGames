@@ -7,4 +7,6 @@ import gamepub.db.entity.Genre;
  */
 public interface GenreDao extends BaseDao<Genre,Integer> {
     public Genre getGenreById(Integer id);
+
+    public Genre getGenreByName(String name);
 }

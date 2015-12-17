@@ -7,4 +7,5 @@ import gamepub.db.entity.Platform;
  */
 public interface PlatformDao extends BaseDao<Platform,Integer> {
     public Platform getPlatformById(Integer id);
+    public Platform getPlatformByName(String name);
 }

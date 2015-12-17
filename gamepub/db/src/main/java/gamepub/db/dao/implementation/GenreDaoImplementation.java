@@ -13,6 +13,19 @@ public class GenreDaoImplementation extends BaseDaoImplementation<Genre,Integer>
         super(Genre.class);
     }
 
+    public Genre getGenreByName(String name) {
+        String jpa = "SELECT g FROM Genre g WHERE g.name= :name";
+        HashMap<String,Object> parameters = new HashMap<String, Object>();
+        parameters.put("name",name);
+        try
+        {
+            return this.ExecuteQuery(jpa, parameters).get(0);
+        }catch (Exception e)
+        {
+            return null;
+        }
+    }
+
     public Genre getGenreById(Integer id) {
         String jpa = "SELECT g FROM Genre g WHERE g.id= :id";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
@@ -22,8 +35,9 @@ public class GenreDaoImplementation extends BaseDaoImplementation<Genre,Integer>
             return this.ExecuteQuery(jpa, parameters).get(0);
         }catch (Exception e)
         {
-            e.printStackTrace();
             return null;
         }
+
+
     }
 }

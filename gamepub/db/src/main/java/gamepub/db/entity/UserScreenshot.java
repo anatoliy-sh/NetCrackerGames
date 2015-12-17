@@ -7,8 +7,8 @@ import java.util.Date;
  * Created by roman on 30.11.15.
  */
 @Entity
-@Table(name = "SCREENSHOT")
-public class Screenshot {
+@Table(name = "USER_SCREENSHOT")
+public class UserScreenshot {
     @Id
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,7 +22,7 @@ public class Screenshot {
     @JoinColumn(name = "USER_ID", nullable = false)
     User user;
 
-    public Screenshot() {
+    public UserScreenshot() {
     }
 
     public int getId() {
@@ -60,9 +60,9 @@ public class Screenshot {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Screenshot)) return false;
+        if (!(o instanceof UserScreenshot)) return false;
 
-        Screenshot that = (Screenshot) o;
+        UserScreenshot that = (UserScreenshot) o;
 
         return id == that.id;
 
@@ -75,7 +75,7 @@ public class Screenshot {
 
     @Override
     public String toString() {
-        return "Screenshot{" +
+        return "UserScreenshot{" +
                 "id=" + id +
                 ", link='" + link + '\'' +
                 ", date=" + date +

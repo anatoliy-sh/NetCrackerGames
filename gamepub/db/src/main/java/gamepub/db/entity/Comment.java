@@ -13,7 +13,7 @@ public class Comment {
     @Column(name = "ID", nullable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     int id;
-    @Column(name = "TEXT", nullable = false)
+    @Column(name = "TEXT", columnDefinition = "TEXT", nullable = false)
     String text;
     @Column(name = "DATE", nullable = false)
     Date date;

@@ -19,6 +19,9 @@ public class GamePlatform {
     @JoinColumn(name = "PLATFORM_ID", nullable = false)
     Platform platform;
 
+    @Column(name="SYSTEM_REQUIREMENTS", columnDefinition = "TEXT", nullable = true)
+    String systemRequirements;
+
     public GamePlatform() {
     }
 
@@ -44,6 +47,14 @@ public class GamePlatform {
 
     public void setPlatform(Platform platform) {
         this.platform = platform;
+    }
+
+    public String getSystemRequirements() {
+        return systemRequirements;
+    }
+
+    public void setSystemRequirements(String systemRequirements) {
+        this.systemRequirements = systemRequirements;
     }
 
     @Override

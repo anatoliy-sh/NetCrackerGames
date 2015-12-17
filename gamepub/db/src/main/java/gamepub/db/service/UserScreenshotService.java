@@ -1,7 +1,7 @@
 package gamepub.db.service;
 
-import gamepub.db.dao.implementation.PlatformDaoImplementation;
-import gamepub.db.entity.Platform;
+import gamepub.db.dao.implementation.UserScreenshotDaoImplementation;
+import gamepub.db.entity.UserScreenshot;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -14,7 +14,7 @@ import java.util.List;
  * Created by roman on 06.12.15.
  */
 @Stateless
-public class PlatformService extends PlatformDaoImplementation {
+public class UserScreenshotService extends UserScreenshotDaoImplementation {
     @PersistenceContext(unitName = "PERSISTENCE_WEB")
     protected EntityManager em;
 
@@ -29,32 +29,32 @@ public class PlatformService extends PlatformDaoImplementation {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Platform getPlatformById(Integer id) {
-        return super.getPlatformById(id);
+    public UserScreenshot getScreenshotById(Integer id) {
+        return super.getScreenshotById(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Platform getPlatformByName(String name) {
-        return super.getPlatformByName(name);
+    public List<UserScreenshot> getScreenshotsByUserId(Integer id) {
+        return super.getScreenshotsByUserId(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Platform create(Platform platform) {
-        return super.create(platform);
+    public UserScreenshot create(UserScreenshot userScreenshot) {
+        return super.create(userScreenshot);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Platform find(Integer id) {
+    public UserScreenshot find(Integer id) {
         return super.find(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Platform update(Platform platform) {
-        return super.update(platform);
+    public UserScreenshot update(UserScreenshot userScreenshot) {
+        return super.update(userScreenshot);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class PlatformService extends PlatformDaoImplementation {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Platform> findAll() {
+    public List<UserScreenshot> findAll() {
         return super.findAll();
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void delete(List<Platform> t) {
+    public void delete(List<UserScreenshot> t) {
         super.delete(t);
     }
 }

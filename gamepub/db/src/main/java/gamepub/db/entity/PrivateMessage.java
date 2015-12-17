@@ -15,7 +15,8 @@ public class PrivateMessage {
     int id;
     @Column(name = "DATE", nullable = false)
     Date date;
-    @Column(name = "TEXT", nullable = false)
+
+    @Column(name = "TEXT", columnDefinition = "TEXT", nullable = false)
     String text;
 
     @ManyToOne(fetch = FetchType.EAGER)

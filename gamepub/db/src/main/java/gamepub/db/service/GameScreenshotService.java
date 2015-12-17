@@ -1,7 +1,7 @@
 package gamepub.db.service;
 
-import gamepub.db.dao.implementation.ScreenshotDaoImplementation;
-import gamepub.db.entity.Screenshot;
+import gamepub.db.dao.implementation.GameScreenshotDaoImplementation;
+import gamepub.db.entity.GameScreenshot;
 
 import javax.ejb.Stateless;
 import javax.ejb.TransactionAttribute;
@@ -11,10 +11,10 @@ import javax.persistence.PersistenceContext;
 import java.util.List;
 
 /**
- * Created by roman on 06.12.15.
+ * Created by roman on 17.12.15.
  */
 @Stateless
-public class ScreenshotService extends ScreenshotDaoImplementation {
+public class GameScreenshotService extends GameScreenshotDaoImplementation {
     @PersistenceContext(unitName = "PERSISTENCE_WEB")
     protected EntityManager em;
 
@@ -29,32 +29,32 @@ public class ScreenshotService extends ScreenshotDaoImplementation {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Screenshot getScreenshotById(Integer id) {
+    public GameScreenshot getScreenshotById(Integer id) {
         return super.getScreenshotById(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Screenshot> getScreenshotsByUserId(Integer id) {
-        return super.getScreenshotsByUserId(id);
+    public List<GameScreenshot> getScreenshotsByGameId(Integer id) {
+        return super.getScreenshotsByGameId(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Screenshot create(Screenshot screenshot) {
-        return super.create(screenshot);
+    public GameScreenshot create(GameScreenshot gameScreenshot) {
+        return super.create(gameScreenshot);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public Screenshot find(Integer id) {
+    public GameScreenshot find(Integer id) {
         return super.find(id);
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public Screenshot update(Screenshot screenshot) {
-        return super.update(screenshot);
+    public GameScreenshot update(GameScreenshot gameScreenshot) {
+        return super.update(gameScreenshot);
     }
 
     @Override
@@ -65,13 +65,13 @@ public class ScreenshotService extends ScreenshotDaoImplementation {
 
     @Override
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
-    public List<Screenshot> findAll() {
+    public List<GameScreenshot> findAll() {
         return super.findAll();
     }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
-    public void delete(List<Screenshot> t) {
+    public void delete(List<GameScreenshot> t) {
         super.delete(t);
     }
 }
