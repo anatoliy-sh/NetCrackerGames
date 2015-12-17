@@ -13,51 +13,20 @@
     <div class="wrapper">
 
         <div class="header">
-            <ui:insert name="header" >
-                <ui:include src="comHeader.xhtml" />
+            <ui:insert name="header">
+                <ui:include src="comHeader.xhtml"/>
             </ui:insert>
         </div><!-- .header-->
 
-        <div class="middle">
+        <ui:insert name="content">
+            <ui:include src="comContent.xhtml"/>
+        </ui:insert>
 
-            <div class="container">
-                <div class="content">
-                    <ui:insert name="content" >
-                        <ui:include src="comContent.xhtml" />
-                    </ui:insert>
-                </div><!-- .content-->
-            </div><!-- .container-->
-
-            <div class="left-sidebar">
-                <h1 align="center">Top of the week</h1>
-                <h:form id="formLeft">
-                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
-                        <f:facet name="header">
-                            Basic
-                        </f:facet>
-                        #{car.brand}, #{car.year}
-                    </p:dataList>
-                </h:form>
-            </div><!-- .left-sidebar -->
-
-            <div class="right-sidebar">
-                <h1 align="center">Tournaments</h1>
-                <h:form id="formRight">
-                    <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
-                        <f:facet name="header">
-                            Basic
-                        </f:facet>
-                        #{car.brand}, #{car.year}
-                    </p:dataList>
-                </h:form>
-            </div><!-- .right-sidebar -->
-
-        </div><!-- .middle-->
 
         <div class="footer">
             <strong>Contact information</strong>
-            <ui:insert name="footer" >
-                <ui:include src="comFooter.xhtml" />
+            <ui:insert name="footer">
+                <ui:include src="comFooter.xhtml"/>
             </ui:insert>
         </div><!-- .footer -->
 

@@ -10,39 +10,60 @@
 </h:head>
 <h:body>
 
-        <ui:composition template="/Template/template.xhtml">
 
-            <ui:define name="content">
+    <ui:composition template="/Template/template.xhtml">
 
-                <h:form id="form">
-                    <p:dataGrid var="car" value="#{dataGridView.cars}" columns="3" layout="grid"
-                                rows="12" paginator="true" id="cars"
-                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                    >
-                        <strong>Content:</strong>
-                        <f:facet name="header">
-                            <h1 align="center">Hot games</h1>
-                        </f:facet>
+        <ui:define name="content">
+            <div class="middle">
+                <div class="container">
+                    <div class="content">
+                        <h:form>
+                            <p:carousel value="#{mainPageBean.myGames}" headerText="Responsive" var="game"
+                                        itemStyle="text-align:center" responsive="true" style="height: 40%;">
+                                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value"
+                                             layout="grid" styleClass="ui-panelgrid-blank">
+                                    <f:facet name="header">
+                                        <p:graphicImage value="Template/404g.png" style="width:40%; height: 45%"/>
+                                    </f:facet>
 
-                        <p:panel header="#{car.id}" style="text-align:center">
-                            <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage name="images/#{car.brand}.gif"/>
+                                    <h:outputText value="Id:"/>
+                                    <h:outputText value="#{game.id}"/>
 
-                                <h:outputText value="#{car.year}"/>
+                                    <h:outputText value="Name"/>
+                                    <h:outputText value="#{game.name}"/>
 
-                                <p:commandLink update=":form:carDetail" oncomplete="PF('carDialog').show()"
-                                               title="View Detail">
-                                    <h:outputText styleClass="ui-icon ui-icon-search" style="margin:0 auto;"/>
-                                    <f:setPropertyActionListener value="#{car}"
-                                                                 target="#{dataGridView.selectedCar}"/>
-                                </p:commandLink>
-                            </h:panelGrid>
-                        </p:panel>
+                                </p:panelGrid>
 
-                    </p:dataGrid>
-                </h:form>
-            </ui:define>
-        </ui:composition>
+                            </p:carousel>
+                        </h:form>
+                    </div>
+                </div>
+                <div class="left-sidebar">
+                    <h1 align="center">Top of the week</h1>
+                    <h:form id="formLeft">
+                        <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                            <f:facet name="header">
+                                Basic
+                            </f:facet>
+                            #{car.brand}, #{car.year}
+                        </p:dataList>
+                    </h:form>
+                </div><!-- .left-sidebar -->
+
+                <div class="right-sidebar">
+                    <h1 align="center">Tournaments</h1>
+                    <h:form id="formRight">
+                        <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                            <f:facet name="header">
+                                Basic
+                            </f:facet>
+                            #{car.brand}, #{car.year}
+                        </p:dataList>
+                    </h:form>
+                </div><!-- .right-sidebar -->
+            </div>
+        </ui:define>
+    </ui:composition>
 
 </h:body>
 </html>
