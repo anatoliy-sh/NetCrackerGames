@@ -26,6 +26,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+	background: #f2f2f2;
 }
 ol, ul {
 	list-style: none;
@@ -75,6 +76,14 @@ body {
 	clear: both;
 	content: '';
 }
+.middledata{
+	align-content: center;
+	width: 80%;
+	position: relative;
+	min-height: 600px;
+	left:10%;
+}
+
 .container {
 	width: 100%;
 	height:100%;

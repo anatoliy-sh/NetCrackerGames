@@ -36,12 +36,12 @@
                 <h:panelGrid columns="6" cellpadding="5">
                     <p:autoComplete id="search" value="#{autoCompleteView.txt1}"
                                     completeMethod="#{autoCompleteView.completeText}"/>
-                    <p:button outcome="allNews" value="Last News" icon="ui-icon-star">
+                    <p:button outcome="allNews" value="Last News" icon="ui-icon-star"/>
 
-                    </p:button>
                     <p:button value="Extended serach" icon="ui-icon-star">
                         <f:param name="productId" value="10"/>
                     </p:button>
+                    <p:button outcome="main" value="Main page" icon="ui-icon-star"/>
 
                 </h:panelGrid>
             </h:form>

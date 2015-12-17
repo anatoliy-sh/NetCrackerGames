@@ -15,25 +15,27 @@
     <ui:composition template="/Template/template.xhtml">
 
         <ui:define name="content">
-            <div id="title" align="center">
-                <h2>#{newsBean.news.title}</h2>
-            </div>
-            <div align="center">
-                <div id="text" style="text-align: left; max-width: 500px">
-                    #{newsBean.news.text}
-                    #{newsBean.news.date}
+            <div class="middledata">
+                <div id="title" align="center">
+                    <h2>#{newsBean.news.title}</h2>
                 </div>
-            </div>
-            <div align="center">
-                <div id="comments">
-                    <p:dataList value="#{newsBean.news.comments}" var="comment">
-                        <f:facet name="header">
-                            <h1 align="center">Comments</h1>
-                        </f:facet>
-                        #{comment.user.login}
-                        #{comment.text}
-                        #{comment.date}
-                    </p:dataList>
+                <div align="center">
+                    <div id="text" style="text-align: left; max-width: 500px">
+                        #{newsBean.news.text}
+                        #{newsBean.news.date}
+                    </div>
+                </div>
+                <div align="center">
+                    <div id="comments">
+                        <p:dataList value="#{newsBean.news.comments}" var="comment">
+                            <f:facet name="header">
+                                <h1 align="center">Comments</h1>
+                            </f:facet>
+                            #{comment.user.login}
+                            #{comment.text}
+                            #{comment.date}
+                        </p:dataList>
+                    </div>
                 </div>
             </div>
         </ui:define>

@@ -12,8 +12,8 @@
 <h:body>
 
     <ui:composition template="/Template/template.xhtml">
-
         <ui:define name="content">
+            <div class="middledata">
             <h:form id="newses">
                 <p:dataList value="#{allNewsBean.newses}" var="news">
                     <f:facet name="header">
@@ -26,6 +26,7 @@
                     #{news.date}
                 </p:dataList>
             </h:form>
+            </div>
         </ui:define>
     </ui:composition>
 
