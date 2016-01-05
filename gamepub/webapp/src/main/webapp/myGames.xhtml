@@ -25,7 +25,7 @@
 
                         <p:panel style="text-align:center">
                             <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage name="demo/images/car/#{car.brand}.gif"/>
+                                <p:graphicImage width="100%" height="90%" value="#{game.poster}"/>
                                 <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
                                     <f:param value="#{game.id}" name="id"/>
                                 </h:link>
