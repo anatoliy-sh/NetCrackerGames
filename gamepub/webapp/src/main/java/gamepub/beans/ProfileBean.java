@@ -1,6 +1,7 @@
 package gamepub.beans;
 
 import gamepub.db.entity.Game;
+import gamepub.db.entity.User;
 import gamepub.db.service.GameService;
 import gamepub.db.service.UserService;
 
@@ -20,20 +21,27 @@ public class ProfileBean {
     private int id = 1;
     List<Game> myGames;
 
+
+
     @EJB
     UserService userService;
     @EJB
     GameService gameService;
 
 
+
     public String getName() {
-        return "User";
+        User user = userService.getUserById(id);
+        return user.getLogin();
     }
     public String getDescription() {
-        return "UserDescription User stories are often written on index cards or sticky notes," +
-                " stored in a shoe box, and arranged on walls or tables to facilitate planning and discussion." +
-                " As such, they strongly shift the focus from writing about features to discussing them. " +
-                "In fact, these discussions are more important than whatever text is written.";
+        User user = userService.getUserById(id);
+        return user.getFbInfo() + user.getEmail() + user.getCity();
+    }
+
+    public String getImage(){
+        User user = userService.getUserById(id);
+        return user.getAvatarUrl();
     }
 
     public List<Game> getMyGames() {
@@ -44,4 +52,5 @@ public class ProfileBean {
         }
         return tmp;
     }
+
 }
