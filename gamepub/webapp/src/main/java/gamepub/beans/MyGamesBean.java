@@ -49,7 +49,8 @@ public class MyGamesBean {
 
         for(int i = 0; i<userGame.size(); i++){
             UserGame game = userGame.get(i);
-            if(listGames.equals("1") || listGames.equals("2") && game.isFavorite() )
+            if(listGames.equals("1") || listGames.equals("2") && game.isFavorite()
+                    ||  listGames.equals("3") && game.isWanted())
                 tmpGames.add(userGame.get(i).getGame());
         }
         return tmpGames;
