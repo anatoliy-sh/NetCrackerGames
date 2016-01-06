@@ -9,9 +9,12 @@ import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
 import gamepub.db.entity.User;
+import gamepub.db.entity.UserGame;
 import gamepub.db.service.CommentService;
 import gamepub.db.service.GameGenreService;
 import gamepub.db.service.GameService;
+import gamepub.db.service.UserGameService;
+import gamepub.db.service.UserService;
 import java.util.ArrayList;
 import java.util.List;
 import javax.ejb.EJB;
@@ -30,8 +33,13 @@ import javax.faces.bean.SessionScoped;
 public class AboutGameBean {
     @ManagedProperty(value = "#{param.id}")
     private int id;
+    
     @EJB
     GameService gameService;
+    @EJB
+    UserGameService userGameService;
+    @EJB
+    UserService userService;
     
     Game game;
 
@@ -40,6 +48,12 @@ public class AboutGameBean {
         Game g = gameService.getGameById(id);  
         return g;
         
+    }
+    public void addToMyGame(){
+        UserGame userGame=new UserGame();      
+        userGame.setGame(gameService.getGameById(id));
+        userGame.setUser(userService.getUserById(1));
+        userGameService.create(userGame);
     }
  
     public int getId() {

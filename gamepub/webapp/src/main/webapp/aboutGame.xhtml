@@ -15,8 +15,8 @@
                     <h2 align="center">#{aboutGameBean.game.name}</h2>
                     <h2 align="center"><p:graphicImage value="#{aboutGameBean.game.poster}"/></h2>
                     <h2 align="center">#{aboutGameBean.game.description}</h2>
-
-                    <p:button icon="ui-icon-star">  </p:button>
+                    
+                    <h:commandButton value="Add to my games" action="#{aboutGameBean.addToMyGame()}"/>
                     <p:button icon="ui-icon-star">  </p:button>
                     <p:button icon="ui-icon-star">  </p:button>
 
