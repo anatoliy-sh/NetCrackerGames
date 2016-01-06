@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui">
+<link rel="stylesheet" href="style.css" type="text/css"/>
+<h:body>
+    <ui:composition template="/Template/template.xhtml">
+        <ui:define name="content">
+            <div class="middledata">
+
+                <h2 align="center">#{aboutGameBean.game.title}</h2>
+
+                <h:panelGrid columns="2" cellpadding="5">
+                    <p:graphicImage name="img.jpg"/>
+                    #{aboutGameBean.game.text}
+                </h:panelGrid>
+
+                <p:button icon="ui-icon-star">
+                </p:button>
+                <p:button icon="ui-icon-star">
+                </p:button>
+                <p:button icon="ui-icon-star">
+                </p:button>
+
+                <div align="center">
+                    <div id="comments">
+                        <p:dataList value="#{aboutGameBean.game.comments}" var="comment">
+                            <f:facet name="header">
+                                <h1 align="center">Comments or rewiew</h1>
+                            </f:facet>
+                            #{comment.user.login}
+                            #{comment.text}
+                            #{comment.date}
+                        </p:dataList>
+                    </div>
+                </div>
+
+                <h3 style="margin-top: 0">Enter a comment</h3>
+                <p:inputTextarea rows="10" cols="50"/>
+                <br><p:button value="send"/></br>
+            </div>
+        </ui:define>
+    </ui:composition>
+</h:body>
+</html>
