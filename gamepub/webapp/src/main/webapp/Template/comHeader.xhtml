@@ -21,10 +21,8 @@
                     <p:password id="password" value="#{passwordView.password4}" feedback="true" inline="true"/>
 
                     <p:button value="OK" icon="ui-icon-star">
-                        <f:param name="productId" value="10"/>
                     </p:button>
                     <p:button value="Registr" icon="ui-icon-star">
-                        <f:param name="productId" value="10"/>
                     </p:button>
                     <p:button outcome="profile" value="My profile" icon="ui-icon-star">
                     </p:button>
@@ -40,8 +38,7 @@
                                     completeMethod="#{autoCompleteView.completeText}"/>
                     <p:button outcome="allNews" value="Last News" icon="ui-icon-star"/>
 
-                    <p:button value="Extended serach" icon="ui-icon-star">
-                        <f:param name="productId" value="10"/>
+                    <p:button outcome="search" value="Extended serach" icon="ui-icon-star">
                     </p:button>
                     <p:button outcome="main" value="Main page" icon="ui-icon-star"/>
 

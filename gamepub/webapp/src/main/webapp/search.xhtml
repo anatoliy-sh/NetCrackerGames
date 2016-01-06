@@ -7,39 +7,20 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
 <link rel="stylesheet" href="style.css" type="text/css"/>
+<h:head>
+</h:head>
 <h:body>
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
             <div class="middledata">
-
-                <h2 align="center">#{profileBean.name}</h2>
-
-                <p:graphicImage value="#{profileBean.image}" style="width:30%; height: 35%;"/>
-
-                <p:layout style="min-width:800px; min-height:100px; position: relative;">
-                    <p:layoutUnit position="center">
-                        #{profileBean.description}
-                    </p:layoutUnit>
-                </p:layout>
-
-                <p:button outcome="myGames" value="My Games" icon="ui-icon-star">
-                    <f:param name="listGames" value="1"/>
-                </p:button>
-                <p:button outcome="myGames" value="Favourite games" icon="ui-icon-star">
-                    <f:param name="listGames" value="2"/>
-                </p:button>
-                <p:button value="Trading Page" icon="ui-icon-star">
-                </p:button>
-                <p:button value="My gallery" icon="ui-icon-star">
-                </p:button>
                 <h:form>
-                    <p:dataGrid var="game" value="#{profileBean.myGames}" columns="4" layout="grid"
-                                rows="1" paginator="true" id="myGames"
-                                paginatorTemplate="{CurrentPageReport}  {PreviousPageLink} {PageLinks} {NextPageLink}"
-                                style="width: 70%">
+                    <p:dataGrid var="game" value="#{serachBean.myGames}" columns="3" layout="grid"
+                                rows="12" paginator="true" id="myGames"
+                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                rowsPerPageTemplate="6,12,18">
 
                         <f:facet name="header">
-                            Recomendations
+                            My Games
                         </f:facet>
 
                         <p:panel style="text-align:center">
@@ -53,8 +34,6 @@
 
                     </p:dataGrid>
                 </h:form>
-
-
             </div>
         </ui:define>
     </ui:composition>
