@@ -12,13 +12,16 @@
             <ui:define name="content">
                 <div class="middledata">
 
-                    <h2 align="center">#{aboutGameBean.game.name}</h2>
+                    <h1 align="center">#{aboutGameBean.game.name}</h1>
                     <h2 align="center"><p:graphicImage value="#{aboutGameBean.game.poster}"/></h2>
                     <h2 align="center">#{aboutGameBean.game.description}</h2>
-                    
-                    <h:commandButton value="Add to my games" action="#{aboutGameBean.addToMyGame()}"/>
-                    <p:button icon="ui-icon-star">  </p:button>
-                    <p:button icon="ui-icon-star">  </p:button>
+
+                    <h:form> 
+                        <p:growl id="growl" life="2000" /> 
+                        <p:commandButton value="Add to favourite" id="favourite" update="growl" actionListener="#{aboutGameBean.addToFavourite()}" />
+                        <p:commandButton value="Add to wanted" id="wanted" update="growl" actionListener="#{aboutGameBean.addToWanted()}" />
+                        <p:commandButton value="Add to exchange" id="exchange" update="growl" actionListener="#{aboutGameBean.addToExchange()}" />
+                    </h:form>
 
                 </div>
             </ui:define>
