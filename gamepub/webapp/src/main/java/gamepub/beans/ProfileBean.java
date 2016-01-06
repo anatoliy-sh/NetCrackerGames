@@ -36,7 +36,8 @@ public class ProfileBean {
     }
     public String getDescription() {
         User user = userService.getUserById(id);
-        return user.getFbInfo() + user.getEmail() + user.getCity();
+        return user.getFbInfo() + user.getEmail() + user.getCity().getName()
+                + user.getCity().getCountry().getName();
     }
 
     public String getImage(){
@@ -46,7 +47,7 @@ public class ProfileBean {
 
     public List<Game> getMyGames() {
         myGames = gameService.findAll();
-        List<Game> tmp= new ArrayList<Game>(4);
+        List<Game> tmp= new ArrayList<Game>();
         for (int i=0; i<6; i++){
             tmp.add(myGames.get(i));
         }

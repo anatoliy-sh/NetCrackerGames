@@ -13,6 +13,9 @@
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
             <div class="middledata">
+                <f:metadata>
+                    <f:viewParam name="listGames" value="#{myGamesBean.listGames}" />
+                </f:metadata>
                 <h:form>
                     <p:dataGrid var="game" value="#{myGamesBean.myGames}" columns="3" layout="grid"
                                 rows="12" paginator="true" id="myGames"
@@ -20,7 +23,7 @@
                                 rowsPerPageTemplate="6,12,18">
 
                         <f:facet name="header">
-                            My Games
+                            My Games #{myGamesBean.listGames}
                         </f:facet>
 
                         <p:panel style="text-align:center">
