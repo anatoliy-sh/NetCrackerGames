@@ -13,27 +13,53 @@
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
             <div class="middledata">
+                <h1>Search</h1>
                 <h:form>
-                    <p:dataGrid var="game" value="#{serachBean.myGames}" columns="3" layout="grid"
-                                rows="12" paginator="true" id="myGames"
-                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                rowsPerPageTemplate="6,12,18">
 
-                        <f:facet name="header">
-                            My Games
-                        </f:facet>
+                    <h:panelGrid columns="3" style="margin:10px;" cellpadding="5">
+                        <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
 
-                        <p:panel style="text-align:center">
-                            <h:panelGrid columns="1" style="width:100%">
-                                <p:graphicImage width="100%" height="90%" value="#{game.poster}"/>
-                                <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
-                                    <f:param value="#{game.id}" name="id"/>
-                                </h:link>
-                            </h:panelGrid>
-                        </p:panel>
+                            <h3 style="margin-top:0px">Name</h3>
+                            <p:autoComplete id="acSimple" value=" "/>
 
-                    </p:dataGrid>
+                            <h3 style="margin-top:0px">Genre</h3>
+                            <p:selectOneMenu  id="console" value="All" style="width:125px">
+                                <f:selectItems value="#{serachBean.genre}" var="genre" itemLabel="#{genre.name}"
+                                               itemValue="#{genre.id}"/>
+                            </p:selectOneMenu>
+                        </h:panelGrid>
+
+                        <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
+                            <h3 style="margin-top:0px">Platforms</h3>
+                            <p:selectManyCheckbox id="basic" value="#{serachBean.platforms}" columns="3">
+                                <f:selectItems value="#{serachBean.platforms}" var="platform" itemLabel="#{platform.name}"
+                                               itemValue="#{platform.id}"/>
+                            </p:selectManyCheckbox>
+                            <h3 style="margin-top:0px">Data</h3>
+                            <p:calendar id="mask"  pattern="dd-MM-yyyy" mask="true" />
+                        </h:panelGrid>
+
+
+                    </h:panelGrid>
+                    <p:growl id="growl" life="2000" />
+                    <p:commandButton value="Submit" icon="ui-icon-check" actionListener="#{serachBean.serch()}"/>
+
+
+                    <p:dataScroller value="#{serachBean.myGames}" var="game" chunkSize="10">
+
+                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                            <p:outputPanel>
+                                <h:panelGrid columns="2" style="width:100%">
+                                    <p:graphicImage width="50%" height="100%" value="#{game.poster}" />
+                                    <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                                        <f:param value="#{game.id}" name="id"/>
+                                    </h:link>
+                                </h:panelGrid>
+                            </p:outputPanel>
+                        </h:panelGrid>
+                    </p:dataScroller>
                 </h:form>
+
             </div>
         </ui:define>
     </ui:composition>

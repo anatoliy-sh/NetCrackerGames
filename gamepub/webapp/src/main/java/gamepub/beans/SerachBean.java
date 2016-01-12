@@ -1,9 +1,14 @@
 package gamepub.beans;
 
 import gamepub.db.entity.Game;
+import gamepub.db.entity.Genre;
+import gamepub.db.entity.Platform;
 import gamepub.db.entity.UserGame;
 import gamepub.db.service.GameService;
+import gamepub.db.service.GenreService;
+import gamepub.db.service.PlatformService;
 import gamepub.db.service.UserGameService;
+import org.hibernate.Hibernate;
 
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -22,10 +27,26 @@ public class SerachBean {
     @EJB
     GameService gameService;
 
+    @EJB
+    GenreService genreService;
+    @EJB
+    PlatformService platformService;
 
     public List<Game> getMyGames() {
+        myGames = gameService.findAll();
+        return myGames;
+    }
 
-        return gameService.findAll();
+    public List<Genre> getGenre(){
+        return genreService.findAll();
+    }
+
+    public List<Platform> getPlatforms(){
+        return platformService.findAll();
+    }
+
+    public void serch(){
+
     }
 
     public String goToConcreteGame() {
