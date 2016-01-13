@@ -8,6 +8,7 @@ import javax.ejb.TransactionAttribute;
 import javax.ejb.TransactionAttributeType;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -37,6 +38,12 @@ public class GameService extends GameDaoImplementation {
     @TransactionAttribute(TransactionAttributeType.SUPPORTS)
     public List<Game> getGamesByName(String name) {
         return super.getGamesByName(name);
+    }
+
+    @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<Game> getGamesByCustomParams(List<HashMap.Entry<String, Object>> parameterList) {
+        return super.getGamesByCustomParams(parameterList);
     }
 
     @Override

@@ -30,8 +30,8 @@ import org.primefaces.component.inputtextarea.InputTextarea;
 @RequestScoped
 public class NewsBean {
 
-    @ManagedProperty(value = "#{param.id}")
-    private int id;
+    @ManagedProperty(value = "#{param.newsId}")
+    private int newsId;
 
     @EJB
     NewsService newsService;
@@ -44,12 +44,12 @@ public class NewsBean {
 
     public News getNews() {
         FacesContext context = FacesContext.getCurrentInstance();
-        context.getExternalContext().getSessionMap().put("id", id);
-        return newsService.getNewsById(id);
+        context.getExternalContext().getSessionMap().put("newsId", newsId);
+        return newsService.getNewsById(newsId);
     }
 
     public List<Comment> getComments() {
-        comments = commentService.getCommentsByNewsId(id);
+        comments = commentService.getCommentsByNewsId(newsId);
         return comments;
     }
 
@@ -74,14 +74,14 @@ public class NewsBean {
         commentService.create(comm);
 
         inputText.setValue("");
-        comments = commentService.getCommentsByNewsId(id);
+        comments = commentService.getCommentsByNewsId(newsId);
     }
 
-    public int getId() {
-        return id;
+    public int getNewsId() {
+        return newsId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setNewsId(int newsId) {
+        this.newsId = newsId;
     }
 }

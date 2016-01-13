@@ -11,9 +11,7 @@ import org.jsoup.Jsoup;
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * Created by roman on 10.12.15.
@@ -23,21 +21,34 @@ public class Main {
     private static final String USER_AGENT = "Mozilla/5.0";
 
     public static void main(String[] args) throws Exception {
+
+        //WARNING!!!! RUN IT ONLY ONCE!!!
+
         Main loader = new Main();
         String gameUrl = "http://api.steampowered.com/ISteamApps/GetAppList/v2"; //all games
         String newsUrl = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid="; //news by game
         JSONObject jsonObject = new JSONObject((new Main()).sendGet(gameUrl));
         JSONArray jsonArray = jsonObject.getJSONObject("applist").getJSONArray("apps");
         Game game;
-
         GameDaoImplementation gameDaoImplementation = new GameDaoImplementation();
         PlatformDaoImplementation platformDaoImplementation = new PlatformDaoImplementation();
         GamePlatformDaoImplementation gamePlatformDaoImplementation = new GamePlatformDaoImplementation();
         GameScreenshotDaoImplementation gameScreenshotDaoImplementation = new GameScreenshotDaoImplementation();
         GenreDaoImplementation genreDaoImplementation = new GenreDaoImplementation();
         GameGenreDaoImplementation gameGenreDaoImplementation = new GameGenreDaoImplementation();
-
-
+/*
+        Genre g = genreDaoImplementation.getGenreById(1);
+        Platform pl = platformDaoImplementation.getPlatformById(2);
+        List<HashMap.Entry<String, Object>> p = new ArrayList<Map.Entry<String, Object>>();
+        Map.Entry<String,Object> o = new HashMap.SimpleEntry<String,Object>("genre",g);
+        p.add(o);
+        o = new HashMap.SimpleEntry<String,Object>("platform",pl);
+        p.add(o);
+        o = new HashMap.SimpleEntry<String,Object>("name","Cou");
+        p.add(o);
+        List<Game> gm= gameDaoImplementation.getGamesByCustomParams(p);
+        System.out.println(gm.size());
+*/
         Platform platform = new Platform();
         platform.setName("Windows");
         platformDaoImplementation.create(platform);
@@ -72,6 +83,7 @@ public class Main {
                 if (type.equals("game")) {
                     game.setDescription(gameJSON.getString("detailed_description"));
                     game.setPoster(gameJSON.getString("header_image"));
+                    game.setReleaseDate(new Date(gameJSON.getJSONObject("release_date").getString("date")));
                     game = gameDaoImplementation.create(game);
                    //GENRES
                     try {
@@ -197,7 +209,6 @@ public class Main {
         }
         BufferedReader input = new BufferedReader(new InputStreamReader(connection.getInputStream()));
         String inputLine;
-        //inputLine = input.toString();
         StringBuffer response = new StringBuffer();
         while ((inputLine = input.readLine()) != null) {
             response.append(inputLine);

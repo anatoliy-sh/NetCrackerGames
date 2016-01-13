@@ -1,6 +1,7 @@
 package gamepub.db.entity;
 
 import javax.persistence.*;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -19,10 +20,14 @@ public class Game {
     String linkToSteam;
     @Column(name = "LINK_TO_PLAYSTATION_STORE", nullable = true)
     String linkToSonyPlaystationStore;
-    @Column(name="DESCRIPTION", columnDefinition = "TEXT", nullable = false)
+    @Column(name = "DESCRIPTION", columnDefinition = "TEXT", nullable = false)
     String description;
     @Column(name = "POSTER", nullable = false)
     String poster;
+
+
+    @Column(name = "RELEASE_DATE")
+    Date releaseDate;
 
     @Column(name = "STEAM_ID", nullable = true)
     int steamId;
@@ -164,6 +169,14 @@ public class Game {
         return id;
     }
 
+    public Date getReleaseDate() {
+        return releaseDate;
+    }
+
+    public void setReleaseDate(Date releaseDate) {
+        this.releaseDate = releaseDate;
+    }
+
     @Override
     public String toString() {
         return "Game{" +
@@ -171,6 +184,10 @@ public class Game {
                 ", name='" + name + '\'' +
                 ", linkToSteam='" + linkToSteam + '\'' +
                 ", linkToSonyPlaystationStore='" + linkToSonyPlaystationStore + '\'' +
+                ", description='" + description + '\'' +
+                ", poster='" + poster + '\'' +
+                ", releaseDate=" + releaseDate +
+                ", steamId=" + steamId +
                 '}';
     }
 }
