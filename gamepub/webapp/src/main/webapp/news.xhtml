@@ -1,30 +1,85 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-<link rel="stylesheet" href="style.css" type="text/css"/>
-<h:head>
-</h:head>
-<h:body>
+    <link rel="stylesheet" href="style.css" type="text/css"/>
+    <h:head>
+    </h:head>
+    <h:body>
 
 
-    <ui:composition template="/Template/template.xhtml">
+        <ui:composition template="/Template/template.xhtml">
 
-        <ui:define name="content">
-            <div class="middledata">
-                <div id="title" align="center">
-                    <h2>#{newsBean.news.name}</h2>
+            <ui:define name="content">
+                <div class="middledata">
+                    <div id="title" align="center">
+                        <h2>#{newsBean.news.name}</h2>
+                    </div>
+                    <div align="center">
+                        <iframe src="#{newsBean.news.link}" width="800" height="400"></iframe>
+                    </div>
                 </div>
-                <div align="center">
-                    <iframe src="#{newsBean.news.link}" width="800" height="400"></iframe>
-                </div>
-            </div>
-        </ui:define>
-    </ui:composition>
 
-</h:body>
+                <h:form id="table">
+                    <p:growl id="commentsMessage" showDetail="true" life="1000" />
+
+                    <p:panel styleClass="comments-container">
+                        <p:dataGrid var="comment"
+                                    id="comments"
+                                    value="#{newsBean.comments}"
+                                    emptyMessage="No comments"
+                                    columns="1"
+                                    rows = "10"
+                                    paginator="true"
+                                    paginatorTemplate="{CurrentPageReport} {PageLinks}">
+                            <p:panel id="comment" 
+                                     header="#{comment.user.login}"
+                                     style="text-align: left; ">
+                                <h:outputText id="commentContent"
+                                              value="#{comment.text}"
+                                              style=" white-space: pre-wrap; word-break: break-all;
+                                              word-wrap: break-word; "/>
+                            </p:panel>
+                        </p:dataGrid>
+                    </p:panel>
+                </h:form>
+
+                <p:confirmDialog
+                    global="true"
+                    widgetVar="confirm">
+                    <p:commandButton
+                        styleClass="ui-confirmdialog-yes"
+                        value="Yes"
+                        type="button"/>
+                    <p:commandButton
+                        styleClass="ui-confirmdialog-no"
+                        value="No"
+                        type="button"/>
+                </p:confirmDialog>
+
+                <p:panel 
+                    id="commentAdder" 
+                    header="Your comment..." 
+                    styleClass="comments-container">
+                    <h:form id="commentAdderForm">
+                        <p:inputTextarea 
+                            id="commentAdderNewComment" 
+                            style="width:100%"/>
+                        <br/>
+                        <p:commandButton 
+                            id="commentAdderSubmit" 
+                            value="Send"
+                            action="#{newsBean.addComment()}"
+                            update=":table :commentAdder"/>
+                    </h:form>
+                </p:panel>
+                
+            </ui:define>
+        </ui:composition>
+
+    </h:body>
 </html>
