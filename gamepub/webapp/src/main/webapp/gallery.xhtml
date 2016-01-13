@@ -18,7 +18,7 @@
     <h2>#{MainBean.user}'s Gallery  </h2>
         <p:galleria value="#{GalleryBean.images}" var="image" panelWidth="1000"
                     panelHeight="700" showCaption="true">
-            <p:graphicImage name="#{image}" 
+            <p:graphicImage value ="#{image}"                           
                             alt="desc for #{image}"
                             title="#{image}" />
         </p:galleria> 
@@ -27,8 +27,7 @@
     <h:form enctype="multipart/form-data">
     <p:growl id="messages" showDetail="true" />
     <p:fileUpload value="#{GalleryBean.file}" mode="simple" skinSimple="true"/>
-    <p:commandButton value="Submit" ajax="false" actionListener="#{GalleryBean.upload}" disabled="false" />
-    
+    <p:commandButton value="add" ajax="false" actionListener="#{GalleryBean.upload}" />
 </h:form>
         </p:panel>
         </div>

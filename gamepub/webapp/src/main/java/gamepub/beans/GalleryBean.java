@@ -9,6 +9,7 @@ import com.cloudinary.utils.ObjectUtils;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserScreenshot;
 import gamepub.db.service.UserScreenshotService;
+import gamepub.db.service.UserService;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -34,7 +35,8 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean(name = "GalleryBean")
 @SessionScoped
 public class GalleryBean {
-    
+   @EJB
+    UserService userService; 
    @EJB
    UserScreenshotService userScreenshotService;
 private User user;   
@@ -54,51 +56,49 @@ public UploadedFile getFile() {
     public void upload() throws IOException {
         if(getFile() != null) {
       
-            Map options = ObjectUtils.asMap("cloud_name", "dtx5nrsak",
+            Map options = ObjectUtils.asMap(
+  "cloud_name", "dtx5nrsak",
   "api_key", "152549788856848",
   "api_secret", "yJVWUKhjo_3tr9wEnOndydIEGtY");
             Cloudinary cloudinary = new Cloudinary(options);
-            uploadResult = cloudinary.uploader().upload(stream2file(getFile().getInputstream()), options);
-            UserScreenshot uScreen = new UserScreenshot();
-            uScreen.setLink((String)uploadResult.get("url"));
-            System.out.println("ЮРЛА ЮРЛА ЮРЛА "+(String)uploadResult.get("url"));
-            Date curDate = new Date();            
-            uScreen.setDate(curDate);   
-            uScreen.setUser(user);
-            uScreen.setId(i++);           
-            userScreenshotService.create(uScreen);
+              uploadResult = cloudinary.uploader().upload(stream2file(getFile().getInputstream()), options);
+                 UserScreenshot uScreen = new UserScreenshot();
+                    uScreen.setLink((String)uploadResult.get("url"));           
+                    Date curDate = new Date();            
+                    uScreen.setDate(curDate);   
+                    uScreen.setUser(user);
+                    uScreen.setId(i++);           
+                userScreenshotService.create(uScreen);
             FacesMessage message = new FacesMessage("Succesful", getFile().getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
         }
     } 
  
-@PostConstruct
-    public void init(){   
-        user = new User();
-        user.setId(1);
-        i = userScreenshotService.findAll().size();  
-        if(i!=0){
-            images = new ArrayList<String>();
-            int j=0;
-            while(userScreenshotService.find(j)!=null){
-            images.add(userScreenshotService.find(j).getLink());j++;
-            }
-        }
-    }
+  
+       
+    
     
     /**
      * @return the images
      */
     public List<String> getImages() {
+         user = userService.getUserById(1);
+        i = userScreenshotService.findAll().size();  
+        if(i!=0){
+            images = new ArrayList<String>();         
+            for (int j=0;j<i;j++){
+            images.add(userScreenshotService.getScreenshotsByUserId(1).get(j).getLink()); 
+            }
+            }
+             
         return images;
     }
     
          public File stream2file (InputStream in) throws IOException {
-        final File tempFile = File.createTempFile("stream2file", ".tmp");
+        final File tempFile = File.createTempFile("stream2file"+Integer.toString(i), ".tmp");
         tempFile.deleteOnExit();
         FileOutputStream out = new FileOutputStream(tempFile);
-            IOUtils.copy(in, out);
-        
+            IOUtils.copy(in, out);      
         return tempFile;
     }
     
