@@ -9,12 +9,14 @@ import gamepub.dto.GameDto;
 import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
+import gamepub.db.entity.Mark;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserGame;
 import gamepub.db.service.CommentService;
 import gamepub.db.service.GameGenreService;
 import gamepub.db.service.GameService;
 import gamepub.db.service.GameStatusService;
+import gamepub.db.service.MarkService;
 import gamepub.db.service.UserGameService;
 import gamepub.db.service.UserService;
 import java.util.ArrayList;
@@ -24,7 +26,10 @@ import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
+import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.component.rating.Rating;
 
 /**
  *
@@ -46,14 +51,53 @@ public class AboutGameBean {
     UserService userService;
     @EJB
     GameStatusService gameStatusService;
+    @EJB
+    MarkService markService;
 
     Game game;
+    List<Mark> marksAndReviews;
 
     public Game getGame() {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().put("id", id);
         Game g = gameService.getGameById(id);
         return g;
+    }
+    
+    public List<Mark> getMarksAndReviews() {
+        marksAndReviews = markService.getMarksByGameId(id);
+        return marksAndReviews;
+    }
+    
+    public void addMarkAndReview(){
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        UIViewRoot uiViewRoot = context.getViewRoot();
+        InputTextarea inputText = null;
+        Rating rating= null;
+        inputText = (InputTextarea) uiViewRoot.findComponent("markAdderForm:markAdderNewComment");
+        rating =(Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
+        int mrk= Integer.valueOf((String)rating.getValue());
+        String review = (String) inputText.getValue();
+        if (review == null || review.isEmpty() || review.length() >= 501) {
+            return;
+        }
+        if(mrk==0){
+            return;
+        }
+        
+        Mark mark = new Mark();
+        mark.setDate(new java.util.Date());
+        mark.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
+        context.getExternalContext().getSessionMap().remove("id");
+        mark.setMark(mrk);
+        mark.setReview(review);
+        mark.setUser(userService.getUserById(1));
+        markService.create(mark);
+
+        inputText.setValue("");
+        rating.setValue(0);
+        marksAndReviews = markService.getMarksByGameId(id);
     }
 
     public void addToFavourite() {
