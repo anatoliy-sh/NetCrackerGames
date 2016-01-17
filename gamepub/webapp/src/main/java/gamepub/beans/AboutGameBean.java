@@ -106,16 +106,11 @@ public class AboutGameBean {
     }
 
     public void addToFavourite() {
+        
         FacesContext context = FacesContext.getCurrentInstance();
         boolean exist = true;
-        UserGame userGame = null;
-        try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
-        }
-        catch (Exception e){
-
-        }
-         if (userGame == null) {
+        UserGame userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        if (userGame == null) {
             exist = false;
             userGame = new UserGame();
         }
