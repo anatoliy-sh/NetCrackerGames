@@ -79,8 +79,8 @@
                             <p:commandButton 
                                 id="markAdderSubmit" 
                                 value="Send"
-                                action="#{aboutGameBean.addMarkAndReview()}"
-                                update=":table :markAdder"/>
+                                actionListener="#{aboutGameBean.addMarkAndReview}"
+                                update="table markAdderForm"/>
                         </h:form>
                     </p:panel>
 

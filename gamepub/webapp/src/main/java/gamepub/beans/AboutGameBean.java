@@ -20,6 +20,7 @@ import gamepub.db.service.MarkService;
 import gamepub.db.service.UserGameService;
 import gamepub.db.service.UserService;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
 import javax.faces.bean.ManagedBean;
@@ -65,6 +66,10 @@ public class AboutGameBean {
     }
     
     public List<Mark> getMarksAndReviews() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        //if(context.getExternalContext().getSessionMap().containsKey("id")) {
+        id = Integer.parseInt(context.getExternalContext().getSessionMap().get("id").toString());
+        //}
         marksAndReviews = markService.getMarksByGameId(id);
         return marksAndReviews;
     }
@@ -89,7 +94,7 @@ public class AboutGameBean {
         Mark mark = new Mark();
         mark.setDate(new java.util.Date());
         mark.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
-        context.getExternalContext().getSessionMap().remove("id");
+        //context.getExternalContext().getSessionMap().remove("id");
         mark.setMark(mrk);
         mark.setReview(review);
         mark.setUser(userService.getUserById(1));
@@ -97,14 +102,20 @@ public class AboutGameBean {
 
         inputText.setValue("");
         rating.setValue(0);
-        marksAndReviews = markService.getMarksByGameId(id);
+        //marksAndReviews = markService.getMarksByGameId(id);
     }
 
     public void addToFavourite() {
         FacesContext context = FacesContext.getCurrentInstance();
         boolean exist = true;
-        UserGame userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
-        if (userGame == null) {
+        UserGame userGame = null;
+        try {
+            userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        }
+        catch (Exception e){
+
+        }
+         if (userGame == null) {
             exist = false;
             userGame = new UserGame();
         }
