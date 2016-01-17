@@ -45,6 +45,11 @@ public class SerachBean {
     @EJB
     PlatformService platformService;
 
+    String platform;
+    String myGenre;
+    String myGame;
+    Date date;
+
     public void setGenres(String genreS) {
         genre = genreS;
     }
@@ -68,7 +73,13 @@ public class SerachBean {
         }
         if(context.getExternalContext().getSessionMap().containsKey("platform")) {
             String platform = context.getExternalContext().getSessionMap().get("platform").toString();
-            param = new HashMap.SimpleEntry<String, Object>("genre", genreService.getGenreById(Integer.parseInt(platform)));
+            param = new HashMap.SimpleEntry<String, Object>("platform", platformService.getPlatformById(Integer.parseInt(platform)));
+            parametersList.add(param);
+            //context.getExternalContext().getSessionMap().remove("genre");
+        }
+        if(date != null) {
+
+            param = new HashMap.SimpleEntry<String, Object>("date", date);
             parametersList.add(param);
             //context.getExternalContext().getSessionMap().remove("genre");
         }
@@ -89,25 +100,18 @@ public class SerachBean {
     public void search() {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        UIViewRoot uiViewRoot = facesContext.getViewRoot();
+        if(myGame != null){
+            facesContext.getExternalContext().getSessionMap().put("name", myGame);
+        }
 
-        SelectOneMenu inputText = (SelectOneMenu) uiViewRoot.
-                findComponent("searchForm:console");
-        genre = (String) inputText.getValue();
-        facesContext.getExternalContext().getSessionMap().put("genre", genre);
+        if(myGenre != null){
+            facesContext.getExternalContext().getSessionMap().put("genre", myGenre);
+        }
 
-        AutoComplete autoComplete = (AutoComplete) uiViewRoot.
-                findComponent("searchForm:nameGame");
-
-        //if(!facesContext.getExternalContext().getSessionMap().containsKey("name"))
-            facesContext.getExternalContext().getSessionMap().put("name","");
-        //if(autoComplete.getValue().toString().length() > 1)
-        facesContext.getExternalContext().getSessionMap().put("name",autoComplete.getValue());
-
-        SelectOneRadio selectOneRadio = (SelectOneRadio) uiViewRoot.
-                findComponent("searchForm:platformRadio");
-
-        //facesContext.getExternalContext().getSessionMap().put("platform", selectOneRadio.getValue());
+        if(platform != null) {
+            System.out.println("itssplatform" + platform);
+            facesContext.getExternalContext().getSessionMap().put("platform", platform);
+        }
 
     }
 
@@ -123,6 +127,38 @@ public class SerachBean {
 
     public String goToConcreteGame() {
         return "game?faces-redirect=true";
+    }
+
+    public String getMyGame(){
+        return myGame;
+    }
+
+    public void setMyGame(String myGame){
+        this.myGame = myGame;
+    }
+
+    public String getPlatform(){
+        return platform;
+    }
+
+    public void setPlatform(String platform){
+        this.platform = platform;
+    }
+
+    public String getMyGenre(){
+        return myGenre;
+    }
+
+    public void setMyGenre(String myGenre){
+        this.myGenre = myGenre;
+    }
+
+    public Date getDate(){
+        return date;
+    }
+
+    public void setDate(Date date){
+        this.date = date;
     }
 }
 

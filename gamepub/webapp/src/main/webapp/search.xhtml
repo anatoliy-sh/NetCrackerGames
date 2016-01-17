@@ -20,36 +20,34 @@
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
 
                             <h3 style="margin-top:0px">Name</h3>
-                            <p:autoComplete id="nameGame" />
+                            <p:inputText id="nameGame" value="#{serachBean.myGame}"/>
 
                             <h3 style="margin-top:0px">Genre</h3>
-                            <p:selectOneMenu   id="console" style="width:125px">
+                            <p:selectOneMenu   id="console1" value="#{serachBean.myGenre}"  style="width:125px">
                                 <f:selectItems value="#{serachBean.genre}" var="genre" itemLabel="#{genre.name}"
                                                itemValue="#{genre.id}"/>
-                                <p:ajax event="change" update="dataForm" listener="#{serachBean.search()}" />
                             </p:selectOneMenu>
+
                         </h:panelGrid>
 
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
                             <h3 style="margin-top:0px">Platforms</h3>
-                            <p:selectOneRadio id="platformRadio" value="#{serachBean.platforms}" columns="3">
+                            <p:selectOneRadio id="platformRadio" value="#{serachBean.platform}" columns="3">
                                 <f:selectItems value="#{serachBean.platforms}" var="platform" itemLabel="#{platform.name}"
                                                itemValue="#{platform.id}"/>
                             </p:selectOneRadio>
                             <h3 style="margin-top:0px">Data</h3>
-                            <p:calendar id="mask"  pattern="dd-MM-yyyy" mask="true" />
+                            <p:calendar id="mask"  pattern="dd-MM-yyyy" value="#{serachBean.date}" mask="true" />
                         </h:panelGrid>
 
 
                     </h:panelGrid>
                     <h:outputText id="output" value="#{serachBean.genreStr}" />
-                    <p:commandButton value="Submit"  immediate="true" update="dataForm" icon="ui-icon-check" actionListener="#{serachBean.search()}" action="#{serachBean.search()}"/>
+                    <p:commandButton value="Search"  update="dataForm" icon="ui-icon-check" actionListener="#{serachBean.search}"/>
 
                 </h:form>
 
                 <h:form id="dataForm">
-
-                    #{serachBean.genreStr}
                     <p:dataScroller id="sgames" value="#{serachBean.myGames}" var="game" chunkSize="10">
 
                         <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
