@@ -65,12 +65,12 @@ public class AboutGameBean {
         context.getExternalContext().getSessionMap().put("id", id);
         Game g = gameService.getGameById(id);
         UserGame userGame = getUserGame();
-        if(userGame != null){
+        if (userGame != null) {
             disableButtons(userGame);
         }
         return g;
     }
-    
+
     public List<Mark> getMarksAndReviews() {
         FacesContext context = FacesContext.getCurrentInstance();
         //if(context.getExternalContext().getSessionMap().containsKey("id")) {
@@ -79,24 +79,28 @@ public class AboutGameBean {
         marksAndReviews = markService.getMarksByGameId(id);
         return marksAndReviews;
     }
-    
-    public void addMarkAndReview(){
+
+    public void addMarkAndReview() {
         FacesContext context = FacesContext.getCurrentInstance();
 
         UIViewRoot uiViewRoot = context.getViewRoot();
         InputTextarea inputText = null;
-        Rating rating= null;
+        Rating rating = null;
         inputText = (InputTextarea) uiViewRoot.findComponent("markAdderForm:markAdderNewComment");
-        rating =(Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
-        int mrk= Integer.valueOf((String)rating.getValue());
+        rating = (Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
+        int mrk = Integer.valueOf((String) rating.getValue());
         String review = (String) inputText.getValue();
         if (review == null || review.isEmpty() || review.length() >= 501) {
             return;
         }
-        if(mrk==0){
+        if (mrk == 0) {
             return;
         }
-        
+        Mark m = markService.getMarkByUserAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        if (m != null) {
+            return;
+        }
+
         Mark mark = new Mark();
         mark.setDate(new java.util.Date());
         mark.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
@@ -111,8 +115,14 @@ public class AboutGameBean {
         //marksAndReviews = markService.getMarksByGameId(id);
     }
 
+    public void deleteMarkAndReview(Mark mark) {
+        if (mark.getUser().getId() == 1) {//тут потом пользователя проверять
+            markService.delete(mark.getId());
+        }
+    }
+
     public void addToFavourite() {
-        
+
         FacesContext context = FacesContext.getCurrentInstance();
         boolean exist = true;
         UserGame userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
@@ -129,8 +139,7 @@ public class AboutGameBean {
             userGame.setWanted(false);
             userGame.setFavorite(true);
             userGameService.create(userGame);
-        }
-        else {
+        } else {
             userGame.setFavorite(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -144,8 +153,7 @@ public class AboutGameBean {
         UserGame userGame = null;
         try {
             userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         if (userGame == null) {
@@ -162,8 +170,7 @@ public class AboutGameBean {
             userGame.setWanted(true);
             userGame.setFavorite(false);
             userGameService.create(userGame);
-        }
-        else {
+        } else {
             userGame.setWanted(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -177,8 +184,7 @@ public class AboutGameBean {
         UserGame userGame = null;
         try {
             userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         if (userGame == null) {
@@ -195,8 +201,7 @@ public class AboutGameBean {
             userGame.setWanted(false);
             userGame.setFavorite(false);
             userGameService.create(userGame);
-        }
-        else {
+        } else {
             userGame.setCanExchange(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -212,35 +217,31 @@ public class AboutGameBean {
         this.id = id;
     }
 
-    private UserGame getUserGame(){
+    private UserGame getUserGame() {
         FacesContext context = FacesContext.getCurrentInstance();
         UserGame userGame = null;
         try {
             userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
-        }
-        catch (Exception e){
+        } catch (Exception e) {
 
         }
         return userGame;
     }
 
-    private void disableButtons(UserGame userGame){
+    private void disableButtons(UserGame userGame) {
         FacesContext context = FacesContext.getCurrentInstance();
         UIViewRoot uiViewRoot = context.getViewRoot();
         CommandButton commandButton;
-        if(userGame.isFavorite()){
-            commandButton = (CommandButton)
-                    uiViewRoot.findComponent("addBut:favourite");
+        if (userGame.isFavorite()) {
+            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:favourite");
             commandButton.setDisabled(true);
         }
-        if(userGame.isWanted()){
-            commandButton = (CommandButton)
-                    uiViewRoot.findComponent("addBut:wanted");
+        if (userGame.isWanted()) {
+            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:wanted");
             commandButton.setDisabled(true);
         }
-        if(userGame.isCanExchange()){
-            commandButton = (CommandButton)
-                    uiViewRoot.findComponent("addBut:exchange");
+        if (userGame.isCanExchange()) {
+            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:exchange");
             commandButton.setDisabled(true);
         }
 

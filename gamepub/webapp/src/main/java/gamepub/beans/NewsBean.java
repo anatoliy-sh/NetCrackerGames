@@ -79,6 +79,12 @@ public class NewsBean {
         //comments = commentService.getCommentsByNewsId(newsId);
     }
 
+    public void deleteComment(Comment comment) {
+        if (comment.getUser().getId() == 1) { //тут пользователя проверять потом
+            commentService.delete(comment.getId());
+        }
+    }
+
     public int getNewsId() {
         return newsId;
     }

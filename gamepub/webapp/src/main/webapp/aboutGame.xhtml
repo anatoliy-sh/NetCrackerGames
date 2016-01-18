@@ -24,7 +24,7 @@
                     </h:form>
                     <br/>
 
-                    <h:form id="table">
+                    <h:form id="tableReviews">
                         <p:growl id="commentsMessage" showDetail="true" life="1000" />
 
                         <p:panel styleClass="comments-container">
@@ -39,6 +39,19 @@
                                 <p:panel id="mark" 
                                          header="#{mark.user.login}"
                                          style="text-align: left; ">
+                                    
+                                    <f:facet name="actions">
+                                        <p:commandLink
+                                            styleClass="ui-panel-titlebar-icon ui-corner-all 
+                                            ui-state-default ui-icon ui-icon-close"
+                                            actionListener="#{aboutGameBean.deleteMarkAndReview(mark)}"
+                                            update="tableReviews">
+                                            <p:confirm
+                                                header="Confirm deletion"
+                                                message="Are you sure you want to delete this mark and review?"
+                                                icon="ui-icon-alert"/>
+                                        </p:commandLink>
+                                    </f:facet>
 
                                     <p:rating value="#{mark.mark}" readonly="true" />
                                     <br/>
@@ -80,7 +93,7 @@
                                 id="markAdderSubmit" 
                                 value="Send"
                                 actionListener="#{aboutGameBean.addMarkAndReview}"
-                                update="table markAdderForm"/>
+                                update="tableReviews markAdderForm"/>
                         </h:form>
                     </p:panel>
 
