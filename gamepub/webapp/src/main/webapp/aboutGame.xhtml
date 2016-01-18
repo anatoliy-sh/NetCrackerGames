@@ -16,45 +16,47 @@
                     <h2 align="center"><p:graphicImage value="#{aboutGameBean.game.poster}"/></h2>
                     <h2 align="center">#{aboutGameBean.game.description}</h2>
 
-                    <h:form> 
-                        <p:growl id="growl" life="2000" /> 
-                        <p:commandButton value="Add to favourite" id="favourite" update="growl" actionListener="#{aboutGameBean.addToFavourite()}" />
-                        <p:commandButton value="Add to wanted" id="wanted" update="growl" actionListener="#{aboutGameBean.addToWanted()}" />
-                        <p:commandButton value="Add to exchange" id="exchange" update="growl" actionListener="#{aboutGameBean.addToExchange()}" />
-                    </h:form>
+                    <h:form id="addBut">
 
-                    <h:form id="table">
+                        <p:commandButton value="Add to favourite" id="favourite" update="addBut" actionListener="#{aboutGameBean.addToFavourite()}" />
+                        <p:commandButton value="Add to wanted" id="wanted" update="addBut" actionListener="#{aboutGameBean.addToWanted()}" />
+                        <p:commandButton value="Add to exchange" id="exchange" update="addBut" actionListener="#{aboutGameBean.addToExchange()}" />
+                    </h:form>
+                    <br/>
+
+                    <h:form id="tableReviews">
                         <p:growl id="commentsMessage" showDetail="true" life="1000" />
 
                         <p:panel styleClass="comments-container">
-                            <p:dataGrid var="comment"
-                                        id="comments"
-                                        value="#{commentsController.comments}"
-                                        emptyMessage="No comments"
+                            <p:dataGrid var="mark"
+                                        id="marks"
+                                        value="#{aboutGameBean.marksAndReviews}"
+                                        emptyMessage="No reviews"
                                         columns="1"
                                         rows = "10"
                                         paginator="true"
                                         paginatorTemplate="{CurrentPageReport} {PageLinks}">
-                                <p:panel id="comment" 
-                                         header="#{comment.userId.realNickname}"
+                                <p:panel id="mark" 
+                                         header="#{mark.user.login}"
                                          style="text-align: left; ">
+                                    
                                     <f:facet name="actions">
-
                                         <p:commandLink
                                             styleClass="ui-panel-titlebar-icon ui-corner-all 
                                             ui-state-default ui-icon ui-icon-close"
-                                            action="#{commentsController.deleteComment(comment)}"
-                                            rendered="#{commentsController.isCommentEditable(comment)}"
-                                            update=":table">
+                                            actionListener="#{aboutGameBean.deleteMarkAndReview(mark)}"
+                                            update="tableReviews">
                                             <p:confirm
                                                 header="Confirm deletion"
-                                                message="Are you sure you want to delete this comment?"
+                                                message="Are you sure you want to delete this mark and review?"
                                                 icon="ui-icon-alert"/>
-                                        </p:commandLink>                                    
+                                        </p:commandLink>
                                     </f:facet>
-                                    
+
+                                    <p:rating value="#{mark.mark}" readonly="true" />
+                                    <br/>
                                     <h:outputText id="commentContent"
-                                                  value="#{comment.text}"
+                                                  value="#{mark.review}"
                                                   style=" white-space: pre-wrap; word-break: break-all;
                                                   word-wrap: break-word; "/>
                                 </p:panel>
@@ -74,23 +76,26 @@
                             value="No"
                             type="button"/>
                     </p:confirmDialog>
-                   
-                        <p:panel 
-                            id="commentAdder" 
-                            header="Your comment..." 
-                            styleClass="comments-container">
-                            <h:form id="commentAdderForm">
-                                <p:inputTextarea 
-                                    id="commentAdderNewComment" 
-                                    style="width:100%"/>
-                                <br/>
-                                <p:commandButton 
-                                    id="commentAdderSubmit" 
-                                    value="Send"
-                                    action="#{commentsController.addComment()}"
-                                    update=":table :commentAdder"/>
-                            </h:form>
-                        </p:panel>
+
+                    <p:panel 
+                        id="markAdder" 
+                        header="Your review..." 
+                        styleClass="comments-container">
+                        <h:form id="markAdderForm">
+                            <h:outputText value="Your mark:" />
+                            <p:rating id="markAdderNewMark" cancel="false" stars="5" />
+                            <br/>
+                            <p:inputTextarea 
+                                id="markAdderNewComment" 
+                                style="width:100%"/>
+                            <br/>
+                            <p:commandButton 
+                                id="markAdderSubmit" 
+                                value="Send"
+                                actionListener="#{aboutGameBean.addMarkAndReview}"
+                                update="tableReviews markAdderForm"/>
+                        </h:form>
+                    </p:panel>
 
                 </div>
             </ui:define>

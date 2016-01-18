@@ -11,57 +11,61 @@
 </h:head>
 <h:body>
     <ui:composition template="/Template/template.xhtml">
-        <ui:define name="content">
+    <ui:define name="content">
             <div class="middledata">
                 <h1>Search</h1>
-                <h:form>
+                <h:form id="searchForm">
 
                     <h:panelGrid columns="3" style="margin:10px;" cellpadding="5">
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
 
                             <h3 style="margin-top:0px">Name</h3>
-                            <p:autoComplete id="acSimple" value=" "/>
+                            <p:inputText id="nameGame" value="#{serachBean.myGame}"/>
 
                             <h3 style="margin-top:0px">Genre</h3>
-                            <p:selectOneMenu  id="console" value="All" style="width:125px">
+                            <p:selectOneMenu   id="console1" value="#{serachBean.myGenre}"  style="width:125px">
                                 <f:selectItems value="#{serachBean.genre}" var="genre" itemLabel="#{genre.name}"
                                                itemValue="#{genre.id}"/>
                             </p:selectOneMenu>
+
                         </h:panelGrid>
 
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
                             <h3 style="margin-top:0px">Platforms</h3>
-                            <p:selectManyCheckbox id="basic" value="#{serachBean.platforms}" columns="3">
+                            <p:selectOneRadio id="platformRadio" value="#{serachBean.platform}" columns="3">
                                 <f:selectItems value="#{serachBean.platforms}" var="platform" itemLabel="#{platform.name}"
                                                itemValue="#{platform.id}"/>
-                            </p:selectManyCheckbox>
+                            </p:selectOneRadio>
                             <h3 style="margin-top:0px">Data</h3>
-                            <p:calendar id="mask"  pattern="dd-MM-yyyy" mask="true" />
+                            <p:calendar id="mask"  pattern="dd-MM-yyyy" value="#{serachBean.date}" mask="true" />
                         </h:panelGrid>
 
 
                     </h:panelGrid>
-                    <p:growl id="growl" life="2000" />
-                    <p:commandButton value="Submit" icon="ui-icon-check" actionListener="#{serachBean.serch()}"/>
+                    <h:outputText id="output" value="#{serachBean.genreStr}" />
+                    <p:commandButton value="Search"  update="dataForm" icon="ui-icon-check" actionListener="#{serachBean.search}"/>
 
+                </h:form>
 
-                    <p:dataScroller value="#{serachBean.myGames}" var="game" chunkSize="10">
+                <h:form id="dataForm">
+                    <p:dataScroller id="sgames" value="#{serachBean.myGames}" var="game" chunkSize="10">
 
                         <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
                             <p:outputPanel>
                                 <h:panelGrid columns="2" style="width:100%">
-                                    <p:graphicImage width="50%" height="100%" value="#{game.poster}" />
+                                    <p:graphicImage style="width:65%; height: 70%;" value="#{game.poster}" />
                                     <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
                                         <f:param value="#{game.id}" name="id"/>
                                     </h:link>
                                 </h:panelGrid>
                             </p:outputPanel>
                         </h:panelGrid>
+
                     </p:dataScroller>
                 </h:form>
 
             </div>
-        </ui:define>
+    </ui:define>
     </ui:composition>
 </h:body>
 </html>

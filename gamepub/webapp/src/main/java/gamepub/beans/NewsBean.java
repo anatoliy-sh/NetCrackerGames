@@ -49,6 +49,8 @@ public class NewsBean {
     }
 
     public List<Comment> getComments() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        newsId = Integer.parseInt(context.getExternalContext().getSessionMap().get("newsId").toString());
         comments = commentService.getCommentsByNewsId(newsId);
         return comments;
     }
@@ -69,12 +71,18 @@ public class NewsBean {
         comm.setDate(new java.util.Date());
         comm.setText(comment);
         comm.setUser(userService.getUserById(1));
-        comm.setNews(newsService.getNewsById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
-        context.getExternalContext().getSessionMap().remove("id");
+        comm.setNews(newsService.getNewsById(Integer.valueOf(context.getExternalContext().getSessionMap().get("newsId").toString())));
+        //context.getExternalContext().getSessionMap().remove("newsId");
         commentService.create(comm);
 
         inputText.setValue("");
-        comments = commentService.getCommentsByNewsId(newsId);
+        //comments = commentService.getCommentsByNewsId(newsId);
+    }
+
+    public void deleteComment(Comment comment) {
+        if (comment.getUser().getId() == 1) { //тут пользователя проверять потом
+            commentService.delete(comment.getId());
+        }
     }
 
     public int getNewsId() {
