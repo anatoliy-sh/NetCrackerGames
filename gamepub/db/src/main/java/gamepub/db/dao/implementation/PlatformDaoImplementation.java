@@ -22,7 +22,6 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
             return this.ExecuteQuery(jpa, parameters).get(0);
         }catch (Exception e)
         {
-            e.printStackTrace();
             return null;
         }
     }
@@ -36,7 +35,6 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
             return this.ExecuteQuery(jpa, parameters).get(0);
         }catch (Exception e)
         {
-            e.printStackTrace();
             return null;
         }
 

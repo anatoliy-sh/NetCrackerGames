@@ -30,14 +30,14 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
     }
 
     public List<News> getNewsByName(String name) {
-        String jpa = "SELECT n FROM News n WHERE n.name= :name";
+        String jpa = "SELECT n FROM News n WHERE n.name= :name ORDER BY n.date DESC";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
         parameters.put("name",name);
         return this.ExecuteQuery(jpa, parameters);
     }
 
     public List<News> getNewsByGameId(Integer id) {
-        String jpa = "SELECT n FROM News n WHERE n.game.id= :id";
+        String jpa = "SELECT n FROM News n WHERE n.game.id= :id ORDER BY n.date DESC";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
         parameters.put("id",id);
         return this.ExecuteQuery(jpa, parameters);

@@ -24,7 +24,8 @@ public class Game {
     String description;
     @Column(name = "POSTER", nullable = false)
     String poster;
-
+    @Column(name = "METACRITIC")
+    int metacritic;
 
     @Column(name = "RELEASE_DATE")
     Date releaseDate;
@@ -151,6 +152,14 @@ public class Game {
 
     public void setSteamId(int steamId) {
         this.steamId = steamId;
+    }
+
+    public int getMetacritic() {
+        return metacritic;
+    }
+
+    public void setMetacritic(int metacritic) {
+        this.metacritic = metacritic;
     }
 
     @Override
