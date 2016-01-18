@@ -73,11 +73,11 @@
                         <p:commandButton 
                             id="commentAdderSubmit" 
                             value="Send"
-                            action="#{newsBean.addComment()}"
-                            update=":table :commentAdder"/>
+                            actionListener="#{newsBean.addComment()}"
+                            update="table commentAdderForm"/>
                     </h:form>
                 </p:panel>
-                
+
             </ui:define>
         </ui:composition>
 

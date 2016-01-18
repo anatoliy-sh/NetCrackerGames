@@ -49,6 +49,8 @@ public class NewsBean {
     }
 
     public List<Comment> getComments() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        newsId = Integer.parseInt(context.getExternalContext().getSessionMap().get("newsId").toString());
         comments = commentService.getCommentsByNewsId(newsId);
         return comments;
     }
@@ -70,11 +72,11 @@ public class NewsBean {
         comm.setText(comment);
         comm.setUser(userService.getUserById(1));
         comm.setNews(newsService.getNewsById(Integer.valueOf(context.getExternalContext().getSessionMap().get("newsId").toString())));
-        context.getExternalContext().getSessionMap().remove("newsId");
+        //context.getExternalContext().getSessionMap().remove("newsId");
         commentService.create(comm);
 
         inputText.setValue("");
-        comments = commentService.getCommentsByNewsId(newsId);
+        //comments = commentService.getCommentsByNewsId(newsId);
     }
 
     public int getNewsId() {
