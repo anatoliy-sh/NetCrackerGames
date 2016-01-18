@@ -27,7 +27,7 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
     }
 
     public UserGame getUserGameByUserIdAndGameId(Integer userId, Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id= :userId AND" +
+        String jpa = "SELECT u FROM UserGame u WHERE u.user.id= :userId AND " +
                 "u.game.id= :gameId";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
         parameters.put("userId",userId);
@@ -48,7 +48,7 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
     }
 
     public List<UserGame> getUserGamesByUserId(Integer userId, Integer gameStatusId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND" +
+        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND " +
                 "u.gameStatus.id= :gameStatusId ORDER BY u.game.name";
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("id",userId);
@@ -64,7 +64,7 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
     }
 
     public List<UserGame> getUserGamesByGameId(Integer gameId, Integer gameStatusId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND" +
+        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND " +
                 "u.gameStatus.id= :gameStatusId ORDER BY u.game.name";
         HashMap<String, Object> parameters = new HashMap<String, Object>();
         parameters.put("id",gameId);

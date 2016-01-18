@@ -16,11 +16,11 @@
                     <h2 align="center"><p:graphicImage value="#{aboutGameBean.game.poster}"/></h2>
                     <h2 align="center">#{aboutGameBean.game.description}</h2>
 
-                    <h:form> 
-                        <p:growl id="growl" life="2000" /> 
-                        <p:commandButton value="Add to favourite" id="favourite" update="growl" actionListener="#{aboutGameBean.addToFavourite()}" />
-                        <p:commandButton value="Add to wanted" id="wanted" update="growl" actionListener="#{aboutGameBean.addToWanted()}" />
-                        <p:commandButton value="Add to exchange" id="exchange" update="growl" actionListener="#{aboutGameBean.addToExchange()}" />
+                    <h:form id="addBut">
+
+                        <p:commandButton value="Add to favourite" id="favourite" update="addBut" actionListener="#{aboutGameBean.addToFavourite()}" />
+                        <p:commandButton value="Add to wanted" id="wanted" update="addBut" actionListener="#{aboutGameBean.addToWanted()}" />
+                        <p:commandButton value="Add to exchange" id="exchange" update="addBut" actionListener="#{aboutGameBean.addToExchange()}" />
                     </h:form>
                     <br/>
 
