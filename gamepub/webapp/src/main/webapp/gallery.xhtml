@@ -6,7 +6,7 @@
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
     <h:head>
-        <title>#{MainBean.user}'s Gallery</title>
+        <title>#{loginBean.name}'s Gallery</title>
     </h:head>
             
     <h:body>
@@ -15,7 +15,7 @@
             <ui:define name="content">        
         
         <div align="center">
-    <h2>#{MainBean.user}'s Gallery  </h2>
+            <h2>#{loginBean.name}'s Gallery  </h2>
         <p:galleria value="#{GalleryBean.images}" var="image" panelWidth="1000"
                     panelHeight="700" showCaption="true">
             <p:graphicImage value ="#{image}"                           

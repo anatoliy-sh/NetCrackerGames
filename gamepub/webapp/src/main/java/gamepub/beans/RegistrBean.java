@@ -3,62 +3,106 @@ package gamepub.beans;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import gamepub.db.entity.City;
+import gamepub.db.entity.User;
+import gamepub.db.entity.UserRole;
 import gamepub.db.entity.UserScreenshot;
 import gamepub.db.service.CityService;
 import gamepub.db.service.NewsService;
+import gamepub.db.service.UserRoleService;
+import gamepub.db.service.UserService;
+import gamepub.encode.shaCode;
 import org.primefaces.model.UploadedFile;
 
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
-import javax.faces.bean.SessionScoped;
 import javax.faces.context.FacesContext;
 import java.io.IOException;
+import java.io.UnsupportedEncodingException;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.faces.bean.RequestScoped;
+import org.primefaces.context.RequestContext;
 
 /**
- * Created by ¿Ì‡ÚÓÎËÈ on 13.01.2016.
+ * Created by Fitok on 13.01.2016.
  */
 @ManagedBean
-@SessionScoped
+@RequestScoped
 public class RegistrBean {
-
-    private UploadedFile file;
-    private Map uploadResult;
-
-    public UploadedFile getFile() {
-        return file;
-    }
+private User user;
+private City city;
+private String name,password,email;
+private int cityId;
 
     @EJB
+    UserService userService; 
+    @EJB
     CityService cityService;
-
+    @EJB
+    UserRoleService userRoleService;
+    
+    public String getName(){
+       return name;
+    }
+    public void setName(String uname){
+        name=uname;
+    }
+    public String getPassword(){
+        return password;
+    }
+    public void setPassword(String upass){
+        password=upass;
+    }
+    public String getEmail(){
+        return email;
+    }
+    public void setEmail(String uemail){
+        email = uemail;
+    }
+    public int getCity(){
+        return cityId;
+    }
+    public void setCity(int ucityId){
+        cityId = ucityId;
+    }
+    
+    
     public List<City> getCities(){
         return cityService.findAll();
     }
-
-    /* void upload() throws IOException {
-        if(getFile() != null) {
-
-            Map options = ObjectUtils.asMap("cloud_name", "dtx5nrsak",
-                    "api_key", "152549788856848",
-                    "api_secret", "yJVWUKhjo_3tr9wEnOndydIEGtY");
-            Cloudinary cloudinary = new Cloudinary(options);
-            uploadResult = cloudinary.uploader().upload(stream2file(getFile().getInputstream()), options);
-            UserScreenshot uScreen = new UserScreenshot();
-            uScreen.setLink((String)uploadResult.get("url"));
-            System.out.println("ﬁ–À¿ ﬁ–À¿ ﬁ–À¿ "+(String)uploadResult.get("url"));
-            Date curDate = new Date();
-            uScreen.setDate(curDate);
-            uScreen.setUser(user);
-            uScreen.setId(i++);
-            userScreenshotService.create(uScreen);
-            FacesMessage message = new FacesMessage("Succesful", getFile().getFileName() + " is uploaded.");
-            FacesContext.getCurrentInstance().addMessage(null, message);
-        }
-    }*/
-
-
+    
+    public void save() throws NoSuchAlgorithmException, UnsupportedEncodingException{
+        user=new User();
+        UserRole ur = userRoleService.getUserRoleById(1);
+        city = cityService.getCityById(cityId);    
+       
+        
+        if(userService.getUserByLogin(name)==null){
+        user.setAvatarUrl("src/main/webapp/Template/404g.png");
+        
+        user.setPassword(shaCode.code(shaCode.code(name)+password));            
+        user.setEmail(email);
+        user.setLogin(name);
+        user.setCity(city); 
+        user.setUserRole(ur);
+        userService.create(user);
+        
+       FacesMessage regMes= new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Success",
+                    "Welcome "+name+"! Login now.");
+               RequestContext.getCurrentInstance().showMessageInDialog(regMes);
+        
+    }
+        else {FacesMessage failMes= new FacesMessage(FacesMessage.SEVERITY_WARN,
+                        "Error",
+                    "User "+name+" already exists!Try another name.");
+               RequestContext.getCurrentInstance().showMessageInDialog(failMes);}
+        
+}
 }

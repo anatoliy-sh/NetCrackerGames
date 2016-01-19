@@ -22,9 +22,12 @@ import javax.annotation.PostConstruct;
 import javax.ejb.EJB;
 import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
+import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
 import javax.faces.bean.SessionScoped;
+import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
+import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
 import org.primefaces.model.UploadedFile;
 
@@ -35,6 +38,7 @@ import org.primefaces.model.UploadedFile;
 @ManagedBean(name = "GalleryBean")
 @SessionScoped
 public class GalleryBean {
+   
    @EJB
     UserService userService; 
    @EJB
@@ -43,7 +47,6 @@ private User user;
 private List<String> images;
 private UploadedFile file;
 private Map uploadResult;
-private int i;
 
 public UploadedFile getFile() {
         return file;
@@ -66,8 +69,8 @@ public UploadedFile getFile() {
                     uScreen.setLink((String)uploadResult.get("url"));           
                     Date curDate = new Date();            
                     uScreen.setDate(curDate);   
-                    uScreen.setUser(user);
-                    uScreen.setId(i++);           
+                    uScreen.setUser(userService.getUserById(SessionBean.getUserId()));
+                             
                 userScreenshotService.create(uScreen);
             FacesMessage message = new FacesMessage("Succesful", getFile().getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
@@ -82,20 +85,20 @@ public UploadedFile getFile() {
      * @return the images
      */
     public List<String> getImages() {
-         user = userService.getUserById(1);
-        i = userScreenshotService.findAll().size();  
-        if(i!=0){
+    
+    List<UserScreenshot> userScreens = userScreenshotService.getScreenshotsByUserId(SessionBean.getUserId());
+        
             images = new ArrayList<String>();         
-            for (int j=0;j<i;j++){
-            images.add(userScreenshotService.getScreenshotsByUserId(1).get(j).getLink()); 
+            for(UserScreenshot u:userScreens){
+            images.add(u.getLink()); 
             }
-            }
+            
              
         return images;
     }
     
          public File stream2file (InputStream in) throws IOException {
-        final File tempFile = File.createTempFile("stream2file"+Integer.toString(i), ".tmp");
+        final File tempFile = File.createTempFile("stream2file", ".tmp");
         tempFile.deleteOnExit();
         FileOutputStream out = new FileOutputStream(tempFile);
             IOUtils.copy(in, out);      

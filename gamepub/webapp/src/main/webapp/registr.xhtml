@@ -10,27 +10,44 @@
 <h:body>
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
-            <div class="middledata">
+            <div class="middle">
                 <h:form>
-                <h:panelGrid columns="1" style="margin:20px; alignment: ceneter" cellpadding="5" >
-                    <h1>Login</h1>
-                    <p:autoComplete id="login"/>
-                    <h1>Password</h1>
-                    <p:password id="password"  feedback="true" inline="true"/>
-                    <h1>Confirm</h1>
-                    <p:password id="confirm"  feedback="true" inline="true"/>
-                    <h1>Email</h1>
-                    <p:autoComplete id="email"/>
-                    <h1>Avatar</h1>
-                    <p:growl id="growl" life="2000" />
-                    <p:commandButton value="Submit" disabled="false"/>
-                    <p:selectOneMenu  id="console" style="width:125px">
-                        <f:selectItems value="#{registrBean.cities}" var="city" itemLabel="#{city.name}"
+                 
+                    
+                    <p:panel id="panel" header="Registration">
+                     <p:messages id="msgs" /> 
+                     <h:panelGrid columns="3" cellpadding="5">
+                            <p:outputLabel for="name" value="Name:" />
+                            <p:inputText id="name" value="#{registrBean.name}" required="true" label="Name"
+                                         requiredMessage="Please enter your name">
+                                <f:validateLength minimum="2" />                                
+                            </p:inputText>
+                            <p:message for="name" style ="color:red" /> 
+                            
+                            <p:outputLabel for="password" value="Password:" />
+                            <p:password id="password" value="#{registrBean.password}" label="Password" required="true" 
+                                        requiredMessage = "Please enter your password">
+                                <f:validateLength minimum="2" />                                
+                            </p:password>
+                                <p:message for="password" style="color: red" /> 
+                                
+                                 <p:outputLabel for="email" value="Email:" />
+                                 <p:inputText id="email" value="#{registrBean.email}" label="Email" required="true"
+                                         requiredMessage="Please enter your email">
+                                <f:validateLength minimum="5" />                                
+                            </p:inputText>
+                                <p:message for="email" style="color:red" />
+                                
+                            <p:outputLabel for="console" value="City:" />
+                            <p:selectOneMenu  id="console" value="#{registrBean.city}">
+                                <f:selectItems value="#{registrBean.cities}" var="city" itemLabel="#{city.name}"
                                        itemValue="#{city.id}"/>
-                    </p:selectOneMenu>
-
-
-                </h:panelGrid>
+                                
+                            </p:selectOneMenu>
+                    </h:panelGrid>
+                    
+                     <p:commandButton value="Save" ajax="false" actionListener="#{registrBean.save}" icon="ui-icon-check" update="panel"/>                    
+                    </p:panel>
                 </h:form>
             </div>
         </ui:define>

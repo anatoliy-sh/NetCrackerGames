@@ -27,7 +27,7 @@ import javax.faces.convert.IntegerConverter;
 import java.util.*;
 
 /**
- * Created by Анатолий on 06.01.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 06.01.2016.
  */
 @ManagedBean
 @SessionScoped
