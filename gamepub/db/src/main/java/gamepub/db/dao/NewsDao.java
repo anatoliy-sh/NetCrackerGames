@@ -13,4 +13,5 @@ public interface NewsDao extends BaseDao<News,Integer> {
     public List<News> getNewsByName(String name);
     public List<News> getNewsByGameId(Integer id);
     public List<News> getNewsByDate(Date date);
+    public List<News> getNewsOrderByDate();
 }

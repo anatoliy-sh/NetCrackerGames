@@ -53,6 +53,12 @@ public class NewsService extends NewsDaoImplementation {
     }
 
     @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public List<News> getNewsOrderByDate() {
+        return super.getNewsOrderByDate();
+    }
+
+    @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)
     public News create(News news) {
         return super.create(news);

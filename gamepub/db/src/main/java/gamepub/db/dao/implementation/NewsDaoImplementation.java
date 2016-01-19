@@ -43,10 +43,17 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         return this.ExecuteQuery(jpa, parameters);
     }
 
+    public List<News> getNewsOrderByDate() {
+        String jpa = "SELECT n FROM News n ORDER BY n.date DESC";
+        return this.ExecuteQuery(jpa);
+    }
+
     public List<News> getNewsByDate(Date date) {
         String jpa = "SELECT n FROM News n WHERE n.date= :date";
         HashMap<String,Object> parameters = new HashMap<String, Object>();
         parameters.put("date",date);
         return this.ExecuteQuery(jpa, parameters);
+
+
     }
 }

@@ -29,7 +29,7 @@ public class AllNewsBean {
     @EJB
     GameService gameService;
     public List<News> getNewses() {
-        return newsService.findAll();
+        return newsService.getNewsOrderByDate();
     }
 
     public String goToConcreteNews() {
