@@ -55,4 +55,14 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
         }
         return this.ExecuteQuery(jpa, parameters);
     }
+
+    public List<Game> getGamesOrderByMarks(int maxValue){
+        String jpa = "SELECT g FROM Game g ORDER BY g.metacritic, g.releaseDate";
+        try {
+            return this.ExecuteQuery(jpa,maxValue);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
 }

@@ -30,4 +30,11 @@ public abstract class AbstractDaoImplementation<T, PK> {
         closeEntityManager();
         return result;
     }
+
+    protected List<T> ExecuteQuery(String jpql, int maxResult){
+        em = getEntityManager();
+        List<T> result = em.createQuery(jpql).setMaxResults(maxResult).getResultList();
+        closeEntityManager();
+        return result;
+    }
 }

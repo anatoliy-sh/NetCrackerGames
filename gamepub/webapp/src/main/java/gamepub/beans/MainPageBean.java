@@ -23,12 +23,13 @@ public class MainPageBean {
     GameService gameService;
 
     public List<Game> getMyGames() {
-        myGames = gameService.findAll();
+        /*myGames = gameService.findAll();
+
         List<Game> tmp= new ArrayList<Game>(4);
         for (int i=0; i<4; i++){
             tmp.add(myGames.get(i));
-        }
-        return tmp;
+        }*/
+        return gameService.getGamesOrderByMarks(6);
     }
 
     public String goToConcreteGame() {

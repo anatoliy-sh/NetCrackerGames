@@ -16,11 +16,14 @@
         <div style="display: inline; float: right;">
             <c:if test="#{!loginBean.logged}"    >
             <h:form>
-                <p:growl id="msgs" showDetail="true"/>
+                <p:growl id="msgs1" showDetail="true"/>
                 
                 <h:panelGrid columns="6" cellpadding="5">
-                    <p:inputText id="login" value="#{loginBean.name}"/>                                    
-                    <p:password id="password" value="#{loginBean.password}" feedback="true" inline="true"/>
+                    <p:inputText id="login" value="#{loginBean.name}"/>
+                    <p:password id="password" value="#{loginBean.password}" inline="true"/>
+                    <p:watermark for="login" value="Login *" />
+                    <p:watermark for="password" value="Password *" />
+
 
                     <p:commandButton value="OK" icon="ui-icon-star" actionListener="#{loginBean.check}"
                                      ajax="false"/>
@@ -34,7 +37,7 @@
             
             <c:if test="#{loginBean.logged}">
                   <h:form>
-                <p:growl id="msgs" showDetail="true"/>
+                <p:growl id="msgs2" showDetail="true"/>
                 
                 <h:panelGrid columns="6" cellpadding="5">
                     <h:outputLabel for="logged" value ="Logged as:"/>
@@ -42,10 +45,8 @@
                     <p:commandButton value="logout" actionListener="#{loginBean.logout}" ajax="false">
                      
                     </p:commandButton>
-                    <p:button outcome="registr" value="Registr" icon="ui-icon-star">
-                    </p:button>
-                    <p:button outcome="profile" value="My profile" icon="ui-icon-star">
-                    </p:button>
+                    <p:button outcome="registr" value="Registr" icon="ui-icon-star"/>
+                    <p:button outcome="profile" value="My profile" icon="ui-icon-star"/>
                 </h:panelGrid>
             </h:form>                                    
             </c:if>  
@@ -54,10 +55,10 @@
 
         <div align="left" style="display: inline; float: left;">
             <h:form>
-                <p:growl id="msgs1" showDetail="true"/>
+                <p:growl id="msgs3" showDetail="true"/>
                 <h:panelGrid columns="6" cellpadding="5">
-                    <p:autoComplete id="search" value="#{autoCompleteView.txt1}"
-                                    completeMethod="#{autoCompleteView.completeText}"/>
+                    <p:autoComplete id="search" />
+                    <p:watermark for="search" value="Search..." />
                     <p:button outcome="allNews" value="Last News" icon="ui-icon-star"/>
 
                     <p:button outcome="search" value="Extended serach" icon="ui-icon-star">

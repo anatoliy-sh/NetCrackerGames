@@ -50,12 +50,8 @@ public class ProfileBean {
     }
 
     public List<Game> getMyGames() {
-        myGames = gameService.findAll();
-        List<Game> tmp= new ArrayList<Game>();
-        for (int i=0; i<6; i++){
-            tmp.add(myGames.get(i));
-        }
-        return tmp;
+
+        return gameService.getGamesOrderByMarks(4);
     }
 
 }

@@ -1,69 +1,78 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui">
-    <h:head>
-    </h:head>
-    <h:body>
+<h:head>
+</h:head>
+<h:body>
+
+    <ui:composition template="/Template/template.xhtml">
+
+        <ui:define name="content">
+            <div class="middle">
+                <div class="container">
+                    <div class="content">
+                        <h1 align="center">Hot games</h1>
+                        <h:form>
+                            <p:carousel value="#{mainPageBean.myGames}"  var="game"
+                                        itemStyle="text-align:center" responsive="true" style="height: 60%;" numVisible="2" >
+                                <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value"
+                                             layout="grid" styleClass="ui-panelgrid-blank">
+                                    <f:facet name="header">
+                                        <p:graphicImage value="#{game.poster}" style="width:100%; height: 90%"/>
+                                    </f:facet>
+
+                                    <h:outputText value="#{game.id}"/>
+                                    <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                                        <f:param value="#{game.id}" name="id"/>
+                                    </h:link>
+
+                                </p:panelGrid>
 
 
-        <ui:composition template="/Template/template.xhtml">
+                            </p:carousel>
 
-            <ui:define name="content">
-                <div class="middle">
-                    <div class="container">
-                        <div class="content">
-                            <h1 align="center">Hot games</h1>
-                            <h:form>
-                                <p:carousel value="#{mainPageBean.myGames}" headerText="Responsive" var="game"
-                                            itemStyle="text-align:center" responsive="true" style="height: 40%;">
-                                    <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value"
-                                                 layout="grid" styleClass="ui-panelgrid-blank">
-                                        <f:facet name="header">
-                                            <p:graphicImage value="#{game.poster}" style="width:100%; height: 90%"/>
-                                        </f:facet>
-
-                                        <h:outputText value="#{game.id}"/>
-                                        <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
-                                            <f:param value="#{game.id}" name="id"/>
-                                        </h:link>
-
-                                    </p:panelGrid>
-
-                                </p:carousel>
-                            </h:form>
-                        </div>
+                        </h:form>
                     </div>
-                    <div class="left-sidebar">
-                        <h1 align="center">Top of the week</h1>
-                        <h:form id="formLeft">
-                            <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
-                                <f:facet name="header">
-                                    Basic
-                                </f:facet>
-                                #{car.brand}, #{car.year}
-                            </p:dataList>
-                        </h:form>
-                    </div><!-- .left-sidebar -->
-
-                    <div class="right-sidebar">
-                        <h1 align="center">Tournaments</h1>
-                        <h:form id="formRight">
-                            <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
-                                <f:facet name="header">
-                                    Basic
-                                </f:facet>
-                                #{car.brand}, #{car.year}
-                            </p:dataList>
-                        </h:form>
-                    </div><!-- .right-sidebar -->
                 </div>
-            </ui:define>
-        </ui:composition>
+                <div class="left-sidebar">
+                    <h1 align="center">Top of the week</h1>
+                    <h:form id="formLeft">
+                        <p:dataList value="#{mainPageBean.myGames}" var="game" type="unordered" itemType="none" paginator="false" rows="5" styleClass="paginated">
+                            <f:facet name="header">
+                                Games
+                            </f:facet>
+                            <p:panelGrid columns="2" style="width:100%;margin:10px 0px" columnClasses="label,value"
+                                         layout="grid" styleClass="ui-panelgrid-blank">
 
-    </h:body>
+                                <p:graphicImage value="#{game.poster}" style="width:100%; height: 90%"/>
+                                <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                                    <f:param value="#{game.id}" name="id"/>
+                                </h:link>
+
+                            </p:panelGrid>
+                        </p:dataList>
+                    </h:form>
+                </div><!-- .left-sidebar -->
+
+                <div class="right-sidebar">
+                    <h1 align="center">Tournaments</h1>
+                    <h:form id="formRight">
+                        <p:dataList value="#{dataListView.cars1}" var="car" type="ordered">
+                            <f:facet name="header">
+                                Basic
+                            </f:facet>
+                            #{car.brand}, #{car.year}
+                        </p:dataList>
+                    </h:form>
+                </div><!-- .right-sidebar -->
+            </div>
+        </ui:define>
+    </ui:composition>
+
+</h:body>
 </html>
