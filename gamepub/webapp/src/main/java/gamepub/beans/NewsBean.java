@@ -70,7 +70,7 @@ public class NewsBean {
         Comment comm = new Comment();
         comm.setDate(new java.util.Date());
         comm.setText(comment);
-        comm.setUser(userService.getUserById(1));
+        comm.setUser(userService.getUserById(SessionBean.getUserId()));
         comm.setNews(newsService.getNewsById(Integer.valueOf(context.getExternalContext().getSessionMap().get("newsId").toString())));
         //context.getExternalContext().getSessionMap().remove("newsId");
         commentService.create(comm);
@@ -80,7 +80,7 @@ public class NewsBean {
     }
 
     public void deleteComment(Comment comment) {
-        if (comment.getUser().getId() == 1) { //тут пользователя проверять потом
+        if (comment.getUser().getId() == SessionBean.getUserId()) { //тут пользователя проверять потом
             commentService.delete(comment.getId());
         }
     }

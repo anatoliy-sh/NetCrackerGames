@@ -96,7 +96,7 @@ public class AboutGameBean {
         if (mrk == 0) {
             return;
         }
-        Mark m = markService.getMarkByUserAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        Mark m = markService.getMarkByUserAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
         if (m != null) {
             return;
         }
@@ -107,7 +107,7 @@ public class AboutGameBean {
         //context.getExternalContext().getSessionMap().remove("id");
         mark.setMark(mrk);
         mark.setReview(review);
-        mark.setUser(userService.getUserById(1));
+        mark.setUser(userService.getUserById(SessionBean.getUserId()));
         markService.create(mark);
 
         inputText.setValue("");
@@ -116,7 +116,7 @@ public class AboutGameBean {
     }
 
     public void deleteMarkAndReview(Mark mark) {
-        if (mark.getUser().getId() == 1) {//тут потом пользователя проверять
+        if (mark.getUser().getId() == SessionBean.getUserId()) {//тут потом пользователя проверять
             markService.delete(mark.getId());
         }
     }
@@ -125,14 +125,14 @@ public class AboutGameBean {
 
         FacesContext context = FacesContext.getCurrentInstance();
         boolean exist = true;
-        UserGame userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        UserGame userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
         if (userGame == null) {
             exist = false;
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
         //context.getExternalContext().getSessionMap().remove("id");
-        userGame.setUser(userService.getUserById(1));
+        userGame.setUser(userService.getUserById(SessionBean.getUserId()));
         userGame.setGameStatus(gameStatusService.getGameStatusById(1));
         if (!exist) {
             userGame.setCanExchange(false);
@@ -152,7 +152,7 @@ public class AboutGameBean {
         boolean exist = true;
         UserGame userGame = null;
         try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
         } catch (Exception e) {
 
         }
@@ -162,7 +162,7 @@ public class AboutGameBean {
         }
         userGame.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
         //context.getExternalContext().getSessionMap().remove("id");
-        userGame.setUser(userService.getUserById(1));
+        userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
         userGame.setGameStatus(gameStatusService.getGameStatusById(1));
         if (!exist) {
@@ -183,7 +183,7 @@ public class AboutGameBean {
         boolean exist = true;
         UserGame userGame = null;
         try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
         } catch (Exception e) {
 
         }
@@ -193,7 +193,7 @@ public class AboutGameBean {
         }
         userGame.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
         //context.getExternalContext().getSessionMap().remove("id");
-        userGame.setUser(userService.getUserById(1));
+        userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
         userGame.setGameStatus(gameStatusService.getGameStatusById(1));
         if (!exist) {
@@ -221,7 +221,7 @@ public class AboutGameBean {
         FacesContext context = FacesContext.getCurrentInstance();
         UserGame userGame = null;
         try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(1, Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
         } catch (Exception e) {
 
         }
