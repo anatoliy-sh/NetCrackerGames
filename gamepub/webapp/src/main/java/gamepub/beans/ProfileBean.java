@@ -5,9 +5,11 @@ import gamepub.db.entity.User;
 import gamepub.db.service.GameService;
 import gamepub.db.service.UserService;
 
-import javax.ejb.EJB;
+import javax.ejb.*;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,7 +20,7 @@ import java.util.List;
 @SessionScoped
 public class ProfileBean {
 
-    private int id = 1;
+    private int id;
     List<Game> myGames;
 
 
@@ -31,6 +33,8 @@ public class ProfileBean {
 
 
     public String getName() {
+
+        id = SessionBean.getUserId();
         User user = userService.getUserById(id);
         return user.getLogin();
     }

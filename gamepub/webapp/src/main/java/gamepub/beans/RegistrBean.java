@@ -84,7 +84,7 @@ private int cityId;
        
         
         if(userService.getUserByLogin(name)==null){
-        user.setAvatarUrl("src/main/webapp/Template/404g.png");
+        user.setAvatarUrl("http://dializa.md/wp-content/uploads/2015/06/no-avatar-ff.png");
         
         user.setPassword(shaCode.code(shaCode.code(name)+password));            
         user.setEmail(email);
