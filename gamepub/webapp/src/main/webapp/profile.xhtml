@@ -31,8 +31,7 @@
                 <p:button outcome="myGames" value="Trading Page" icon="ui-icon-star">
                     <f:param name="listGames" value="3"/>
                 </p:button>
-                <p:button value="My gallery" icon="ui-icon-star">
-                </p:button>
+                <p:button outcome="gallery" value="My gallery" icon="ui-icon-star"/>
                 <h:form>
                     <p:dataGrid var="game" value="#{profileBean.myGames}" columns="4" layout="grid"
                                 rows="1" paginator="true" id="myGames"

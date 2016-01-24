@@ -6,31 +6,36 @@
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui"
-      xmlns:c="http://java.sun.com/jsp/jstl/core">
-<link rel="stylesheet" href="style.css" type="text/css"/>
+      xmlns:c="http://java.sun.com/jsp/jstl/core" xmlns:b="http://bootsfaces.net/ui">
+
 <h:head>
 </h:head>
 <h:body>
-    <ui:composition>
 
-        <div style="display: inline; float: right;">
+    <ui:composition>
+        <nav class="navbar navbar-inverse">
+            <div class="container-fluid">
+            <div class="navbar-header">
+        <h:outputStylesheet name="theme.css"/>
+        <div style="display: inline; float: right; margin-left: 50px;">
             <c:if test="#{!loginBean.logged}"    >
             <h:form>
                 <p:growl id="msgs1" showDetail="true"/>
                 
-                <h:panelGrid columns="6" cellpadding="5">
-                    <p:inputText id="login" value="#{loginBean.name}"/>
-                    <p:password id="password" value="#{loginBean.password}" inline="true"/>
-                    <p:watermark for="login" value="Login *" />
-                    <p:watermark for="password" value="Password *" />
+                <h:panelGrid columns="8" cellpadding="5">
 
+                    <b:inputText styleClass="water" id="login" value="#{loginBean.name}"/>
 
-                    <p:commandButton value="OK" icon="ui-icon-star" actionListener="#{loginBean.check}"
+                    <b:inputSecret styleClass="water" id="password" value="#{loginBean.password}" inline="true"/>
+
+                    <p:watermark  for="login" value="Login *" />
+                    <p:watermark  for="password" value="Password *" />
+
+                    <b:commandButton styleClass="btn-success" value="Sig In" icon="ui-icon-star" actionListener="#{loginBean.check}"
                                      ajax="false"/>
-                    
-                    <p:button outcome="registr" value="Registr" icon="ui-icon-star">
-                    </p:button>
-                    
+
+                    <b:button styleClass="gBut" outcome="registr" value="Registr" />
+
                 </h:panelGrid>
             </h:form>
            </c:if>
@@ -42,11 +47,10 @@
                 <h:panelGrid columns="6" cellpadding="5">
                     <h:outputLabel for="logged" value ="Logged as:"/>
                     <h:outputText id="logged" value="#{loginBean.name}"/>
-                    <p:commandButton value="logout" actionListener="#{loginBean.logout}" ajax="false">
-                     
-                    </p:commandButton>
-                    <p:button outcome="registr" value="Registr" icon="ui-icon-star"/>
-                    <p:button outcome="profile" value="My profile" icon="ui-icon-star"/>
+                    <b:commandButton styleClass="gBut" value="logout" actionListener="#{loginBean.logout}" ajax="false"/>
+
+                    <b:button styleClass="gBut" outcome="registr" value="Registr" icon="ui-icon-star"/>
+                    <b:button styleClass="gBut" outcome="profile" value="My profile" icon="ui-icon-star"/>
                 </h:panelGrid>
             </h:form>                                    
             </c:if>  
@@ -57,18 +61,24 @@
             <h:form>
                 <p:growl id="msgs3" showDetail="true"/>
                 <h:panelGrid columns="6" cellpadding="5">
-                    <p:autoComplete id="search" />
-                    <p:watermark for="search" value="Search..." />
-                    <p:button outcome="allNews" value="Last News" icon="ui-icon-star"/>
 
-                    <p:button outcome="search" value="Extended serach" icon="ui-icon-star">
-                    </p:button>
-                    <p:button outcome="main" value="Main page" icon="ui-icon-star"/>
+                    <b:inputText styleClass="water"  id="search"/>
+
+                    <p:watermark for="search" value="Search..." />
+
+                    <b:button styleClass="gBut" outcome="allNews" value="Last News" icon="ui-icon-star"/>
+
+                    <b:button styleClass="gBut" outcome="search" value="Extended serach" icon="ui-icon-star"/>
+
+
+                    <b:button  styleClass="gBut" outcome="main" value="Main page" icon="ui-icon-star"/>
 
                 </h:panelGrid>
             </h:form>
         </div>
-
+            </div>
+            </div>
+        </nav>
     </ui:composition>
 
 </h:body>
