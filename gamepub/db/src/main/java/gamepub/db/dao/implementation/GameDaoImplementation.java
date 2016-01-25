@@ -73,8 +73,9 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
         cq.orderBy(cb.desc(root.<Integer>get("metacritic")), cb.desc(root.<Integer>get("releaseDate")));
         List<Game> queryResult = getEntityManager().createQuery(cq).getResultList();
         List<Game> result = new ArrayList<Game>();
-        for(int i = 1; i<=10 && queryResult.size()<maxValue+i; i++)
-            result.add(queryResult.get(maxValue+i));
+        result = queryResult;
+    /*    for(int i = 1; i<=10 && queryResult.size()<maxValue+i; i++)
+            result.add(queryResult.get(maxValue+i));*/
         return result;
     }
 }
