@@ -5,14 +5,13 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-<link rel="stylesheet" href="style.css" type="text/css"/>
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
 <h:head>
 </h:head>
 <h:body>
     <ui:composition template="/Template/template.xhtml">
     <ui:define name="content">
-            <div class="middledata">
+            <b:column span="10" offset="1">
                 <h1>Search</h1>
                 <h:form id="searchForm">
 
@@ -42,18 +41,17 @@
 
 
                     </h:panelGrid>
-                    <h:outputText id="output" value="#{serachBean.genreStr}" />
-                    <p:commandButton value="Search"  update="dataForm" icon="ui-icon-check" actionListener="#{serachBean.search}"/>
+                    <b:commandButton value="Search"  update="dataForm" icon="ui-icon-check" actionListener="#{serachBean.search}"/>
 
                 </h:form>
 
                 <h:form id="dataForm">
                     <p:dataScroller id="sgames" value="#{serachBean.myGames}" var="game" chunkSize="10">
 
-                        <h:panelGrid columns="2" style="width:100%" columnClasses="logo,detail">
+                        <h:panelGrid columns="2" styleClass="gameItem" columnClasses="logo,detail">
                             <p:outputPanel>
-                                <h:panelGrid columns="2" style="width:100%">
-                                    <p:graphicImage style="width:65%; height: 70%;" value="#{game.poster}" />
+                                <h:panelGrid columns="2" >
+                                    <p:graphicImage value="#{game.poster}" style="width:100%; height: 100%;"  />
                                     <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
                                         <f:param value="#{game.id}" name="id"/>
                                     </h:link>
@@ -64,7 +62,7 @@
                     </p:dataScroller>
                 </h:form>
 
-            </div>
+            </b:column>
     </ui:define>
     </ui:composition>
 </h:body>

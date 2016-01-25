@@ -5,31 +5,37 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
 <link rel="stylesheet" href="style.css" type="text/css"/>
 <h:head>
 </h:head>
 <h:body>
     <div class="wrapper">
+        <b:row styleClass="header">
+            <b:column span="12">
+                <ui:insert name="header">
+                    <ui:include src="comHeader.xhtml"/>
+                </ui:insert>
+            </b:column>
+            <!-- .header-->
+        </b:row>
 
-        <div class="header">
-            <ui:insert name="header">
-                <ui:include src="comHeader.xhtml"/>
+        <b:row styleClass="middle">
+
+            <ui:insert name="content">
+                <ui:include src="comContent.xhtml"/>
             </ui:insert>
-        </div><!-- .header-->
 
-        <ui:insert name="content">
-            <ui:include src="comContent.xhtml"/>
-        </ui:insert>
+        </b:row>
 
-
-        <div class="footer">
-            <strong>Contact information</strong>
-            <ui:insert name="footer">
-                <ui:include src="comFooter.xhtml"/>
-            </ui:insert>
-        </div><!-- .footer -->
-
+        <b:row styleClass="footer">
+            <div class="footer">
+                <strong>Contact information</strong>
+                <ui:insert name="footer">
+                    <ui:include src="comFooter.xhtml"/>
+                </ui:insert>
+            </div><!-- .footer -->
+        </b:row>
     </div><!-- .wrapper -->
 
 </h:body>

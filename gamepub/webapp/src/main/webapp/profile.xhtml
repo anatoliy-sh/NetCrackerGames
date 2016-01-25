@@ -5,12 +5,12 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
-<link rel="stylesheet" href="style.css" type="text/css"/>
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
+
 <h:body>
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
-            <div class="middledata">
+            <b:column span="10" offset="1">
 
                 <h2 align="center">#{profileBean.name}</h2>
 
@@ -31,8 +31,7 @@
                 <p:button outcome="myGames" value="Trading Page" icon="ui-icon-star">
                     <f:param name="listGames" value="3"/>
                 </p:button>
-                <p:button value="My gallery" icon="ui-icon-star">
-                </p:button>
+                <p:button outcome="gallery" value="My gallery" icon="ui-icon-star"/>
                 <h:form>
                     <p:dataGrid var="game" value="#{profileBean.myGames}" columns="4" layout="grid"
                                 rows="1" paginator="true" id="myGames"
@@ -56,7 +55,7 @@
                 </h:form>
 
 
-            </div>
+            </b:column>
         </ui:define>
     </ui:composition>
 </h:body>

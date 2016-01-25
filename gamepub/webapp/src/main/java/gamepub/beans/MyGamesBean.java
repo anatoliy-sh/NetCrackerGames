@@ -45,7 +45,8 @@ public class MyGamesBean {
 
     public List<Game> getMyGames() {
         List<Game> tmpGames = new ArrayList<Game>();
-        userGame = userGameService.getUserGamesByUserId(1);
+        int userId = SessionBean.getUserId();
+        userGame = userGameService.getUserGamesByUserId(userId);
 
         for(int i = 0; i<userGame.size(); i++){
             UserGame game = userGame.get(i);

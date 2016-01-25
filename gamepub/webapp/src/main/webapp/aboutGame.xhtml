@@ -5,22 +5,27 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
     <link rel="stylesheet" href="style.css" type="text/css"/>
     <h:body>
         <ui:composition template="/Template/template.xhtml">
             <ui:define name="content">
-                <div class="middledata">
 
+                 <b:row>
+                     <b:column span="10" offset="1">
                     <h1 align="center">#{aboutGameBean.game.name}</h1>
-                    <h2 align="center"><p:graphicImage value="#{aboutGameBean.game.poster}"/></h2>
-                    <h2 align="center">#{aboutGameBean.game.description}</h2>
-
+                    <div style="float:left"><p:graphicImage value="#{aboutGameBean.game.poster}"/></div>
+                    <div>#{aboutGameBean.game.description}</div>
+                     </b:column>
+                 </b:row>
+                 <b:row>
+                     <b:column span="8" offset="2">
+                         <br/><br/><br/>
                     <h:form id="addBut">
 
-                        <p:commandButton value="Add to favourite" id="favourite" update="addBut" actionListener="#{aboutGameBean.addToFavourite()}" />
-                        <p:commandButton value="Add to wanted" id="wanted" update="addBut" actionListener="#{aboutGameBean.addToWanted()}" />
-                        <p:commandButton value="Add to exchange" id="exchange" update="addBut" actionListener="#{aboutGameBean.addToExchange()}" />
+                        <b:commandButton value="Add to favourite" id="favourite" update="addBut" actionListener="#{aboutGameBean.addToFavourite()}" />
+                        <b:commandButton value="Add to wanted" id="wanted" update="addBut" actionListener="#{aboutGameBean.addToWanted()}" />
+                        <b:commandButton value="Add to exchange" id="exchange" update="addBut" actionListener="#{aboutGameBean.addToExchange()}" />
                     </h:form>
                     <br/>
 
@@ -96,8 +101,8 @@
                                 update="tableReviews markAdderForm"/>
                         </h:form>
                     </p:panel>
-
-                </div>
+                     </b:column>
+            </b:row>
             </ui:define>
         </ui:composition>
     </h:body>
