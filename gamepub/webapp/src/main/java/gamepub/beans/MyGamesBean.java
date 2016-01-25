@@ -24,7 +24,6 @@ import javax.faces.bean.SessionScoped;
 @SessionScoped
 public class MyGamesBean {
 
-    List<Game> myGames;
     List<UserGame> userGame;
 
     @EJB
@@ -44,21 +43,28 @@ public class MyGamesBean {
     }
 
     public List<Game> getMyGames() {
-        List<Game> tmpGames = new ArrayList<Game>();
+        List<Game> userGames = new ArrayList<Game>();
         int userId = SessionBean.getUserId();
         userGame = userGameService.getUserGamesByUserId(userId);
-
-        for(int i = 0; i<userGame.size(); i++){
-            UserGame game = userGame.get(i);
-            if(listGames.equals("1") || listGames.equals("2") && game.isFavorite()
-                    ||  listGames.equals("3") && game.isWanted())
-                tmpGames.add(userGame.get(i).getGame());
+        for (int i = 0; i < userGame.size(); i++) {
+            userGames.add(userGame.get(i).getGame());
         }
-        return tmpGames;
+        return userGames;
     }
-    
+
+    public List<UserGame> getFavouriteGames() {
+        return userGameService.getFavoriteUserGamesByUserId(SessionBean.getUserId());
+    }
+
+    public List<UserGame> getExchangeGames() {
+        return userGameService.getCanExchangeUserGamesByUserId(SessionBean.getUserId());
+    }
+
+    public void deleteMyGame(UserGame myGame) {
+        userGameService.delete(myGame.getId());
+    }
+
     public String goToConcreteGame() {
         return "game?faces-redirect=true";
     }
 }
-
