@@ -14,22 +14,39 @@
     <ui:composition template="/Template/template.xhtml">
         <ui:define name="content">
             <b:column span="8" offset="2">
-               <h1>News</h1>
-            <h:form>
-                <p:dataScroller value="#{allNewsBean.newses}" var="news" chunkSize="10">
-                    <f:facet name="header">
+                <h1>News</h1>
+                <h:form id="searchForm">
+                    <h:panelGrid columns="3" style="margin:10px;" cellpadding="5">
+                        <h3 style="margin-top:0px">Name</h3>
+                        <p:inputText id="nameNews" value="#{allNewsBean.newsName}"/>
 
-                    </f:facet>
+                        <h3 style="margin-top:0px">Game</h3>
+                        <p:selectOneMenu id="gameId" value="#{allNewsBean.gameId}" style="width:125px">
+                            <f:selectItems value="#{allNewsBean.games}" var="game" itemLabel="#{game.name}"
+                                           itemValue="#{game.id}"/>
+                        </p:selectOneMenu>
 
-                    <h:panelGrid columns="2" styleClass="newsItem">
-                        <p:graphicImage value="#{news.game.poster}" style="width:45%; height: 50%;"/>
-
-                        <h:link outcome="news" value="#{news.name}" includeViewParams="true">
-                            <f:param value="#{news.id}" name="newsId"/>
-                        </h:link>
+                        <h3 style="margin-top:0px">Date</h3>
+                        <p:calendar id="mask" pattern="dd-MM-yyyy" value="#{allNewsBean.date}" mask="true"/>
                     </h:panelGrid>
-                </p:dataScroller>
-            </h:form>
+                    <b:commandButton value="Search" update="dataForm" icon="ui-icon-check"
+                                     actionListener="#{allNewsBean.search}"/>
+                </h:form>
+                <h:form id="dataForm">
+                    <p:dataScroller value="#{allNewsBean.newses}" var="news" chunkSize="10">
+                        <f:facet name="header">
+
+                        </f:facet>
+
+                        <h:panelGrid columns="2" styleClass="newsItem">
+                            <p:graphicImage value="#{news.game.poster}" style="width:45%; height: 50%;"/>
+
+                            <h:link outcome="news" value="#{news.name}" includeViewParams="true">
+                                <f:param value="#{news.id}" name="newsId"/>
+                            </h:link>
+                        </h:panelGrid>
+                    </p:dataScroller>
+                </h:form>
             </b:column>
         </ui:define>
     </ui:composition>

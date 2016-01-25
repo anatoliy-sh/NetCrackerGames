@@ -6,6 +6,25 @@
              version="1.0">
     <persistence-unit name="PERSISTENCE">
         <provider>org.hibernate.ejb.HibernatePersistence</provider>
+        <class>gamepub.db.entity.Game</class>
+        <class>gamepub.db.entity.News</class>
+        <class>gamepub.db.entity.City</class>
+        <class>gamepub.db.entity.Comment</class>
+        <class>gamepub.db.entity.Country</class>
+        <class>gamepub.db.entity.Friend</class>
+        <class>gamepub.db.entity.GameGenre</class>
+        <class>gamepub.db.entity.GamePlatform</class>
+        <class>gamepub.db.entity.GameScreenshot</class>
+        <class>gamepub.db.entity.GameStatus</class>
+        <class>gamepub.db.entity.Genre</class>
+        <class>gamepub.db.entity.Mark</class>
+        <class>gamepub.db.entity.Platform</class>
+        <class>gamepub.db.entity.PrivateMessage</class>
+        <class>gamepub.db.entity.Tournament</class>
+        <class>gamepub.db.entity.User</class>
+        <class>gamepub.db.entity.UserGame</class>
+        <class>gamepub.db.entity.UserRole</class>
+        <class>gamepub.db.entity.UserScreenshot</class>
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL81Dialect"></property>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>

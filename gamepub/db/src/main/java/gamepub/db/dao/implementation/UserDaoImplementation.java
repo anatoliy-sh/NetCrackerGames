@@ -9,7 +9,9 @@ import gamepub.db.entity.UserRole;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -148,14 +150,22 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         CriteriaQuery cq = cb.createQuery();
         Root<User> root = cq.from(instance);
         cq.select(root);
+        List<Predicate> predicates = new ArrayList<Predicate>();
         if(parameterList!=null && parameterList.size()>0) {
             for (HashMap.Entry<String, Object> entry : parameterList) {
                 if (entry.getKey().equals("name")) {
-                    cq.where(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
+                    predicates.add(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
                 } else if (entry.getKey().equals("country")) {
-                    cq.where(cb.equal(root.<City>get("city").<Country>get("country"), entry.getValue()));
-                } else cq.where(cb.equal(root.<City>get("city"), entry.getValue()));
+                    predicates.add(cb.equal(root.<City>get("city").<Country>get("country"), entry.getValue()));
+                } else predicates.add(cb.equal(root.<City>get("city"), entry.getValue()));
             }
+            Predicate[] p = new Predicate[predicates.size()];
+            int i = 0;
+            for(Predicate predicate:predicates){
+                p[i] = predicate;
+                i++;
+            }
+            cq.where(p);
         }
         cq.orderBy(cb.desc(root.<String>get("name")));
         return getEntityManager().createQuery(cq).getResultList();
