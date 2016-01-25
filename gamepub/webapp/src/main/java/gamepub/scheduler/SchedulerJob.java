@@ -3,6 +3,8 @@ package gamepub.scheduler;
 /**
  * Created by roman on 24.01.16.
  */
+import gamepub.db.dao.implementation.GameDaoImplementation;
+import gamepub.db.dao.implementation.NewsDaoImplementation;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.News;
 import gamepub.db.service.GameService;
@@ -28,11 +30,10 @@ public class SchedulerJob implements Job {
     private static final String GAME_URL = "http://api.steampowered.com/ISteamApps/GetAppList/v2"; //all games
     private static final String NEWS_URL = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid="; //news by game
 
-    @EJB
-    GameService gameService;
 
-    @EJB
-    NewsService newsService;
+    GameDaoImplementation gameService = new GameDaoImplementation();
+
+    NewsDaoImplementation newsService = new NewsDaoImplementation();
 
     private String sendGet(String stringUrl) throws Exception {
         URL url = new URL(stringUrl);

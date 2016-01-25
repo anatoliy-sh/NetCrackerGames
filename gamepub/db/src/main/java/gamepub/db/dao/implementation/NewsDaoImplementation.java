@@ -8,7 +8,9 @@ import org.omg.CORBA.DATA_CONVERSION;
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
 import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -78,14 +80,23 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         CriteriaQuery cq = cb.createQuery();
         Root<News> root = cq.from(instance);
         cq.select(root);
+        List<Predicate> predicates = new ArrayList<Predicate>();
+
         if(parameterList!=null && parameterList.size()>0) {
             for (HashMap.Entry<String, Object> entry : parameterList) {
                 if (entry.getKey().equals("name")) {
-                    cq.where(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
+                    predicates.add(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
                 } else if (entry.getKey().equals("game")) {
-                    cq.where(cb.equal(root.<Game>get("game"), entry.getValue()));
-                } else cq.where(cb.lessThanOrEqualTo(root.<Date>get("date"), (Date) entry.getValue()));
+                    predicates.add(cb.equal(root.<Game>get("game"), entry.getValue()));
+                } else predicates.add(cb.lessThanOrEqualTo(root.<Date>get("date"), (Date) entry.getValue()));
             }
+            Predicate[] p = new Predicate[predicates.size()];
+            int i = 0;
+            for(Predicate predicate:predicates){
+                p[i] = predicate;
+                i++;
+            }
+            cq.where(p);
         }
         cq.orderBy(cb.desc(root.<Date>get("date")));
         return getEntityManager().createQuery(cq).getResultList();
