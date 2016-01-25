@@ -7523,9 +7523,11 @@ input[type="checkbox"]:disabled:checked:after,
 }
 .water{
   color:white;
+  padding:5px;
 }
 .water::-webkit-input-placeholder{
   color:#FFFFFF;
+
 }
 .ui-widget-header{
   background: #2196f3;
@@ -7540,4 +7542,8 @@ input[type="checkbox"]:disabled:checked:after,
 }
 .gameItem{
   margin: 10px;
+}
+.gBut{
+  margin:10px;
+  padding: 5px;
 }
