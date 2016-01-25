@@ -13,72 +13,78 @@
 <h:body>
 
     <ui:composition>
-        <nav class="navbar navbar-inverse">
-            <div class="container-fluid">
-            <div class="navbar-header">
         <h:outputStylesheet name="theme.css"/>
-        <div style="display: inline; float: right; margin-left: 50px;">
-            <c:if test="#{!loginBean.logged}"    >
-            <h:form>
-                <p:growl id="msgs1" showDetail="true"/>
-                
-                <h:panelGrid columns="8" cellpadding="5">
-
-                    <b:inputText styleClass="water" id="login" value="#{loginBean.name}"/>
-
-                    <b:inputSecret styleClass="water" id="password" value="#{loginBean.password}" inline="true"/>
-
-                    <p:watermark  for="login" value="Login *" />
-                    <p:watermark  for="password" value="Password *" />
-
-                    <b:commandButton styleClass="btn-success" value="Sign In" icon="ui-icon-star" actionListener="#{loginBean.check}"
-                                     ajax="false"/>
-
-                    <b:button styleClass="gBut" outcome="registr" value="Registr" />
-
-                </h:panelGrid>
-            </h:form>
-           </c:if>
-            
-            <c:if test="#{loginBean.logged}">
-                  <h:form>
-                <p:growl id="msgs2" showDetail="true"/>
-                
-                <h:panelGrid columns="6" cellpadding="5">
-                    <h:outputLabel for="logged" value ="Logged as:"/>
-                    <h:outputText id="logged" value="#{loginBean.name}"/>
-                    <b:commandButton styleClass="gBut" value="logout" actionListener="#{loginBean.logout}" ajax="false"/>
-
-                    <b:button styleClass="gBut" outcome="registr" value="Registr" icon="ui-icon-star"/>
-                    <b:button styleClass="gBut" outcome="profile" value="My profile" icon="ui-icon-star"/>
-                </h:panelGrid>
-            </h:form>                                    
-            </c:if>  
-            
-        </div>
-
-        <div align="left" style="display: inline; float: left;">
-            <h:form>
-                <p:growl id="msgs3" showDetail="true"/>
-                <h:panelGrid columns="6" cellpadding="5">
-
-                    <b:inputText styleClass="water"  id="search"/>
-
-                    <p:watermark for="search" value="Search..." />
-
-                    <b:button styleClass="gBut" outcome="allNews" value="Last News" icon="ui-icon-star"/>
-
-                    <b:button styleClass="gBut" outcome="search" value="Extended serach" icon="ui-icon-star"/>
+            <div class="container-fluid navbar navbar-inverse">
 
 
-                    <b:button  styleClass="gBut" outcome="main" value="Main page" icon="ui-icon-star"/>
 
-                </h:panelGrid>
-            </h:form>
-        </div>
+                    <b:column span="5" >
+                        <h:form>
+                            <p:growl id="msgs3" showDetail="true"/>
+                            <h:panelGrid columns="6" cellpadding="5">
+
+                                <b:inputText onkeypress="_openedPage(search)" styleClass="water" id="search"/>
+
+                                <p:watermark for="search" value="Search..."/>
+
+                                <b:button styleClass="gBut" outcome="allNews" value="Last News" icon="ui-icon-star"/>
+
+                                <b:button styleClass="gBut" outcome="search" value="Extended serach"
+                                          icon="ui-icon-star"/>
+
+
+                                <b:button styleClass="gBut" outcome="main" value="Main page" icon="ui-icon-star"/>
+
+                            </h:panelGrid>
+                        </h:form>
+                    </b:column>
+
+
+                        <c:if test="#{!loginBean.logged}">
+                            <b:column offset="3" span="4" style="align:right">
+                            <h:form>
+                                <p:growl id="msgs1" showDetail="true"/>
+
+                                <h:panelGrid columns="8" cellpadding="5">
+
+                                    <b:inputText styleClass="water" id="login" value="#{loginBean.name}"/>
+
+                                    <b:inputSecret styleClass="water" id="password" value="#{loginBean.password}"
+                                                   inline="true"/>
+
+                                    <p:watermark for="login" value="Login *"/>
+                                    <p:watermark for="password" value="Password *"/>
+
+                                    <b:commandButton styleClass="btn-success gBut" value="Sign In" icon="ui-icon-star"
+                                                     actionListener="#{loginBean.check}"
+                                                     ajax="false"/>
+
+                                    <b:button styleClass="gBut" outcome="registr" value="Registr"/>
+
+                                </h:panelGrid>
+                            </h:form>
+                            </b:column>
+                        </c:if>
+
+                        <c:if test="#{loginBean.logged}">
+                            <b:column offset="5" span="2" style="align:right">
+                            <h:form>
+                                <p:growl id="msgs2" showDetail="true"/>
+
+                                <h:panelGrid columns="2" cellpadding="5">
+                                    <b:button styleClass="gBut btn btn-info" outcome="profile" value="#{loginBean.name}"
+                                              icon="ui-icon-star"/>
+                                    <b:commandButton styleClass="gBut btn btn-danger" value="logout"
+                                                     actionListener="#{loginBean.logout}" ajax="false"/>
+
+
+                                </h:panelGrid>
+                            </h:form>
+                            </b:column>
+                        </c:if>
+
             </div>
-            </div>
-        </nav>
+
     </ui:composition>
 
 </h:body>
