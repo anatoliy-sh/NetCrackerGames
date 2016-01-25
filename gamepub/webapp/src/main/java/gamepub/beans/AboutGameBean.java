@@ -96,14 +96,20 @@ public class AboutGameBean {
         if (mrk == 0) {
             return;
         }
-        Mark m = markService.getMarkByUserAndGameId(SessionBean.getUserId(), Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString()));
+        Mark m = null;
+        try{
+            m = markService.getMarkByUserAndGameId(SessionBean.getUserId(),
+                    SessionBean.getGameId());
+        }
+        catch (NullPointerException e){
+            System.out.println(e.getMessage());
+        }
         if (m != null) {
             return;
         }
-
         Mark mark = new Mark();
         mark.setDate(new java.util.Date());
-        mark.setGame(gameService.getGameById(Integer.valueOf(context.getExternalContext().getSessionMap().get("id").toString())));
+        mark.setGame(gameService.getGameById(SessionBean.getGameId()));
         //context.getExternalContext().getSessionMap().remove("id");
         mark.setMark(mrk);
         mark.setReview(review);
