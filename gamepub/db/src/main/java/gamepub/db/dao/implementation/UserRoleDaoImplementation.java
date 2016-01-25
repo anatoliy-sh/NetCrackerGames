@@ -3,6 +3,10 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.UserRoleDao;
 import gamepub.db.entity.UserRole;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,16 +19,14 @@ public class UserRoleDaoImplementation extends BaseDaoImplementation<UserRole,In
     }
 
     public UserRole getUserRoleById(Integer id) {
-        String jpa = "SELECT u FROM UserRole u WHERE u.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
-            e.printStackTrace();
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserRole> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (UserRole)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }

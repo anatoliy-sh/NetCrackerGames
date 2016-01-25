@@ -1,8 +1,14 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.GamePlatformDao;
+import gamepub.db.entity.Game;
 import gamepub.db.entity.GamePlatform;
+import gamepub.db.entity.Platform;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,29 +21,34 @@ public class GamePlatformDaoImplementation extends BaseDaoImplementation<GamePla
     }
 
     public GamePlatform getGamePlatformById(Integer id) {
-        String jpa = "SELECT g FROM GamePlatform g WHERE g.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GamePlatform> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (GamePlatform)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<GamePlatform> getGamePlatformsByGameId(Integer id) {
-        String jpa = "SELECT g FROM GamePlatform g WHERE g.game.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GamePlatform> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
 
     }
 
     public List<GamePlatform> getGamePlatformByPlatformId(Integer id) {
-        String jpa = "SELECT g FROM GamePlatform g WHERE g.platform.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GamePlatform> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Platform>get("platform").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

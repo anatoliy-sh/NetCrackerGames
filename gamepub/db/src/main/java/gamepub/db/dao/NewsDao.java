@@ -3,6 +3,7 @@ package gamepub.db.dao;
 import gamepub.db.entity.News;
 
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -14,4 +15,5 @@ public interface NewsDao extends BaseDao<News,Integer> {
     public List<News> getNewsByGameId(Integer id);
     public List<News> getNewsByDate(Date date);
     public List<News> getNewsOrderByDate();
+    public List<News> getNewsByCustomParams(List<HashMap.Entry<String, Object>> parameterList);
 }

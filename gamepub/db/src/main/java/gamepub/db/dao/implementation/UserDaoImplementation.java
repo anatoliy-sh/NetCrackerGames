@@ -1,10 +1,18 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.UserDao;
+import gamepub.db.entity.City;
+import gamepub.db.entity.Country;
 import gamepub.db.entity.User;
+import gamepub.db.entity.UserRole;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created by roman on 05.12.15.
@@ -15,122 +23,141 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
     }
 
     public User getUserById(Integer id) {
-        String jpa = "SELECT u FROM User u WHERE u.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserByLogin(String login) {
-        String jpa = "SELECT u FROM User u WHERE u.login = :login";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("login",login);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("login"), login));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserByLoginAndPassword(String login, String password) {
-        String jpa = "SELECT u FROM User u WHERE u.login = :login AND u.password = :password";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("login",login);
-        parameters.put("password", password);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("login"), login),cb.equal(root.<String>get("password"), password));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserByEmail(String email) {
-        String jpa = "SELECT u FROM User u WHERE u.email = :email";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("email",email);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("email"), email));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserByVkInfo(String vkInfo) {
-        String jpa = "SELECT u FROM User u WHERE u.vkInfo = :vkInfo";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("vkInfo",vkInfo);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("vkInfo"), vkInfo));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserBySteamInfo(String steamInfo) {
-        String jpa = "SELECT u FROM User u WHERE u.steamInfo = :steamInfo";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("steamInfo",steamInfo);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("steamInfo"), steamInfo));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public User getUserByFbInfo(String fbInfo) {
-        String jpa = "SELECT u FROM User u WHERE u.fbInfo = :fbInfo";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("fbInfo",fbInfo);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("fbInfo"), fbInfo));
+        try {
+            return (User)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<User> getUsersByUserRoleId(Integer id) {
-        String jpa = "SELECT u FROM User u WHERE u.userRole.id = :id ORDER BY u.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<UserRole>get("userRole").<Integer>get("id"), id));
+        cq.orderBy(cb.asc(root.<String>get("login")));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<User> getUsersByCityId(Integer id) {
-        String jpa = "SELECT u FROM User u WHERE u.city.id = :id ORDER BY u.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<City>get("city").<Integer>get("id"), id));
+        cq.orderBy(cb.asc(root.<String>get("login")));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<User> getUsersByCountryId(Integer id) {
-        String jpa = "SELECT u FROM User u WHERE u.city.country.id = :id ORDER BY u.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<City>get("city").<Country>get("country").<Integer>get("id"), id));
+        cq.orderBy(cb.asc(root.<String>get("login")));
+        return getEntityManager().createQuery(cq).getResultList();
+    }
+
+    public List<User> getUsersByCustomParams(List<HashMap.Entry<String, Object>> parameterList) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<User> root = cq.from(instance);
+        cq.select(root);
+        if(parameterList!=null && parameterList.size()>0) {
+            for (HashMap.Entry<String, Object> entry : parameterList) {
+                if (entry.getKey().equals("name")) {
+                    cq.where(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
+                } else if (entry.getKey().equals("country")) {
+                    cq.where(cb.equal(root.<City>get("city").<Country>get("country"), entry.getValue()));
+                } else cq.where(cb.equal(root.<City>get("city"), entry.getValue()));
+            }
+        }
+        cq.orderBy(cb.desc(root.<String>get("name")));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

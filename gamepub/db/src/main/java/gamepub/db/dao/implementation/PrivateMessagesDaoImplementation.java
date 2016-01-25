@@ -2,7 +2,12 @@ package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.PrivateMessageDao;
 import gamepub.db.entity.PrivateMessage;
+import gamepub.db.entity.User;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,56 +21,58 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
     }
 
     public PrivateMessage getPrivateMessageById(Integer id) {
-        String jpa = "SELECT p FROM PrivateMessage u WHERE p.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<PrivateMessage> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public PrivateMessage getPrivateMessageBySenderIdAndReceiverIdAndDate(Integer senderId, Integer receiverId, Date date) {
-        String jpa = "SELECT p FROM PrivateMessage u WHERE p.sender.id = :senderId AND " +
-                "p.receiver.id = :receiverId AND" +
-                "p.date = :date";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("senderId",senderId);
-        parameters.put("receiverId",receiverId);
-        parameters.put("date",date);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<PrivateMessage> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), senderId),
+                cb.equal(root.<User>get("receiver").<Integer>get("id"), receiverId),
+                cb.equal(root.<Date>get("date"), date));
+        try {
+            return (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<PrivateMessage> getSendedPrivateMessagesBySenderId(Integer id) {
-        String jpa = "SELECT p FROM PrivateMessage p WHERE p.sender.id = :id ORDER BY p.date DESC";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<PrivateMessage> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<PrivateMessage> getReceivedPrivateMessagesByReceiverId(Integer id) {
-        String jpa = "SELECT p FROM PrivateMessage p WHERE p.receiver.id = :id ORDER BY p.date DESC";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<PrivateMessage> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("receiver").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<PrivateMessage> getPrivateMessagesBySenderIdAndReceiverId(Integer senderId, Integer receiverId) {
-        String jpa = "SELECT p FROM PrivateMessage p WHERE p.sender.id = :senderId AND p.receiver.id = :receiverID  ORDER BY p.date DESC";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("senderId",senderId);
-        parameters.put("receiverID",receiverId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<PrivateMessage> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), senderId),
+                cb.equal(root.<User>get("receiver").<Integer>get("id"), receiverId));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

@@ -3,6 +3,11 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.GameDao;
 import gamepub.db.entity.Game;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -16,22 +21,26 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
     }
 
     public Game getGameById(Integer id) {
-        String jpa = "SELECT g FROM Game g WHERE g.id= :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id", id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Game> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        } catch (Exception e) {
-            e.printStackTrace();
+            return (Game)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<Game> getGamesByName(String name) {
-        String jpa = "SELECT g FROM Game g WHERE g.name= :name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("name", name);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Game> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("name"), name));
+        cq.orderBy(cb.asc(root.<String>get("name")));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<Game> getGamesByCustomParams(List<HashMap.Entry<String, Object>> parameterList) {
@@ -49,7 +58,7 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
                     jpa += " AND gp.platform= :platform";
                 } else if (param.getKey().equals("genre")) {
                     jpa += " AND g.genre= :genre";
-                } else jpa += " AND g.game.date<= :date";
+                } else jpa += " AND g.game.releaseDate<= :date";
                 parameters.put(param.getKey(),param.getValue());
             }
         }
@@ -57,12 +66,15 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
     }
 
     public List<Game> getGamesOrderByMarks(int maxValue){
-        String jpa = "SELECT g FROM Game g ORDER BY g.metacritic, g.releaseDate";
-        try {
-            return this.ExecuteQuery(jpa,maxValue);
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Game> root = cq.from(instance);
+        cq.select(root);
+        cq.orderBy(cb.desc(root.<Integer>get("metacritic")), cb.desc(root.<Integer>get("releaseDate")));
+        List<Game> queryResult = getEntityManager().createQuery(cq).getResultList();
+        List<Game> result = new ArrayList<Game>();
+        for(int i = 1; i<=10 && queryResult.size()<maxValue+i; i++)
+            result.add(queryResult.get(maxValue+i));
+        return result;
     }
 }

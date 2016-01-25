@@ -13,7 +13,7 @@ import java.util.List;
  * Created by roman on 05.12.15.
  */
 public class BaseDaoImplementation<T,PK> extends AbstractDaoImplementation<T,PK> implements BaseDao<T,PK> {
-    private Class<T> instance;
+    protected Class<T> instance;
 
     public BaseDaoImplementation(Class<T> instance)
     {
@@ -41,7 +41,14 @@ public class BaseDaoImplementation<T,PK> extends AbstractDaoImplementation<T,PK>
     }
 
     public T find(PK id) {
-        return null;
+        em = getEntityManager();
+        try{
+           return em.find(instance,id);
+        }catch (Exception e){
+            return null;
+        }finally {
+            closeEntityManager();
+        }
     }
 
     public T update(T t) {

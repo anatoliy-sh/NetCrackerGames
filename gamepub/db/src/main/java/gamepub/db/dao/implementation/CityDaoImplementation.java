@@ -2,7 +2,12 @@ package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.CityDao;
 import gamepub.db.entity.City;
+import gamepub.db.entity.Country;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,23 +21,27 @@ public class CityDaoImplementation extends BaseDaoImplementation<City,Integer> i
     }
 
     public City getCityById(Integer id) {
-        String jpa = "SELECT c FROM City c WHERE c.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<City> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"),id));
+        try {
+            return (City)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
+
     }
 
     public List<City> getCitiesById(Integer id) {
-        String jpa = "SELECT c FROM City c WHERE c.country.id = :id ORDER BY c.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<City> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Country>get("country").<Integer>get("id"), id));
+        cq.orderBy(cb.asc(root.<String>get("name")));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

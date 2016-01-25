@@ -3,6 +3,10 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.GameStatusDao;
 import gamepub.db.entity.GameStatus;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 
 /**
@@ -14,13 +18,14 @@ public class GameStatusDaoImplementation extends BaseDaoImplementation<GameStatu
     }
 
     public GameStatus getGameStatusById(Integer id) {
-        String jpa = "SELECT g FROM GameStatus g WHERE g.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GameStatus> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (GameStatus)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }

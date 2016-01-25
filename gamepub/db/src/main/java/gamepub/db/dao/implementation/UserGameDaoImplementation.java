@@ -1,8 +1,15 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.UserGameDao;
+import gamepub.db.entity.Game;
+import gamepub.db.entity.GameStatus;
+import gamepub.db.entity.User;
 import gamepub.db.entity.UserGame;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,102 +22,127 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
     }
 
     public UserGame getUserGameById(Integer id) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (UserGame)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public UserGame getUserGameByUserIdAndGameId(Integer userId, Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id= :userId AND " +
-                "u.game.id= :gameId";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("userId",userId);
-        parameters.put("gameId",gameId);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<Game>get("game").<Integer>get("id"), userId));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (UserGame)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<UserGame> getUserGamesByUserId(Integer userId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",userId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getUserGamesByUserId(Integer userId, Integer gameStatusId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND " +
-                "u.gameStatus.id= :gameStatusId ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",userId);
-        parameters.put("gameStatusId",gameStatusId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<GameStatus>get("gameStatus").<Integer>get("id"), gameStatusId));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getUserGamesByGameId(Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",gameId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getUserGamesByGameId(Integer gameId, Integer gameStatusId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND " +
-                "u.gameStatus.id= :gameStatusId ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",gameId);
-        parameters.put("gameStatusId",gameStatusId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
+                cb.equal(root.<GameStatus>get("gameStatus").<Integer>get("id"), gameStatusId));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getFavoriteUserGamesByUserId(Integer userId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND u.isFavorite=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",userId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<Boolean>get("favorite"),true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getFavoriteUserGamesByGameId(Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND u.isFavorite=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",gameId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
+                cb.equal(root.<Boolean>get("favorite"), true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getWantedUserGamesByUserId(Integer userId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND u.isWanted=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",userId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<Boolean>get("wanted"), true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getWantedUserGamesByGameId(Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND u.isWanted=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",gameId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
+                cb.equal(root.<Boolean>get("wanted"), true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getCanExchangeUserGamesByUserId(Integer userId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.user.id = :id AND u.isCanExchange=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",userId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<Boolean>get("canExchange"), true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<UserGame> getCanExchangeUserGamesByGameId(Integer gameId) {
-        String jpa = "SELECT u FROM UserGame u WHERE u.game.id = :id AND u.isCanExchange=true ORDER BY u.game.name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",gameId);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserGame> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
+                cb.equal(root.<Boolean>get("canExchange"), true));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

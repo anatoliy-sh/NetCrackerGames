@@ -3,6 +3,10 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.PlatformDao;
 import gamepub.db.entity.Platform;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 
 /**
@@ -14,30 +18,28 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
     }
 
     public Platform getPlatformByName(String name) {
-        String jpa = "SELECT p FROM Platform p WHERE p.name= :name";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("name",name);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Platform> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("name"), name));
+        try {
+            return (Platform)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public Platform getPlatformById(Integer id) {
-        String jpa = "SELECT p FROM Platform p WHERE p.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Platform> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (Platform)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
-
-
     }
 }

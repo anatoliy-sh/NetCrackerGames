@@ -23,7 +23,9 @@ public class Main {
     private static final String NEWS_URL = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid="; //news by game
 
     public static void main(String[] args) throws Exception {
-
+        CityDaoImplementation cdi = new CityDaoImplementation();
+        System.out.println(cdi.getCitiesById(1));
+/*
         //WARNING!!!! RUN IT ONLY ONCE!!!
 
         Main loader = new Main();
@@ -204,7 +206,7 @@ public class Main {
         }
         loader.checkNewses();
         System.exit(0);
-    }
+  */  }
 
     private void checkNewses(){
         GameDaoImplementation gameDaoImplementation = new GameDaoImplementation();
@@ -278,4 +280,5 @@ public class Main {
         input.close();
         return response.toString();
     }
+
 }

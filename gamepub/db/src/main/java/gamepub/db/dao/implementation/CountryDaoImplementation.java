@@ -3,6 +3,10 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.CountryDao;
 import gamepub.db.entity.Country;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -16,13 +20,14 @@ public class CountryDaoImplementation extends BaseDaoImplementation<Country, Int
     }
 
     public Country getCountryById(Integer id) {
-        String jpa = "SELECT c FROM Country c WHERE c.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Country> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (Country)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }

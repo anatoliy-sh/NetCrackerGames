@@ -1,8 +1,13 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.UserScreenshotDao;
+import gamepub.db.entity.User;
 import gamepub.db.entity.UserScreenshot;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,23 +20,24 @@ public class UserScreenshotDaoImplementation extends BaseDaoImplementation<UserS
     }
 
     public UserScreenshot getScreenshotById(Integer id) {
-        String jpa = "SELECT s FROM UserScreenshot s WHERE s.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserScreenshot> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (UserScreenshot)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<UserScreenshot> getScreenshotsByUserId(Integer id) {
-        String jpa = "SELECT s FROM UserScreenshot s WHERE s.user.id = :id ORDER BY s.date DESC";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<UserScreenshot> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

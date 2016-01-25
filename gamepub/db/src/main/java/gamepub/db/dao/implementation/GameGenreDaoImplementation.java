@@ -1,8 +1,14 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.GameGenreDao;
+import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
+import gamepub.db.entity.Genre;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,28 +21,33 @@ public class GameGenreDaoImplementation extends BaseDaoImplementation<GameGenre,
     }
 
     public GameGenre getGameGenreById(Integer id) {
-        String jpa = "SELECT g FROM GameGenre g WHERE g.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GameGenre> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
         try {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e){
-            e.printStackTrace();
+            return (GameGenre)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<GameGenre> getGameGenresByGameId(Integer id) {
-        String jpa = "SELECT g FROM GameGenre g WHERE g.game.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GameGenre> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<GameGenre> getGameGenresByGenreId(Integer id) {
-        String jpa = "SELECT g FROM GameGenre g WHERE g.genre.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<GameGenre> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Genre>get("genre").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

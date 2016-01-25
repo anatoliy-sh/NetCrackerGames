@@ -1,8 +1,13 @@
 package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.TournamentDao;
+import gamepub.db.entity.Game;
 import gamepub.db.entity.Tournament;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 import java.util.List;
 
@@ -15,30 +20,33 @@ public class TournamentDaoImplementation extends BaseDaoImplementation<Tournamen
     }
 
     public Tournament getTournamentById(Integer id) {
-        String jpa = "SELECT t FROM Tournament t WHERE t.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Tournament> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (Tournament)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<Tournament> getTournamentsByName(String name) {
-        String jpa = "SELECT t FROM Tournament t WHERE t.name = :name";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("name",name);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Tournament> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("name"), name));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<Tournament> getTournamentsByGameId(Integer id) {
-        String jpa = "SELECT t FROM Tournament t WHERE t.game.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Tournament> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

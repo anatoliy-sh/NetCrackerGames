@@ -3,6 +3,10 @@ package gamepub.db.dao.implementation;
 import gamepub.db.dao.GenreDao;
 import gamepub.db.entity.Genre;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.HashMap;
 
 /**
@@ -14,30 +18,28 @@ public class GenreDaoImplementation extends BaseDaoImplementation<Genre,Integer>
     }
 
     public Genre getGenreByName(String name) {
-        String jpa = "SELECT g FROM Genre g WHERE g.name= :name";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("name",name);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Genre> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<String>get("name"), name));
+        try {
+            return (Genre)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public Genre getGenreById(Integer id) {
-        String jpa = "SELECT g FROM Genre g WHERE g.id= :id";
-        HashMap<String,Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Genre> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (Genre)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
-
-
     }
 }

@@ -2,7 +2,12 @@ package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.CommentDao;
 import gamepub.db.entity.Comment;
+import gamepub.db.entity.News;
 
+import javax.persistence.NoResultException;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -16,47 +21,48 @@ public class CommentDaoImplementation extends BaseDaoImplementation<Comment,Inte
     }
 
     public Comment getCommentById(Integer id) {
-        String jpa = "SELECT c FROM Comment c WHERE c.id = :id";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Comment> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<Integer>get("id"), id));
+        try {
+            return (Comment)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public Comment getCommentByNewsIdAndUserIdAndDate(Integer newsId, Integer userId, Date date) {
-        String jpa = "SELECT c FROM Comment c WHERE c.news.id = :newsId AND" +
-                "c.user.id= :userId AND c.date= :date";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("userId",userId);
-        parameters.put("newsId",newsId);
-        parameters.put("date",date);
-        try
-        {
-            return this.ExecuteQuery(jpa, parameters).get(0);
-        }
-        catch (Exception e)
-        {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Comment> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<News>get("news").<Integer>get("id"), newsId),
+                cb.equal(root.<News>get("user").<Integer>get("id"), userId),
+                cb.equal(root.<Date>get("date"), date));
+        try {
+            return (Comment)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
             return null;
         }
     }
 
     public List<Comment> getCommentsByNewsId(Integer id) {
-        String jpa = "SELECT c FROM Comment c WHERE c.news.id = :id ORDER BY c.date";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Comment> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<News>get("news").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 
     public List<Comment> getCommentsByUserId(Integer id) {
-        String jpa = "SELECT c FROM Comment c WHERE c.user.id = :id ORDER BY c.date";
-        HashMap<String, Object> parameters = new HashMap<String, Object>();
-        parameters.put("id",id);
-        return this.ExecuteQuery(jpa, parameters);
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Comment> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<News>get("user").<Integer>get("id"), id));
+        return getEntityManager().createQuery(cq).getResultList();
     }
 }

@@ -2,6 +2,7 @@ package gamepub.db.dao;
 
 import gamepub.db.entity.User;
 
+import java.util.HashMap;
 import java.util.List;
 
 /**
@@ -20,4 +21,5 @@ public interface UserDao extends BaseDao<User, Integer> {
     public List<User> getUsersByUserRoleId(Integer id);
     public List<User> getUsersByCityId(Integer id);
     public List<User> getUsersByCountryId(Integer id);
+    public List<User> getUsersByCustomParams(List<HashMap.Entry<String, Object>> parameterList);
 }
