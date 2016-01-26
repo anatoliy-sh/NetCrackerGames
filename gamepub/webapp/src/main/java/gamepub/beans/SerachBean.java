@@ -58,32 +58,28 @@ public class SerachBean {
         parametersList = new ArrayList<HashMap.Entry<String, Object>>();
         Map.Entry<String, Object> param;
         FacesContext context = FacesContext.getCurrentInstance();
-        if(context.getExternalContext().getSessionMap().containsKey("genre")) {
+        if (context.getExternalContext().getSessionMap().containsKey("genre")) {
             genre = context.getExternalContext().getSessionMap().get("genre").toString();
             param = new HashMap.SimpleEntry<String, Object>("genre", genreService.getGenreById(Integer.parseInt(genre)));
             parametersList.add(param);
             //context.getExternalContext().getSessionMap().remove("genre");
         }
-        if(context.getExternalContext().getSessionMap().containsKey("name")
-                && context.getExternalContext().getSessionMap().get("name").toString().length() >0) {
+        if (context.getExternalContext().getSessionMap().containsKey("name")
+                && context.getExternalContext().getSessionMap().get("name").toString().length() > 0) {
             String name = context.getExternalContext().getSessionMap().get("name").toString();
             param = new HashMap.SimpleEntry<String, Object>("name", name);
             parametersList.add(param);
             //context.getExternalContext().getSessionMap().remove("name");
         }
-        if(context.getExternalContext().getSessionMap().containsKey("platform")) {
+        if (context.getExternalContext().getSessionMap().containsKey("platform")) {
             String platform = context.getExternalContext().getSessionMap().get("platform").toString();
             param = new HashMap.SimpleEntry<String, Object>("platform", platformService.getPlatformById(Integer.parseInt(platform)));
             parametersList.add(param);
-            //context.getExternalContext().getSessionMap().remove("genre");
         }
-        if(date != null) {
-
-            param = new HashMap.SimpleEntry<String, Object>("date", date);
+        if (context.getExternalContext().getSessionMap().containsKey("dateGame")) {
+            param = new HashMap.SimpleEntry<String, Object>("dateGame", context.getExternalContext().getSessionMap().get("dateGame"));
             parametersList.add(param);
-            //context.getExternalContext().getSessionMap().remove("genre");
         }
-
 
         return gameService.getGamesByCustomParams(parametersList);
 
@@ -100,17 +96,20 @@ public class SerachBean {
     public void search() {
 
         FacesContext facesContext = FacesContext.getCurrentInstance();
-        if(myGame != null){
+        if (myGame != null) {
             facesContext.getExternalContext().getSessionMap().put("name", myGame);
         }
 
-        if(myGenre != null){
+        if (myGenre != null) {
             facesContext.getExternalContext().getSessionMap().put("genre", myGenre);
         }
 
-        if(platform != null) {
+        if (platform != null) {
             System.out.println("itssplatform" + platform);
             facesContext.getExternalContext().getSessionMap().put("platform", platform);
+        }
+        if (date != null) {
+            facesContext.getExternalContext().getSessionMap().put("dateGame", date);
         }
 
     }
@@ -129,35 +128,35 @@ public class SerachBean {
         return "game?faces-redirect=true";
     }
 
-    public String getMyGame(){
+    public String getMyGame() {
         return myGame;
     }
 
-    public void setMyGame(String myGame){
+    public void setMyGame(String myGame) {
         this.myGame = myGame;
     }
 
-    public String getPlatform(){
+    public String getPlatform() {
         return platform;
     }
 
-    public void setPlatform(String platform){
+    public void setPlatform(String platform) {
         this.platform = platform;
     }
 
-    public String getMyGenre(){
+    public String getMyGenre() {
         return myGenre;
     }
 
-    public void setMyGenre(String myGenre){
+    public void setMyGenre(String myGenre) {
         this.myGenre = myGenre;
     }
 
-    public Date getDate(){
+    public Date getDate() {
         return date;
     }
 
-    public void setDate(Date date){
+    public void setDate(Date date) {
         this.date = date;
     }
 }

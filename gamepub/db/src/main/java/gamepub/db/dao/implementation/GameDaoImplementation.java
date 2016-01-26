@@ -58,7 +58,7 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
                     jpa += " AND gp.platform= :platform";
                 } else if (param.getKey().equals("genre")) {
                     jpa += " AND g.genre= :genre";
-                } else jpa += " AND g.game.releaseDate<= :date";
+                } else jpa += " AND g.game.releaseDate<= :dateGame";
                 parameters.put(param.getKey(),param.getValue());
             }
         }
