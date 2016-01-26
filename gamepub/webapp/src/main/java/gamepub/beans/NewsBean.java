@@ -18,9 +18,11 @@ import javax.faces.bean.SessionScoped;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import javax.faces.application.FacesMessage;
 import javax.faces.component.UIViewRoot;
 import javax.faces.context.FacesContext;
 import org.primefaces.component.inputtextarea.InputTextarea;
+import org.primefaces.context.RequestContext;
 
 /**
  * Created by roman on 03.12.15.
@@ -63,7 +65,11 @@ public class NewsBean {
         inputText = (InputTextarea) uiViewRoot.
                 findComponent("commentAdderForm:commentAdderNewComment");
         String comment = (String) inputText.getValue();
+        
+        FacesMessage errMes;
         if (comment == null || comment.isEmpty() || comment.length() >= 501) {
+            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "the comment is empty");
+             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
 
@@ -82,6 +88,10 @@ public class NewsBean {
     public void deleteComment(Comment comment) {
         if (comment.getUser().getId() == SessionBean.getUserId()) { //тут пользователя проверять потом
             commentService.delete(comment.getId());
+        }
+        else{
+            FacesMessage errMes= new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
+               RequestContext.getCurrentInstance().showMessageInDialog(errMes);
         }
     }
 

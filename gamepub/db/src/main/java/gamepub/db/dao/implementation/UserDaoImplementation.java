@@ -154,7 +154,7 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         if(parameterList!=null && parameterList.size()>0) {
             for (HashMap.Entry<String, Object> entry : parameterList) {
                 if (entry.getKey().equals("name")) {
-                    predicates.add(cb.like(root.<String>get("name"), "%" + entry.getValue() + "%"));
+                    predicates.add(cb.like(root.<String>get("login"), "%" + entry.getValue() + "%"));
                 } else if (entry.getKey().equals("country")) {
                     predicates.add(cb.equal(root.<City>get("city").<Country>get("country"), entry.getValue()));
                 } else predicates.add(cb.equal(root.<City>get("city"), entry.getValue()));
@@ -167,7 +167,7 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
             }
             cq.where(p);
         }
-        cq.orderBy(cb.desc(root.<String>get("name")));
+        cq.orderBy(cb.asc(root.<String>get("login")));
         return getEntityManager().createQuery(cq).getResultList();
     }
 }

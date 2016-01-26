@@ -17,19 +17,23 @@
                 <h1>News</h1>
                 <h:form id="searchForm">
                     <h:panelGrid columns="3" style="margin:10px;" cellpadding="5">
-                        <h3 style="margin-top:0px">Name</h3>
-                        <p:inputText id="nameNews" value="#{allNewsBean.newsName}"/>
-
-                        <h3 style="margin-top:0px">Game</h3>
-                        <p:selectOneMenu id="gameId" value="#{allNewsBean.gameId}" style="width:125px">
-                            <f:selectItems value="#{allNewsBean.games}" var="game" itemLabel="#{game.name}"
-                                           itemValue="#{game.id}"/>
-                        </p:selectOneMenu>
-
-                        <h3 style="margin-top:0px">Date</h3>
-                        <p:calendar id="mask" pattern="dd-MM-yyyy" value="#{allNewsBean.date}" mask="true"/>
+                        <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
+                            <h3 style="margin-top:0px">Name</h3>
+                            <p:inputText id="nameNews" value="#{allNewsBean.newsName}"/>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
+                            <h3 style="margin-top:0px">Game</h3>
+                            <b:selectOneMenu id="gameId" value="#{allNewsBean.gameId}" style="width:125px">
+                                <f:selectItems value="#{allNewsBean.games}" var="game" itemLabel="#{game.name}"
+                                               itemValue="#{game.id}"/>
+                            </b:selectOneMenu>
+                        </h:panelGrid>
+                        <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
+                            <h3 style="margin-top:0px">Date</h3>
+                            <p:calendar id="mask" pattern="dd-MM-yyyy" value="#{allNewsBean.date}" mask="true"/>
+                        </h:panelGrid>
                     </h:panelGrid>
-                    <b:commandButton value="Search" update="dataForm" icon="ui-icon-check"
+                    <b:commandButton value="Search" styleClass="btn btn-primary" update="dataForm" icon="ui-icon-check"
                                      actionListener="#{allNewsBean.search}"/>
                 </h:form>
                 <h:form id="dataForm">

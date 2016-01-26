@@ -23,6 +23,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import javax.ejb.EJB;
+import javax.faces.application.FacesMessage;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.ManagedProperty;
 import javax.faces.bean.RequestScoped;
@@ -34,6 +35,7 @@ import javax.servlet.http.HttpSession;
 import net.bootsfaces.component.commandButton.CommandButton;
 import org.primefaces.component.inputtextarea.InputTextarea;
 import org.primefaces.component.rating.Rating;
+import org.primefaces.context.RequestContext;
 
 /**
  *
@@ -73,9 +75,7 @@ public class AboutGameBean {
     }
 
     public List<Mark> getMarksAndReviews() {
-        //if(context.getExternalContext().getSessionMap().containsKey("id")) {
         id = SessionBean.getGameId();
-        //}
         marksAndReviews = markService.getMarksByGameId(id);
         return marksAndReviews;
     }
@@ -90,10 +90,16 @@ public class AboutGameBean {
         rating = (Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
         int mrk = Integer.valueOf((String) rating.getValue());
         String review = (String) inputText.getValue();
+        
+        FacesMessage errMes;
         if (review == null || review.isEmpty() || review.length() >= 501) {
+             errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "write a riview");
+             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         if (mrk == 0) {
+            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "rate this game");
+             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark m = null;
@@ -105,6 +111,8 @@ public class AboutGameBean {
             System.out.println(e.getMessage());
         }
         if (m != null) {
+            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "you've already left a review");
+             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark mark = new Mark();
@@ -124,6 +132,10 @@ public class AboutGameBean {
     public void deleteMarkAndReview(Mark mark) {
         if (mark.getUser().getId() == SessionBean.getUserId()) {//��� ����� ������������ ���������
             markService.delete(mark.getId());
+        }
+        else{
+            FacesMessage errMes= new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
+               RequestContext.getCurrentInstance().showMessageInDialog(errMes);
         }
     }
 
