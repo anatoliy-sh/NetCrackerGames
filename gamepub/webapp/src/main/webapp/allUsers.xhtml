@@ -24,7 +24,6 @@
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
                             <h3 style="margin-top:0px">Country</h3>
                             <p:selectOneMenu id="countryId" value="#{allUsersBean.countryId}" style="width:125px">
-                                <f:selectItem itemLabel="None" itemValue="#{null}" />
                                 <f:selectItems value="#{allUsersBean.countries}" var="country" itemLabel="#{country.name}"
                                                itemValue="#{country.id}"/>
                                 <p:ajax listener="#{allUsersBean.updateCities}" render="cityId" update="cityId" />
@@ -33,7 +32,6 @@
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
                             <h3 style="margin-top:0px">City</h3>
                             <p:selectOneMenu id="cityId" value="#{allUsersBean.cityId}" style="width:125px">
-                                <f:selectItem itemLabel="None" itemValue="#{null}" />
                                 <f:selectItems value="#{allUsersBean.cities}" var="city" itemLabel="#{city.name}"
                                                itemValue="#{city.id}"/>
                             </p:selectOneMenu>

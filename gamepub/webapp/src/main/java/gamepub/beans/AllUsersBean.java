@@ -31,7 +31,8 @@ public class AllUsersBean {
     @EJB
     CityService cityService;
 
-    List<City> cities;
+    List<City> cities =new ArrayList<City>();
+    List<Country> countries = new ArrayList<Country>();
 
     String userName;
     Integer countryId;
@@ -41,16 +42,16 @@ public class AllUsersBean {
         List<HashMap.Entry<String, Object>> parametersList = new ArrayList<HashMap.Entry<String, Object>>();
         Map.Entry<String, Object> param;
         FacesContext context = FacesContext.getCurrentInstance();
-        if (context.getExternalContext().getSessionMap().containsKey("name") && context.getExternalContext().getSessionMap().get("name").toString().length() > 0) {
-            param = new HashMap.SimpleEntry<String, Object>("login", context.getExternalContext().getSessionMap().get("name"));
+        if (userName != null && userName.length()>0) {
+            param = new HashMap.SimpleEntry<String, Object>("login", userName);
             parametersList.add(param);
         }
-        if (context.getExternalContext().getSessionMap().containsKey("countryId")) {
-            param = new HashMap.SimpleEntry<String, Object>("country", countryService.getCountryById((Integer) context.getExternalContext().getSessionMap().get("countryId")));
+        if (countryId != null && countryId>0) {
+            param = new HashMap.SimpleEntry<String, Object>("country", countryService.getCountryById(countryId));
             parametersList.add(param);
         }
-        if (context.getExternalContext().getSessionMap().containsKey("cityId")) {
-            param = new HashMap.SimpleEntry<String, Object>("city", cityService.getCityById((Integer)context.getExternalContext().getSessionMap().get("cityId")));
+        if (cityId != null && cityId>0) {
+            param = new HashMap.SimpleEntry<String, Object>("city", cityService.getCityById(cityId));
             parametersList.add(param);
         }
         return userService.getUsersByCustomParams(parametersList);
@@ -72,17 +73,35 @@ public class AllUsersBean {
     }
 
     public List<Country> getCountries(){
-        return countryService.findAll();
+        if (countries.size()==0) {
+            Country c = new Country();
+            c.setName("None");
+            c.setId(0);
+            countries.add(c);
+            countries.addAll(countryService.findAll());
+        }
+        return countries;
     }
 
     public List<City> getCities(){
+        if (cities.size()==0)
+        {
+            City c = new City();
+            c.setId(0);
+            c.setName("None");
+            cities.add(c);
+        }
         return cities;
     }
 
     public void updateCities(){
-        if (countryId == null)
-            cities = null;
-        cities = cityService.getCitiesById(countryId);
+        cities = new ArrayList<City>();
+        City c = new City();
+        c.setId(0);
+        c.setName("None");
+        cities.add(c);
+        if (countryId != null && countryId>0)
+            cities.addAll(cityService.getCitiesById(countryId));
     }
 
     public String getUserName() {
@@ -109,11 +128,4 @@ public class AllUsersBean {
         this.cityId = cityId;
     }
 
-    public void clearSelectedCountry(){
-        countryId = null;
-    }
-
-    public void clearSelectedCity(){
-        cityId = null;
-    }
 }

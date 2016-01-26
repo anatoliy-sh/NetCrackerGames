@@ -33,16 +33,16 @@ public class AllNewsBean {
         List<HashMap.Entry<String, Object>> parametersList = new ArrayList<HashMap.Entry<String, Object>>();
         Map.Entry<String, Object> param;
         FacesContext context = FacesContext.getCurrentInstance();
-        if(context.getExternalContext().getSessionMap().containsKey("name") && context.getExternalContext().getSessionMap().get("name").toString().length() >0) {
-            param = new HashMap.SimpleEntry<String, Object>("name", context.getExternalContext().getSessionMap().get("name"));
+        if(newsName != null && newsName.length()>0) {
+            param = new HashMap.SimpleEntry<String, Object>("name", newsName);
             parametersList.add(param);
         }
-        if(context.getExternalContext().getSessionMap().containsKey("gameId")) {
-            param = new HashMap.SimpleEntry<String, Object>("game", gameService.getGameById((Integer) context.getExternalContext().getSessionMap().get("gameId")));
+        if(gameId != null && gameId>0) {
+            param = new HashMap.SimpleEntry<String, Object>("game", gameService.getGameById(gameId));
             parametersList.add(param);
         }
-        if(context.getExternalContext().getSessionMap().containsKey("date")) {
-            param = new HashMap.SimpleEntry<String, Object>("date", context.getExternalContext().getSessionMap().get("date"));
+        if(date != null) {
+            param = new HashMap.SimpleEntry<String, Object>("date", date);
             parametersList.add(param);
         }
         return newsService.getNewsByCustomParams(parametersList);
@@ -72,7 +72,13 @@ public class AllNewsBean {
     }
 
     public List<Game> getGames() {
-        return gameService.findAll();
+        List<Game> res = new ArrayList<Game>();
+        Game g = new Game();
+        g.setName("None");
+        g.setId(0);
+        res.add(g);
+        res.addAll(gameService.findAll());
+        return res;
     }
 
     public void setNewsName(String newsName) {
