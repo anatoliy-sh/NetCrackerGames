@@ -1,44 +1,84 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui">
+      xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <h:body>
-        <ui:composition template="/Template/template.xhtml">
-            <ui:define name="content">
+<h:body>
+    <ui:composition template="/Template/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+               <f:viewParam name="userId" value="#{profileBean.userId}" />
+            </f:metadata>
+            <h2 align="center">#{profileBean.name}</h2>
+            <b:row>
+                <b:column span="4" offset="1">
+                    <p:graphicImage value="#{profileBean.image}" style="width:100%; height: 100%;"/>
+                </b:column>
+                <b:column span="6">
+                    <h:form>
+                        <c:if test="#{!profileBean.isEdit}">
+                             <b:label text="#{profileBean.city}"/>
+                             <b:label text="#{profileBean.country}"/>
+                             <b:label text="#{profileBean.email}"/>
+
+                            <p:layout style="min-width:100px; min-height:100px; position: relative;">
+                                <p:layoutUnit position="center">
+                                    #{profileBean.fbInfo}
+                                </p:layoutUnit>
+                            </p:layout>
+                            <c:if test="#{profileBean.isMy}">
+                            <b:commandButton class="btn btn-warning" value="Edit"
+                                             actionListener="#{profileBean.edit()}"/>
+                            </c:if>
+                        </c:if>
+
+                        <c:if test="#{profileBean.isEdit}">
+                            <h:panelGrid columns="1" cellpadding="5">
+                                <p:outputLabel for="city" />
+                                <b:selectOneMenu id="city" value="#{profileBean.cityId}">
+                                    <f:selectItems value="#{profileBean.cities}" var="city" itemLabel="#{city.name}"
+                                                   itemValue="#{city.id}"/>
+                                </b:selectOneMenu>
+                                <p:outputLabel for="email" value="Email:"/>
+                                 <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
+                                <f:validateLength minimum="5"/>
+                            </p:inputText>
+                                <p:outputLabel for="fbInfo" value="FbInfo:"/>
+                                <b:inputText id="fbInfo" value="#{profileBean.fbInfo}"/>
+
+                                <b:commandButton class="btn btn-danger" value="Submit" actionListener="#{profileBean.update}"/>
+                            </h:panelGrid>
+                        </c:if>
+
+
+                    </h:form>
+                </b:column>
+            </b:row>
+            <b:row>
                 <b:column span="10" offset="1">
-
-                    <h2 align="center">#{profileBean.name}</h2>
-
-                    <p:graphicImage value="#{profileBean.image}" style="width:30%; height: 35%;"/>
-
-                    <p:layout style="min-width:800px; min-height:100px; position: relative;">
-                        <p:layoutUnit position="center">
-                            #{profileBean.description}
-                        </p:layoutUnit>
-                    </p:layout>
-
-                    <p:button outcome="gallery" value="My gallery" icon="ui-icon-star"/>
+                    <b:button outcome="gallery" value="My gallery"/>
+                    <b:button outcome="tradingPage" value="Trading page"/>
 
                     <h:form id="tabForm">
-                        <p:growl id="msgs" showDetail="true" />
+                        <p:growl id="msgs" showDetail="true"/>
 
-                        <p:tabView>
-                            <p:tab title="Recomendation">
+                        <b:tabView>
+                            <b:tab title="Recomendation">
                                 <h:form>
-                                    <p:dataGrid var="game" value="#{profileBean.myGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="myGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    <p:dataGrid var="game" value="#{profileBean.recomendGames}" columns="3" layout="grid"
+                                                rows="12" paginator="true" id="myGames1"
+                                                paginatorTemplate=" {PreviousPageLink} {PageLinks} {NextPageLink} "
                                                 rowsPerPageTemplate="6,12,18">
 
                                         <p:panel style="text-align:center">
                                             <h:panelGrid columns="1" style="width:100%">
                                                 <p:graphicImage width="100%" height="90%" value="#{game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                                                <h:link outcome="aboutGame" value="#{game.name} "
+                                                        includeViewParams="true">
                                                     <f:param value="#{game.id}" name="id"/>
                                                 </h:link>
                                             </h:panelGrid>
@@ -46,30 +86,31 @@
 
                                     </p:dataGrid>
                                 </h:form>
-                            </p:tab>
-                            <p:tab title="My games">
+                            </b:tab>
+                            <b:tab title="My games">
                                 <h:form>
-                                    <p:dataGrid var="mygame" value="#{myGamesBean.myGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="myGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    <p:dataGrid var="mygame" value="#{profileBean.myGames}" columns="3" layout="grid"
+                                                rows="12" paginator="true" id="myGames2"
+                                                paginatorTemplate=" {PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
                                                 rowsPerPageTemplate="6,12,18">
 
-                                        <p:panel id = "mygame" style="text-align:center" header="">
+                                        <p:panel id="mygame" style="text-align:center" header="">
                                             <f:facet name="actions">
                                                 <p:commandLink
-                                                    styleClass="ui-panel-titlebar-icon ui-corner-all 
+                                                        styleClass="ui-panel-titlebar-icon ui-corner-all
                                                     ui-state-default ui-icon ui-icon-close"
-                                                    actionListener="#{myGamesBean.deleteMyGame(mygame)}"
-                                                    update="tabForm">
+                                                        actionListener="#{profileBean.deleteMyGame(mygame)}"
+                                                        update="tabForm">
                                                     <p:confirm
-                                                        header="Confirm deletion"
-                                                        message="Are you sure you want to delete this game?"
-                                                        icon="ui-icon-alert"/>
+                                                            header="Confirm deletion"
+                                                            message="Are you sure you want to delete this game?"
+                                                            icon="ui-icon-alert"/>
                                                 </p:commandLink>
                                             </f:facet>
                                             <h:panelGrid columns="1" style="width:100%">
                                                 <p:graphicImage width="100%" height="90%" value="#{mygame.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{mygame.name} " includeViewParams="true">
+                                                <h:link outcome="aboutGame" value="#{mygame.name} "
+                                                        includeViewParams="true">
                                                     <f:param value="#{mygame.id}" name="id"/>
                                                 </h:link>
                                             </h:panelGrid>
@@ -77,19 +118,22 @@
 
                                     </p:dataGrid>
                                 </h:form>
-                            </p:tab>
-                            <p:tab title="Favourite games">
+                            </b:tab>
+                            <b:tab title="Favourite games">
                                 <h:form id="favouriteForm">
-                                    <p:dataGrid var="favouritegame" value="#{myGamesBean.favouriteGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="myGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                    <p:dataGrid var="favouritegame" value="#{profileBean.favouriteGames}" columns="3"
+                                                layout="grid"
+                                                rows="12" paginator="true" id="myGames3"
+                                                paginatorTemplate="{PreviousPageLink} {PageLinks} {NextPageLink} {RowsPerPageDropdown}"
                                                 rowsPerPageTemplate="6,12,18">
 
                                         <p:panel style="text-align:center">
 
                                             <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{favouritegame.game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{favouritegame.game.name} " includeViewParams="true">
+                                                <p:graphicImage width="100%" height="90%"
+                                                                value="#{favouritegame.game.poster}"/>
+                                                <h:link outcome="aboutGame" value="#{favouritegame.game.name} "
+                                                        includeViewParams="true">
                                                     <f:param value="#{favouritegame.game.id}" name="id"/>
                                                 </h:link>
                                             </h:panelGrid>
@@ -97,18 +141,21 @@
 
                                     </p:dataGrid>
                                 </h:form>
-                            </p:tab>
-                            <p:tab title="Exchange games">
+                            </b:tab>
+                            <b:tab title="Exchange games">
                                 <h:form>
-                                    <p:dataGrid var="exchangegame" value="#{myGamesBean.exchangeGames}" columns="3" layout="grid"
+                                    <p:dataGrid var="exchangegame" value="#{profileBean.exchangeGames}" columns="3"
+                                                layout="grid"
                                                 rows="12" paginator="true" id="myGames"
                                                 paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                                 rowsPerPageTemplate="6,12,18">
 
                                         <p:panel style="text-align:center">
                                             <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{exchangegame.game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{exchangegame.game.name} " includeViewParams="true">
+                                                <p:graphicImage width="100%" height="90%"
+                                                                value="#{exchangegame.game.poster}"/>
+                                                <h:link outcome="aboutGame" value="#{exchangegame.game.name} "
+                                                        includeViewParams="true">
                                                     <f:param value="#{exchangegame.game.id}" name="id"/>
                                                 </h:link>
                                             </h:panelGrid>
@@ -116,26 +163,27 @@
 
                                     </p:dataGrid>
                                 </h:form>
-                            </p:tab>
-                        </p:tabView>
+                            </b:tab>
+                        </b:tabView>
 
                     </h:form>
 
                     <p:confirmDialog
-                        global="true"
-                        widgetVar="confirm">
+                            global="true"
+                            widgetVar="confirm">
                         <p:commandButton
-                            styleClass="ui-confirmdialog-yes"
-                            value="Yes"
-                            type="button"/>
+                                styleClass="ui-confirmdialog-yes"
+                                value="Yes"
+                                type="button"/>
                         <p:commandButton
-                            styleClass="ui-confirmdialog-no"
-                            value="No"
-                            type="button"/>
+                                styleClass="ui-confirmdialog-no"
+                                value="No"
+                                type="button"/>
                     </p:confirmDialog>
 
                 </b:column>
-            </ui:define>
-        </ui:composition>
-    </h:body>
+            </b:row>
+        </ui:define>
+    </ui:composition>
+</h:body>
 </html>

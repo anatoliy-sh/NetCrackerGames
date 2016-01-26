@@ -14,76 +14,79 @@
 
     <ui:composition>
         <h:outputStylesheet name="theme.css"/>
-            <div class="container-fluid navbar navbar-inverse">
+
+        <div class="container-fluid navbar navbar-inverse">
 
 
+            <b:column span="5">
+                <h:form>
+                    <p:growl id="msgs3" showDetail="true"/>
+                    <h:panelGrid columns="6" cellpadding="5">
 
-                    <b:column span="5" >
-                        <h:form>
-                            <p:growl id="msgs3" showDetail="true"/>
-                            <h:panelGrid columns="6" cellpadding="5">
+                        <b:inputText onkeypress="_openedPage(search)" styleClass="water" id="search"/>
 
-                                <b:inputText onkeypress="_openedPage(search)" styleClass="water" id="search"/>
+                        <p:watermark for="search" value="Search..."/>
 
-                                <p:watermark for="search" value="Search..."/>
+                        <b:button styleClass="gBut" outcome="allNews" value="Last News" icon="ui-icon-star"/>
 
-                                <b:button styleClass="gBut" outcome="allNews" value="Last News" icon="ui-icon-star"/>
-
-                                <b:button styleClass="gBut" outcome="search" value="Extended serach"
-                                          icon="ui-icon-star"/>
-
-
-                                <b:button styleClass="gBut" outcome="main" value="Main page" icon="ui-icon-star"/>
-
-                            </h:panelGrid>
-                        </h:form>
-                    </b:column>
+                        <b:button styleClass="gBut" outcome="search" value="Extended serach"
+                                  icon="ui-icon-star"/>
 
 
-                        <c:if test="#{!loginBean.logged}">
-                            <b:column offset="3" span="4" style="align:right">
-                            <h:form>
-                                <p:growl id="msgs1" showDetail="true"/>
+                        <b:button styleClass="gBut" outcome="main" value="Main page" icon="ui-icon-star"/>
 
-                                <h:panelGrid columns="8" cellpadding="5">
-
-                                    <b:inputText styleClass="water" id="login" value="#{loginBean.name}"/>
-
-                                    <b:inputSecret styleClass="water" id="password" value="#{loginBean.password}"
-                                                   inline="true"/>
-
-                                    <p:watermark for="login" value="Login *"/>
-                                    <p:watermark for="password" value="Password *"/>
-
-                                    <b:commandButton styleClass="btn-success gBut" value="Sign In" icon="ui-icon-star"
-                                                     actionListener="#{loginBean.check}"
-                                                     ajax="false"/>
-
-                                    <b:button styleClass="gBut" outcome="registr" value="Registr"/>
-
-                                </h:panelGrid>
-                            </h:form>
-                            </b:column>
-                        </c:if>
-
-                        <c:if test="#{loginBean.logged}">
-                            <b:column offset="5" span="2" style="align:right">
-                            <h:form>
-                                <p:growl id="msgs2" showDetail="true"/>
-
-                                <h:panelGrid columns="2" cellpadding="5">
-                                    <b:button styleClass="gBut btn btn-info" outcome="profile" value="#{loginBean.name}"
-                                              icon="ui-icon-star"/>
-                                    <b:commandButton styleClass="gBut btn btn-danger" value="logout"
-                                                     actionListener="#{loginBean.logout}" ajax="false"/>
+                    </h:panelGrid>
+                </h:form>
+            </b:column>
 
 
-                                </h:panelGrid>
-                            </h:form>
-                            </b:column>
-                        </c:if>
+            <c:if test="#{!loginBean.logged}">
+                <b:column offset="3" span="4" style="align:right">
+                    <h:form>
+                        <p:growl id="msgs1" showDetail="true"/>
 
-            </div>
+                        <h:panelGrid columns="8" cellpadding="5">
+
+                            <b:inputText styleClass="water" id="login" value="#{loginBean.name}"/>
+
+                            <b:inputSecret styleClass="water" id="password" value="#{loginBean.password}"
+                                           inline="true"/>
+
+                            <p:watermark for="login" value="Login *"/>
+                            <p:watermark for="password" value="Password *"/>
+
+                            <b:commandButton styleClass="btn-success gBut" value="Sign In" icon="ui-icon-star"
+                                             actionListener="#{loginBean.check}"
+                                             ajax="false"/>
+
+                            <b:button styleClass="gBut" outcome="registr" value="Registr"/>
+
+                        </h:panelGrid>
+                    </h:form>
+                </b:column>
+            </c:if>
+
+            <c:if test="#{loginBean.logged}">
+                <b:column offset="4" span="3" style="align:right">
+                    <h:form>
+                        <p:growl id="msgs2" showDetail="true"/>
+
+                        <h:panelGrid columns="3" cellpadding="5">
+                            <b:button outcome="allUsers" styleClass="gBut btn" value="Users"/>
+                            <b:button styleClass="gBut btn btn-info" outcome="profile" value="#{loginBean.name}"
+                                      icon="ui-icon-star">
+                                <f:param value="0" name="userId"/>
+                            </b:button>
+                            <b:commandButton styleClass="gBut btn btn-danger" value="logout"
+                                             actionListener="#{loginBean.logout}" ajax="false"/>
+
+
+                        </h:panelGrid>
+                    </h:form>
+                </b:column>
+            </c:if>
+
+        </div>
 
     </ui:composition>
 
