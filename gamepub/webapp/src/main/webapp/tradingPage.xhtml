@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui"
+      xmlns:c="http://java.sun.com/jsp/jstl/core">
+<link rel="stylesheet" href="style.css" type="text/css"/>
+    <head>
+        <title>TODO supply a title</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    </head>
+    <body>
+         <ui:composition template="/Template/template.xhtml">
+            <ui:define name="content">
+               <b:column span="8" offset="2">
+                   <h1>Trading page</h1>
+                   <h:form>
+                       <p:dataScroller value ="#{tradeBean.wantedGames}" var ="game">
+                           <f:facet name="header">
+                           </f:facet>
+                           
+                           <h:panelGrid columns="3" styleClass="newsItem" >
+                               
+                        <p:graphicImage value="#{game.poster}" style="width:45%; height: 50%;"/>
+                              
+                        <h:link outcome="aboutGame" value="#{game.name} " includeViewParams="true">
+                            <f:param value="#{game.id}" name="id"/>
+                        </h:link>
+                               
+                        <p:tieredMenu  model="#{menuModelBean.getMenubar(tradeBean.getUserNames(game))}" rendered="#{!tradeBean.noUsersCheck(game)}" style="width: 220px">                                                       
+                         </p:tieredMenu>
+                        <h:outputText value="-noone wants to exchange this game" rendered="#{tradeBean.noUsersCheck(game)}"/>
+                               
+                    </h:panelGrid>
+                       </p:dataScroller>
+                   </h:form>
+               </b:column>
+            </ui:define>
+         </ui:composition>
+        <div>TODO write content</div>
+    </body>
+</html>
