@@ -148,22 +148,17 @@ public class ProfileBean {
     }
 
     //Games
-    public List<Game> getMyGames() {
-        List<Game> userGames = new ArrayList<Game>();
-        int userId = id;
-        userGame = userGameService.getUserGamesByUserId(userId);
-        for (int i = 0; i < userGame.size(); i++) {
-            userGames.add(userGame.get(i).getGame());
-        }
-        return userGames;
+    
+    public List<UserGame> getMyGames() {
+        return userGameService.getUserGamesByUserId(SessionBean.getUserId());       
     }
 
     public List<UserGame> getFavouriteGames() {
-        return userGameService.getFavoriteUserGamesByUserId(id);
+        return userGameService.getFavoriteUserGamesByUserId(SessionBean.getUserId());
     }
 
     public List<UserGame> getExchangeGames() {
-        return userGameService.getCanExchangeUserGamesByUserId(id);
+        return userGameService.getCanExchangeUserGamesByUserId(SessionBean.getUserId());
     }
 
     public void deleteMyGame(UserGame myGame) {
