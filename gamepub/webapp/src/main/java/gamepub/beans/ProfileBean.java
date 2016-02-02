@@ -148,19 +148,19 @@ public class ProfileBean {
         FacesContext context = FacesContext.getCurrentInstance();
         context.getExternalContext().getSessionMap().remove("edit");
         context.getExternalContext().getSessionMap().put("edit", false);
-        //isEdit = false;
-        //User user = userService.getUserById(id);
-        /*if(cityId != 0){
+        isEdit = false;
+        User user = userService.getUserById(id);
+        if(cityId != 0){
             user.setCity(cityService.getCityById(cityId));
         }
         if(fbInfo != null){
             user.setFbInfo(fbInfo);
             System.out.println(fbInfo);
-        }*/
+        }
         //user.setFbInfo("11111111");
 
         //userService.delete(user.getId());
-        //userService.update(user);
+        userService.update(user);
         /*Country country = countryService.getCountryById(7);
         country.setName("22");
         countryService.update(country);*/
