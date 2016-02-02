@@ -1,160 +1,171 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-    "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+        "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
       xmlns:p="http://primefaces.org/ui" xmlns:b="http://bootsfaces.net/ui" xmlns:c="http://java.sun.com/jsp/jstl/core">
 
-    <h:body>
-        <ui:composition template="/Template/template.xhtml">
-            <ui:define name="content">
-                <f:metadata>
-                    <f:viewParam name="userId" value="#{profileBean.userId}" />
-                </f:metadata>
-                <h2 align="center">#{profileBean.name}</h2>
-                <b:row>
-                    <b:column span="4" offset="1">
-                        <p:graphicImage value="#{profileBean.image}" style="width:100%; height: 100%;"/>
-                    </b:column>
-                    <b:column span="6">
-                        <h:form>
-                            <c:if test="#{!profileBean.isEdit}">
-                                <b:label text="#{profileBean.city}"/>
-                                <b:label text="#{profileBean.country}"/>
-                                <b:label text="#{profileBean.email}"/>
+<h:body>
+    <ui:composition template="/Template/template.xhtml">
+        <ui:define name="content">
+            <f:metadata>
+                <f:viewParam name="userId" value="#{profileBean.userId}"/>
+            </f:metadata>
 
-                                <p:layout style="min-width:100px; min-height:100px; position: relative;">
-                                    <p:layoutUnit position="center">
-                                        #{profileBean.fbInfo}
-                                    </p:layoutUnit>
-                                </p:layout>
-                                <c:if test="#{profileBean.isMy}">
-                                    <b:commandButton class="btn btn-warning" value="Edit"
-                                                     actionListener="#{profileBean.edit()}"/>
-                                </c:if>
-                            </c:if>
+            <h2 align="center">#{profileBean.name}</h2>
+            <b:row>
+                <b:column span="4" offset="1">
+                    <p:graphicImage value="#{profileBean.image}" style="width:100%; height: 100%;"/>
+                </b:column>
+                <b:column span="6">
+                    <h:form id="infoedit">
+                        <h:panelGrid columns="1" cellpadding="5" rendered="#{profileBean.isEdit}">
+                            <p:outputLabel for="city"/>
+                            <b:selectOneMenu id="city" value="#{profileBean.cityId}">
+                                <f:selectItems value="#{profileBean.cities}" var="city" itemLabel="#{city.name}"
+                                               itemValue="#{city.id}"/>
+                            </b:selectOneMenu>
+                            <p:outputLabel for="email" value="Email:"/>
+                             <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
+                            <f:validateLength minimum="5"/>
+                        </p:inputText>
+                            <p:outputLabel for="fbInfo" value="FbInfo:"/>
+                            <b:inputText id="fbInfo" value="#{profileBean.fbInfo}"/>
 
-                            <c:if test="#{profileBean.isEdit}">
-                                <h:panelGrid columns="1" cellpadding="5">
-                                    <p:outputLabel for="city" />
-                                    <b:selectOneMenu id="city" value="#{profileBean.cityId}">
-                                        <f:selectItems value="#{profileBean.cities}" var="city" itemLabel="#{city.name}"
-                                                       itemValue="#{city.id}"/>
-                                    </b:selectOneMenu>
-                                    <p:outputLabel for="email" value="Email:"/>
-                                    В <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
-                                        <f:validateLength minimum="5"/>
-                                    </p:inputText>
-                                    <p:outputLabel for="fbInfo" value="FbInfo:"/>
-                                    <b:inputText id="fbInfo" value="#{profileBean.fbInfo}"/>
+                        </h:panelGrid>
+                        <b:commandButton class="btn btn-danger" value="Submitt" ajax="false"
+                                         actionListener="#{profileBean.confirmEdit()}"/>
+                    </h:form>
+                    <h:form id="info">
+                        <h:panelGrid columns="1" cellpadding="5" rendered="#{!profileBean.isEdit}">
+                            <b:label text="#{profileBean.city}"/>
+                            <b:label text="#{profileBean.country}"/>
+                            <b:label text="#{profileBean.email}"/>
 
-                                    <b:commandButton class="btn btn-danger" value="Submit" actionListener="#{profileBean.update}"/>
-                                </h:panelGrid>
-                            </c:if>
+                            <p:layout style="max-width:100px; max-height:100px; min-height: 50px; position: relative;">
+                                <p:layoutUnit position="center">
+                                    #{profileBean.fbInfo}
+                                </p:layoutUnit>
+                            </p:layout>
 
+                        </h:panelGrid>
+                        <b:commandButton class="btn btn-warning" value="Edit" ajax="false"
+                                         actionListener="#{profileBean.edit()}" rendered="#{profileBean.isMy}"/>
 
-                        </h:form>
-                    </b:column>
-                </b:row>
+                    </h:form>
 
-                <b:row>
-                    <b:column span="10" offset="1">
-                        <b:button outcome="gallery" value="My gallery"/>
-                        <b:button outcome="tradingPage" value="Trading page"/>
+                </b:column>
+            </b:row>
 
-
-                        <p:growl id="msgs" showDetail="true" />
-
-                        <p:tabView id="tabView">
-                            <p:tab title="Recomendation">
-                                <h:form>
-                                    <p:dataGrid var="recomendGame" value="#{profileBean.recomendGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="recomendGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                rowsPerPageTemplate="6,12,18">
-
-                                        <p:panel style="text-align:center">
-                                            <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{recomendGame.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{recomendGame.name} " includeViewParams="true">
-                                                    <f:param value="#{recomendGame.id}" name="id"/>
-                                                </h:link>
-                                            </h:panelGrid>
-                                        </p:panel>
-
-                                    </p:dataGrid>
-                                </h:form>
-                            </p:tab>
-                            <p:tab title="My games" id="tabMyGames">
-                                <h:form id="myGamesForm">
-                                    <p:dataGrid var="mygame" value="#{profileBean.myGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="myGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                rowsPerPageTemplate="6,12,18">
-
-                                        <p:panel id = "mygame" style="text-align:center" header="">
-                                            <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{mygame.game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{mygame.game.name} " includeViewParams="true">
-                                                    <f:param value="#{mygame.game.id}" name="id"/>
-                                                </h:link>
-                                                <b:commandButton value="delete" update="tabView" actionListener="#{profileBean.deleteMyGame(mygame)}" />
-                                            </h:panelGrid>
-                                        </p:panel>
-
-                                    </p:dataGrid>
-                                </h:form>
-                            </p:tab>
-                            <p:tab title="Favourite games">
-                                <h:form id="favouriteForm">
-                                    <p:dataGrid var="favouritegame" value="#{profileBean.favouriteGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="favouriteGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                rowsPerPageTemplate="6,12,18">
-
-                                        <p:panel style="text-align:center">
-
-                                            <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{favouritegame.game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{favouritegame.game.name} " includeViewParams="true">
-                                                    <f:param value="#{favouritegame.game.id}" name="id"/>
-                                                </h:link>
-                                                <b:commandButton value="delete" update="tabView" actionListener="#{profileBean.deleteMyGame(favouritegame)}" />
-                                            </h:panelGrid>
-                                        </p:panel>
-
-                                    </p:dataGrid>
-                                </h:form>
-                            </p:tab>
-                            <p:tab title="Exchange games">
-                                <h:form>
-                                    <p:dataGrid var="exchangegame" value="#{profileBean.exchangeGames}" columns="3" layout="grid"
-                                                rows="12" paginator="true" id="exchangeGames"
-                                                paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
-                                                rowsPerPageTemplate="6,12,18">
-
-                                        <p:panel style="text-align:center">
-                                            <h:panelGrid columns="1" style="width:100%">
-                                                <p:graphicImage width="100%" height="90%" value="#{exchangegame.game.poster}"/>
-                                                <h:link outcome="aboutGame" value="#{exchangegame.game.name} " includeViewParams="true">
-                                                    <f:param value="#{exchangegame.game.id}" name="id"/>
-                                                </h:link>
-                                                <b:commandButton value="delete" update="tabView" actionListener="#{profileBean.deleteMyGame(exchangegame)}" />
-                                            </h:panelGrid>
-                                        </p:panel>
-
-                                    </p:dataGrid>
-                                </h:form>
-                            </p:tab>
-                        </p:tabView>
+            <b:row>
+                <b:column span="10" offset="1">
+                    <b:button outcome="gallery" value="My gallery" rendered="#{profileBean.isMy}"/>
+                    <b:button outcome="tradingPage" value="Trading page"/>
 
 
+                    <p:growl id="msgs" showDetail="true"/>
 
-                    </b:column>
-                </b:row>
-            </ui:define>
-        </ui:composition>
-    </h:body>
+                    <b:tabView id="tabView">
+                        <b:tab title="Recomendation">
+                            <h:form>
+                                <p:dataGrid var="recomendGame" value="#{profileBean.recomendGames}" columns="3"
+                                            layout="grid"
+                                            rows="12" paginator="true" id="recomendGames"
+                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                            rowsPerPageTemplate="6,12,18">
+
+                                    <p:panel style="text-align:center">
+                                        <h:panelGrid columns="1" style="width:100%">
+                                            <p:graphicImage width="100%" height="90%" value="#{recomendGame.poster}"/>
+                                            <h:link outcome="aboutGame" value="#{recomendGame.name} "
+                                                    includeViewParams="true">
+                                                <f:param value="#{recomendGame.id}" name="id"/>
+                                            </h:link>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                </p:dataGrid>
+                            </h:form>
+                        </b:tab>
+                        <b:tab title="My games" id="tabMyGames">
+                            <h:form id="myGamesForm">
+                                <p:dataGrid var="mygame" value="#{profileBean.myGames}" columns="3" layout="grid"
+                                            rows="12" paginator="true" id="myGames"
+                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                            rowsPerPageTemplate="6,12,18">
+
+                                    <p:panel id="mygame" style="text-align:center" header="">
+                                        <h:panelGrid columns="1" style="width:100%">
+                                            <p:graphicImage width="100%" height="90%" value="#{mygame.game.poster}"/>
+                                            <h:link outcome="aboutGame" value="#{mygame.game.name} "
+                                                    includeViewParams="true">
+                                                <f:param value="#{mygame.game.id}" name="id"/>
+                                            </h:link>
+                                            <b:commandButton value="delete" update="tabView"
+                                                             actionListener="#{profileBean.deleteMyGame(mygame)}"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                </p:dataGrid>
+                            </h:form>
+                        </b:tab>
+                        <b:tab title="Favourite games">
+                            <h:form id="favouriteForm">
+                                <p:dataGrid var="favouritegame" value="#{profileBean.favouriteGames}" columns="3"
+                                            layout="grid"
+                                            rows="12" paginator="true" id="favouriteGames"
+                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                            rowsPerPageTemplate="6,12,18">
+
+                                    <p:panel style="text-align:center">
+
+                                        <h:panelGrid columns="1" style="width:100%">
+                                            <p:graphicImage width="100%" height="90%"
+                                                            value="#{favouritegame.game.poster}"/>
+                                            <h:link outcome="aboutGame" value="#{favouritegame.game.name} "
+                                                    includeViewParams="true">
+                                                <f:param value="#{favouritegame.game.id}" name="id"/>
+                                            </h:link>
+                                            <b:commandButton value="delete" update="tabView"
+                                                             actionListener="#{profileBean.deleteMyGame(favouritegame)}"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                </p:dataGrid>
+                            </h:form>
+                        </b:tab>
+                        <b:tab title="Exchange games">
+                            <h:form>
+                                <p:dataGrid var="exchangegame" value="#{profileBean.exchangeGames}" columns="3"
+                                            layout="grid"
+                                            rows="12" paginator="true" id="exchangeGames"
+                                            paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
+                                            rowsPerPageTemplate="6,12,18">
+
+                                    <p:panel style="text-align:center">
+                                        <h:panelGrid columns="1" style="width:100%">
+                                            <p:graphicImage width="100%" height="90%"
+                                                            value="#{exchangegame.game.poster}"/>
+                                            <h:link outcome="aboutGame" value="#{exchangegame.game.name} "
+                                                    includeViewParams="true">
+                                                <f:param value="#{exchangegame.game.id}" name="id"/>
+                                            </h:link>
+                                            <b:commandButton value="delete" update="tabView"
+                                                             actionListener="#{profileBean.deleteMyGame(exchangegame)}"/>
+                                        </h:panelGrid>
+                                    </p:panel>
+
+                                </p:dataGrid>
+                            </h:form>
+                        </b:tab>
+                    </b:tabView>
+
+
+                </b:column>
+            </b:row>
+        </ui:define>
+    </ui:composition>
+</h:body>
 </html>

@@ -1,18 +1,15 @@
 package gamepub.beans;
 
-import gamepub.db.entity.City;
-import gamepub.db.entity.Game;
-import gamepub.db.entity.User;
-import gamepub.db.entity.UserGame;
-import gamepub.db.service.CityService;
-import gamepub.db.service.GameService;
-import gamepub.db.service.UserGameService;
-import gamepub.db.service.UserService;
+import gamepub.db.entity.*;
+import gamepub.db.service.*;
 import org.hibernate.Session;
+import org.hibernate.jpa.criteria.expression.function.AggregationFunction;
 
+import javax.annotation.PostConstruct;
 import javax.ejb.*;
 import javax.faces.bean.ManagedBean;
 import javax.faces.bean.SessionScoped;
+import javax.faces.context.FacesContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
@@ -42,8 +39,15 @@ public class ProfileBean {
     CityService cityService;
     @EJB
     UserGameService userGameService;
+    @EJB
+    CountryService countryService;
 
     private String userId;
+
+    @PostConstruct
+    public void init() {
+
+    }
 
     public void setUserId(String userId) {
         this.userId = userId;
@@ -54,11 +58,13 @@ public class ProfileBean {
     }
 
     public String getName() {
-
         id = SessionBean.getUserId();
-        int tmpId = Integer.parseInt(userId);
-        if(tmpId != 0)
+        if (!userId.equals("my"))
             id = Integer.parseInt(userId);
+        FacesContext context = FacesContext.getCurrentInstance();
+        if (!context.getExternalContext().getSessionMap().containsKey("edit"))
+            //context.getExternalContext().getSessionMap().remove("edit");
+            context.getExternalContext().getSessionMap().put("edit", false);
 
 
         User user = userService.getUserById(id);
@@ -116,49 +122,63 @@ public class ProfileBean {
     }
 
     public boolean getIsEdit() {
-        return isEdit;
+        FacesContext context = FacesContext.getCurrentInstance();
+
+        return (Boolean) context.getExternalContext().getSessionMap().get("edit");
     }
-    public boolean getIsMy(){
-        return Integer.parseInt(userId) == 0;
+
+    public boolean getIsMy() {
+        return userId.equals("my");
     }
 
     public List<Game> getRecomendGames() {
-
         return gameService.getGamesOrderByMarks(4);
     }
 
     public void edit() {
-        isEdit = true;
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().remove("edit");
+        context.getExternalContext().getSessionMap().put("edit", true);
+        /*Country country = countryService.getCountryById(7);
+        country.setName("12");
+        countryService.update(country);*/
     }
 
-    public void update(){
-        User user = userService.getUserById(id);
-        if(cityId != 0){
+    public void confirmEdit() {
+        FacesContext context = FacesContext.getCurrentInstance();
+        context.getExternalContext().getSessionMap().remove("edit");
+        context.getExternalContext().getSessionMap().put("edit", false);
+        //isEdit = false;
+        //User user = userService.getUserById(id);
+        /*if(cityId != 0){
             user.setCity(cityService.getCityById(cityId));
         }
         if(fbInfo != null){
             user.setFbInfo(fbInfo);
             System.out.println(fbInfo);
-        }
-        System.out.println(fbInfo);
-        isEdit = false;
+        }*/
+        //user.setFbInfo("11111111");
+
         //userService.delete(user.getId());
-        userService.update(user);
+        //userService.update(user);
+        /*Country country = countryService.getCountryById(7);
+        country.setName("22");
+        countryService.update(country);*/
 
     }
 
     //Games
-    
+
     public List<UserGame> getMyGames() {
-        return userGameService.getUserGamesByUserId(SessionBean.getUserId());       
+        return userGameService.getUserGamesByUserId(id);
     }
 
     public List<UserGame> getFavouriteGames() {
-        return userGameService.getFavoriteUserGamesByUserId(SessionBean.getUserId());
+        return userGameService.getFavoriteUserGamesByUserId(id);
     }
 
     public List<UserGame> getExchangeGames() {
-        return userGameService.getCanExchangeUserGamesByUserId(SessionBean.getUserId());
+        return userGameService.getCanExchangeUserGamesByUserId(id);
     }
 
     public void deleteMyGame(UserGame myGame) {
