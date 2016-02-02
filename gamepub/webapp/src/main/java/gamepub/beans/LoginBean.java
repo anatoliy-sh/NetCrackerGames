@@ -74,10 +74,10 @@ private boolean logged;
             setLogged(true);
             ses.setAttribute("userid", user.getId());
             ses.setAttribute("username", getName());
-       FacesMessage successMes= new FacesMessage(FacesMessage.SEVERITY_WARN,
+       /*FacesMessage successMes= new FacesMessage(FacesMessage.SEVERITY_WARN,
                         "Success",
                     "You've been successfully logged in!!");       
-               RequestContext.getCurrentInstance().showMessageInDialog(successMes);
+               RequestContext.getCurrentInstance().showMessageInDialog(successMes);*/
                     
          }        
        
@@ -92,8 +92,13 @@ private boolean logged;
 
     
     public void logout(){
-        setLogged(false);
-        SessionBean.getSession().invalidate();
+        try {
+            setLogged(false);
+            SessionBean.getSession().invalidate();
+        }
+        catch (Exception e){
+            System.out.print(e.getMessage());
+        }
     }
     /**
      * @return the logged
