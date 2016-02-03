@@ -40,7 +40,7 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         Root<UserGame> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
-                cb.equal(root.<Game>get("game").<Integer>get("id"), userId));
+                cb.equal(root.<Game>get("game").<Integer>get("id"), gameId));
         try {
             return (UserGame)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
