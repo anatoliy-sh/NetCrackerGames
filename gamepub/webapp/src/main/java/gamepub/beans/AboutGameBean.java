@@ -9,6 +9,7 @@ import gamepub.dto.GameDto;
 import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
+import gamepub.db.entity.GameStatus;
 import gamepub.db.entity.Mark;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserGame;
@@ -62,7 +63,18 @@ public class AboutGameBean {
 
     Game game;
     List<Mark> marksAndReviews;
-
+    
+    String myStatus;
+    
+    public String getMyStatus(){
+        return myStatus;
+    }
+    public void setMyStatus(String myStatus){
+        this.myStatus=myStatus;
+    }
+    public List<GameStatus> getStatus(){
+        return gameStatusService.findAll();
+    }
     public Game getGame() {
         HttpSession ses = SessionBean.getSession();
         ses.setAttribute("gameid", id);
@@ -151,7 +163,7 @@ public class AboutGameBean {
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
         //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(false);
@@ -182,7 +194,8 @@ public class AboutGameBean {
         //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
+        
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(true);
@@ -213,7 +226,8 @@ public class AboutGameBean {
         //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
+        
         if (!exist) {
             userGame.setCanExchange(true);
             userGame.setWanted(false);
@@ -251,15 +265,15 @@ public class AboutGameBean {
         UIViewRoot uiViewRoot = context.getViewRoot();
         CommandButton commandButton;
         if (userGame.isFavorite()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("favouriteBut:favourite");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:favourite");
             commandButton.setDisabled(true);
         }
         if (userGame.isWanted()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("wantedBut:wanted");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:wanted");
             commandButton.setDisabled(true);
         }
         if (userGame.isCanExchange()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("exchangeBut:exchange");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:exchange");
             commandButton.setDisabled(true);
         }
 
