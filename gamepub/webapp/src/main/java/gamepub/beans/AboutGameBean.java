@@ -148,7 +148,6 @@ public class AboutGameBean {
         Mark mark = new Mark();
         mark.setDate(new java.util.Date());
         mark.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         mark.setMark(mrk);
         mark.setReview(review);
         mark.setUser(userService.getUserById(SessionBean.getUserId()));
@@ -178,9 +177,9 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
         userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
+        
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(false);
@@ -208,9 +207,7 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
-
         userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
 
         if (!exist) {
@@ -219,6 +216,11 @@ public class AboutGameBean {
             userGame.setFavorite(false);
             userGameService.create(userGame);
         } else {
+            if (userGame.isCanExchange()) {
+                FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "the game can not be directly on the exchange and wanted");
+                RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+                return;
+            }
             userGame.setWanted(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -240,9 +242,7 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
-
         userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
 
         if (!exist) {
@@ -251,6 +251,11 @@ public class AboutGameBean {
             userGame.setFavorite(false);
             userGameService.create(userGame);
         } else {
+            if (userGame.isWanted()) {
+                FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "the game can not be directly on the exchange and wanted");
+                RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+                return;
+            }
             userGame.setCanExchange(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
