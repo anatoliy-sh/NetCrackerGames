@@ -44,6 +44,11 @@ public class FriendService extends FriendDaoImplementation {
     public List<Friend> getSubscribedToByUserId(Integer id) {
         return super.getSubscribedToByUserId(id);
     }
+    @Override
+    @TransactionAttribute(TransactionAttributeType.SUPPORTS)
+    public Friend getFriendBySubIdToId(Integer subId, Integer subToId){
+        return super.getFriendBySubIdToId(subId,subToId);
+    }
 
     @Override
     @TransactionAttribute(TransactionAttributeType.REQUIRED)

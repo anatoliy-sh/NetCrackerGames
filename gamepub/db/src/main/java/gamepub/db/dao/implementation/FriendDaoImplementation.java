@@ -32,6 +32,22 @@ public class FriendDaoImplementation extends BaseDaoImplementation<Friend, Integ
         }
     }
 
+    public Friend getFriendBySubIdToId(Integer subId, Integer subToId) {
+        CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
+        CriteriaQuery cq = cb.createQuery();
+        Root<Friend> root = cq.from(instance);
+        cq.select(root);
+        cq.where(cb.equal(root.<User>get("subscribedTo").<Integer>get("id"), subToId),
+                cb.equal(root.<User>get("subscriber").<Integer>get("id"), subId));
+
+        try {
+            return (Friend)getEntityManager().createQuery(cq).getSingleResult();
+        }catch (NoResultException e){
+            return null;
+        }
+    }
+
+
     public List<Friend> getSubscribersByUserId(Integer id) {
         CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
         CriteriaQuery cq = cb.createQuery();

@@ -41,6 +41,8 @@ public class ProfileBean {
     UserGameService userGameService;
     @EJB
     CountryService countryService;
+    @EJB
+    FriendService friendService;
 
     private String userId;
 
@@ -165,6 +167,28 @@ public class ProfileBean {
         country.setName("22");
         countryService.update(country);*/
 
+    }
+
+    //Friends
+
+    public List<Friend> getSubscribedTo(){
+        return friendService.getSubscribedToByUserId(SessionBean.getUserId());
+    }
+
+    public void follow(){
+        Friend friend = new Friend();
+        friend.setSubscribedTo(userService.getUserById(id));
+        friend.setSubscriber(userService.getUserById(SessionBean.getUserId()));
+        friendService.create(friend);
+    }
+    public void unfollow(){
+        Friend friend = friendService.getFriendBySubIdToId(SessionBean.getUserId(),id);
+
+        friendService.delete(friend.getId());
+    }
+
+    public boolean getIsSubscribedTo(){
+        return friendService.getFriendBySubIdToId(SessionBean.getUserId(),id) != null;
     }
 
     //Games

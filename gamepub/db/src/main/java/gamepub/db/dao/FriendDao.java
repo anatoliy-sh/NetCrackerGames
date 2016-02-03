@@ -11,4 +11,5 @@ public interface FriendDao extends BaseDao<Friend,Integer> {
     public Friend getFriendById(Integer id);
     public List<Friend> getSubscribersByUserId(Integer id);
     public List<Friend> getSubscribedToByUserId(Integer id);
+    public Friend getFriendBySubIdToId(Integer subId, Integer subToId);
 }
