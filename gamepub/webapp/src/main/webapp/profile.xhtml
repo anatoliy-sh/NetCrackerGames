@@ -30,7 +30,7 @@
                                                itemValue="#{city.id}"/>
                             </b:selectOneMenu>
                             <p:outputLabel for="email" value="Email:"/>
-                             <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
+                            В <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
                             <f:validateLength minimum="5"/>
                         </p:inputText>
                             <p:outputLabel for="fbInfo" value="FbInfo:"/>
@@ -153,7 +153,7 @@
                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                             rowsPerPageTemplate="6,12,18">
 
-                                    <p:panel style="text-align:center">
+                                    <p:panel style="text-align:center" header="">
                                         <f:facet name="actions">
                                             <p:commandLink
                                                     styleClass="gameIcon btn btn-danger"

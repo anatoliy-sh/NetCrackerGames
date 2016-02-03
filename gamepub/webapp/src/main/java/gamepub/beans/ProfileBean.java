@@ -14,6 +14,8 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
+import javax.faces.application.FacesMessage;
+import org.primefaces.context.RequestContext;
 
 /**
  * Created by Анатолий on 06.01.2016.
@@ -29,7 +31,6 @@ public class ProfileBean {
     private boolean isMy;
     private int cityId;
     private String email, fbInfo, name, password;
-
 
     @EJB
     UserService userService;
@@ -61,13 +62,14 @@ public class ProfileBean {
 
     public String getName() {
         id = SessionBean.getUserId();
-        if (!userId.equals("my"))
+        if (!userId.equals("my")) {
             id = Integer.parseInt(userId);
+        }
         FacesContext context = FacesContext.getCurrentInstance();
-        if (!context.getExternalContext().getSessionMap().containsKey("edit"))
-            //context.getExternalContext().getSessionMap().remove("edit");
+        if (!context.getExternalContext().getSessionMap().containsKey("edit")) //context.getExternalContext().getSessionMap().remove("edit");
+        {
             context.getExternalContext().getSessionMap().put("edit", false);
-
+        }
 
         User user = userService.getUserById(id);
         isEdit = false;
@@ -95,15 +97,15 @@ public class ProfileBean {
 
     public String getFbInfo() {
         User user = userService.getUserById(id);
-        if (user.getFbInfo() == null)
+        if (user.getFbInfo() == null) {
             return " ";
+        }
         return user.getFbInfo();
     }
 
     public void setFbInfo(String ufbInfo) {
         fbInfo = ufbInfo;
     }
-
 
     public int getCityId() {
         return cityId;
@@ -117,7 +119,6 @@ public class ProfileBean {
         User user = userService.getUserById(id);
         return user.getCity().getName();
     }
-
 
     public List<City> getCities() {
         return cityService.findAll();
@@ -152,10 +153,10 @@ public class ProfileBean {
         context.getExternalContext().getSessionMap().put("edit", false);
         isEdit = false;
         User user = userService.getUserById(id);
-        if(cityId != 0){
+        if (cityId != 0) {
             user.setCity(cityService.getCityById(cityId));
         }
-        if(fbInfo != null){
+        if (fbInfo != null) {
             user.setFbInfo(fbInfo);
             System.out.println(fbInfo);
         }
@@ -170,29 +171,28 @@ public class ProfileBean {
     }
 
     //Friends
-
-    public List<Friend> getSubscribedTo(){
+    public List<Friend> getSubscribedTo() {
         return friendService.getSubscribedToByUserId(SessionBean.getUserId());
     }
 
-    public void follow(){
+    public void follow() {
         Friend friend = new Friend();
         friend.setSubscribedTo(userService.getUserById(id));
         friend.setSubscriber(userService.getUserById(SessionBean.getUserId()));
         friendService.create(friend);
     }
-    public void unfollow(){
-        Friend friend = friendService.getFriendBySubIdToId(SessionBean.getUserId(),id);
+
+    public void unfollow() {
+        Friend friend = friendService.getFriendBySubIdToId(SessionBean.getUserId(), id);
 
         friendService.delete(friend.getId());
     }
 
-    public boolean getIsSubscribedTo(){
-        return friendService.getFriendBySubIdToId(SessionBean.getUserId(),id) != null;
+    public boolean getIsSubscribedTo() {
+        return friendService.getFriendBySubIdToId(SessionBean.getUserId(), id) != null;
     }
 
     //Games
-
     public List<UserGame> getMyGames() {
         return userGameService.getUserGamesByUserId(id);
     }
@@ -206,6 +206,12 @@ public class ProfileBean {
     }
 
     public void deleteMyGame(UserGame myGame) {
-        userGameService.delete(myGame.getId());
+        if (SessionBean.getUserId() == myGame.getUser().getId()) {
+            userGameService.delete(myGame.getId());
+        } else {
+            FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+        }
+
     }
 }

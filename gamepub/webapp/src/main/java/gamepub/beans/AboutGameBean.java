@@ -251,15 +251,15 @@ public class AboutGameBean {
         UIViewRoot uiViewRoot = context.getViewRoot();
         CommandButton commandButton;
         if (userGame.isFavorite()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:favourite");
+            commandButton = (CommandButton) uiViewRoot.findComponent("favouriteBut:favourite");
             commandButton.setDisabled(true);
         }
         if (userGame.isWanted()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:wanted");
+            commandButton = (CommandButton) uiViewRoot.findComponent("wantedBut:wanted");
             commandButton.setDisabled(true);
         }
         if (userGame.isCanExchange()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:exchange");
+            commandButton = (CommandButton) uiViewRoot.findComponent("exchangeBut:exchange");
             commandButton.setDisabled(true);
         }
 
