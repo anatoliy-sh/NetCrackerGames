@@ -7547,3 +7547,8 @@ input[type="checkbox"]:disabled:checked:after,
   margin:10px;
   padding: 5px;
 }
+.gameIcon{
+  margin:10px;
+  padding: 5px;
+  float: right;
+}
