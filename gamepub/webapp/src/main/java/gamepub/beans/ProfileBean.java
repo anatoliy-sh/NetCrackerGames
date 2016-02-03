@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
 import java.util.List;
 import javax.faces.application.FacesMessage;
+
 import org.primefaces.context.RequestContext;
 
 /**
@@ -190,6 +191,13 @@ public class ProfileBean {
 
     public boolean getIsSubscribedTo() {
         return friendService.getFriendBySubIdToId(SessionBean.getUserId(), id) != null;
+    }
+
+
+    public String goToMessage() {
+        HttpSession session = SessionBean.getSession();
+        session.setAttribute("receiverId", id);
+        return "message";
     }
 
     //Games
