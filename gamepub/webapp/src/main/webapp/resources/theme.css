@@ -7552,3 +7552,9 @@ input[type="checkbox"]:disabled:checked:after,
   padding: 5px;
   float: right;
 }
+
+.dataList .ui-datalist-data{
+border: none;
+background: transparent;
+background-image: none;
+}

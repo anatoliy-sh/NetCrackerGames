@@ -9,15 +9,19 @@ import gamepub.dto.GameDto;
 import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
+import gamepub.db.entity.GamePlatform;
 import gamepub.db.entity.GameStatus;
 import gamepub.db.entity.Mark;
+import gamepub.db.entity.Platform;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserGame;
 import gamepub.db.service.CommentService;
 import gamepub.db.service.GameGenreService;
+import gamepub.db.service.GamePlatformService;
 import gamepub.db.service.GameService;
 import gamepub.db.service.GameStatusService;
 import gamepub.db.service.MarkService;
+import gamepub.db.service.PlatformService;
 import gamepub.db.service.UserGameService;
 import gamepub.db.service.UserService;
 import java.util.ArrayList;
@@ -60,21 +64,28 @@ public class AboutGameBean {
     GameStatusService gameStatusService;
     @EJB
     MarkService markService;
+    @EJB
+    GamePlatformService gamePlatformService;
+    @EJB
+    GameGenreService gameGenreService;
 
     Game game;
     List<Mark> marksAndReviews;
-    
+
     String myStatus;
-    
-    public String getMyStatus(){
+
+    public String getMyStatus() {
         return myStatus;
     }
-    public void setMyStatus(String myStatus){
-        this.myStatus=myStatus;
+
+    public void setMyStatus(String myStatus) {
+        this.myStatus = myStatus;
     }
-    public List<GameStatus> getStatus(){
+
+    public List<GameStatus> getStatus() {
         return gameStatusService.findAll();
     }
+
     public Game getGame() {
         HttpSession ses = SessionBean.getSession();
         ses.setAttribute("gameid", id);
@@ -92,6 +103,14 @@ public class AboutGameBean {
         return marksAndReviews;
     }
 
+    public List<GamePlatform> getGamePlatforms() {
+        return gamePlatformService.getGamePlatformsByGameId(SessionBean.getGameId());
+    }
+
+    public List<GameGenre> getGameGenres() {
+        return gameGenreService.getGameGenresByGameId(SessionBean.getGameId());
+    }
+
     public void addMarkAndReview() {
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -102,29 +121,28 @@ public class AboutGameBean {
         rating = (Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
         int mrk = Integer.valueOf((String) rating.getValue());
         String review = (String) inputText.getValue();
-        
+
         FacesMessage errMes;
         if (review == null || review.isEmpty() || review.length() >= 501) {
-             errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "write a riview");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "write a riview");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         if (mrk == 0) {
-            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "rate this game");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "rate this game");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark m = null;
-        try{
+        try {
             m = markService.getMarkByUserAndGameId(SessionBean.getUserId(),
                     SessionBean.getGameId());
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
         if (m != null) {
-            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "you've already left a review");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "you've already left a review");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark mark = new Mark();
@@ -144,10 +162,9 @@ public class AboutGameBean {
     public void deleteMarkAndReview(Mark mark) {
         if (mark.getUser().getId() == SessionBean.getUserId()) {//��� ����� ������������ ���������
             markService.delete(mark.getId());
-        }
-        else{
-            FacesMessage errMes= new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
-               RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+        } else {
+            FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
         }
     }
 
@@ -195,7 +212,7 @@ public class AboutGameBean {
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
         userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
-        
+
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(true);
@@ -210,11 +227,11 @@ public class AboutGameBean {
     }
 
     public void addToExchange() {
-        
+
         boolean exist = true;
         UserGame userGame = null;
         try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(),SessionBean.getGameId() );
+            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), SessionBean.getGameId());
         } catch (Exception e) {
 
         }
@@ -227,7 +244,7 @@ public class AboutGameBean {
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
 
         userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
-        
+
         if (!exist) {
             userGame.setCanExchange(true);
             userGame.setWanted(false);
@@ -250,7 +267,7 @@ public class AboutGameBean {
     }
 
     private UserGame getUserGame() {
-        
+
         UserGame userGame = null;
         try {
             userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), SessionBean.getGameId());

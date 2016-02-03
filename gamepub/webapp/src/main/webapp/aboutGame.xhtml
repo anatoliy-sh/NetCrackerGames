@@ -10,28 +10,49 @@
     <h:body>
         <ui:composition template="/Template/template.xhtml">
             <ui:define name="content">
-
+                <h:outputStylesheet name="theme.css"/>
+                
+                <h1 align="center">#{aboutGameBean.game.name}</h1>
                 <b:row>
-                    <b:column span="8" offset="2">
-                        <h1 align="center">#{aboutGameBean.game.name}</h1>
-                        <div style="float:left"><p:graphicImage value="#{aboutGameBean.game.poster}"/></div>
-                        <div>#{aboutGameBean.game.description}</div>
+                    <b:column span="3" offset="2">
+                        <p:graphicImage value="#{aboutGameBean.game.poster}"/>
+                    </b:column>
+                    <b:column span="4" offset="1">
+                        <b>Platform and system requirements:</b>
+                        <br/>
+                        <p:dataList value="#{aboutGameBean.gamePlatforms}" var="gameplatform" styleClass="dataList">
+                            <b>#{gameplatform.platform.name}:</b> #{gameplatform.systemRequirements}
+                        </p:dataList>
+                        <b>Genres:</b>
+                        <br/>
+                        <p:dataList value="#{aboutGameBean.gameGenres}" var="gamegenre" styleClass="dataList">
+                            #{gamegenre.genre.name}
+                        </p:dataList>
+                        <b>Release date:</b> #{aboutGameBean.game.releaseDate}                      
                     </b:column>
                 </b:row>
                 <b:row>
                     <b:column span="8" offset="2">
-                        <br/><br/>
+                        <b>Description:</b>
+                        <br/>
+                        #{aboutGameBean.game.description}
+                    </b:column>
+                </b:row>
+                <br/>
+
+                <b:row>
+                    <b:column span="8" offset="2">
 
                         <h:form id="statusForm">
                             <b:selectOneMenu   id="console1" value="#{aboutGameBean.myStatus}"  style="width:20%">
                                 <f:selectItems value="#{aboutGameBean.status}" var="status" itemLabel="#{status.name}"
                                                itemValue="#{status.id}"/>
                             </b:selectOneMenu>
-                            
-                                <b:commandButton style="width:20%" value="Add to favourite" id="favourite" update="statusForm:favourite" actionListener="#{aboutGameBean.addToFavourite()}" />                                                       
-                                <b:commandButton style="width:20%" value="Add to wanted" id="wanted" update="statusForm:wanted" actionListener="#{aboutGameBean.addToWanted()}" />                                                       
-                                <b:commandButton style="width:20%" value="Add to exchange" id="exchange" update="statusForm:exchange" actionListener="#{aboutGameBean.addToExchange()}" />
-                            
+
+                            <b:commandButton style="width:20%" value="Add to favourite" id="favourite" update="statusForm:favourite" actionListener="#{aboutGameBean.addToFavourite()}" />                                                       
+                            <b:commandButton style="width:20%" value="Add to wanted" id="wanted" update="statusForm:wanted" actionListener="#{aboutGameBean.addToWanted()}" />                                                       
+                            <b:commandButton style="width:20%" value="Add to exchange" id="exchange" update="statusForm:exchange" actionListener="#{aboutGameBean.addToExchange()}" />
+
                         </h:form>                       
 
                         <br/>
@@ -39,7 +60,7 @@
                         <h:form id="tableReviews">
                             <p:growl id="commentsMessage" showDetail="true" life="1000" />
 
-                            <p:panel styleClass="comments-container">
+                            <p:panel styleClass="comments-container" header="Reviews">
                                 <p:dataGrid var="mark"
                                             id="marks"
                                             value="#{aboutGameBean.marksAndReviews}"
