@@ -7,10 +7,16 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.select.Elements;
+import org.jsoup.nodes.Element;
 
 import java.io.*;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.*;
 
 /**
@@ -22,9 +28,105 @@ public class Main {
     private static final String GAME_URL = "http://api.steampowered.com/ISteamApps/GetAppList/v2"; //all games
     private static final String NEWS_URL = "http://api.steampowered.com/ISteamNews/GetNewsForApp/v0002/?appid="; //news by game
 
+    public static void load(String filename, String platformName) throws Exception{
+        GameDaoImplementation gameDaoImplementation = new GameDaoImplementation();
+        PlatformDaoImplementation platformDaoImplementation = new PlatformDaoImplementation();
+        GamePlatformDaoImplementation gamePlatformDaoImplementation = new GamePlatformDaoImplementation();
+        GameScreenshotDaoImplementation gameScreenshotDaoImplementation = new GameScreenshotDaoImplementation();
+        GenreDaoImplementation genreDaoImplementation = new GenreDaoImplementation();
+        GameGenreDaoImplementation gameGenreDaoImplementation = new GameGenreDaoImplementation();
+        NewsDaoImplementation newsDaoImplementation = new NewsDaoImplementation();
+
+        Main main = new Main();
+        Path file = Paths.get(main.getClass().getClassLoader().getResource(filename).getPath());
+        InputStream is = Files.newInputStream(file);
+        BufferedReader reader = new BufferedReader(new InputStreamReader(is));
+        StringBuffer html = new  StringBuffer();
+        String line = null;
+        while ((line = reader.readLine()) != null) {
+            html.append(line);
+        }
+        Document document = Jsoup.parse(html.toString());
+        Elements elements = document.select("li");
+        for (Element element:elements){
+            Game game;
+            String name = element.select("div > div > div > h2 > a").text();
+            name = name.substring(0, name.length() / 2);
+            List<Game> games = gameDaoImplementation.getGamesByName(name.trim());
+            if (games ==null || games.size() == 0){
+                game = new Game();
+                game.setName(name);
+                game.setMetacritic(0);
+                game.setReleaseDate(new Date(element.select("div > div:eq(1) > div > div > h3").text()));
+                game.setPoster(element.select("div > div:eq(1) > div > a > img").attr("src").replaceAll("Small", "Large"));
+                game.setLinkToSonyPlaystationStore(element.select("div > div > div > h2 > a").attr("href"));
+                String tmp = main.sendGet(game.getLinkToSonyPlaystationStore());
+                Document document1 = Jsoup.parse(tmp);
+                game.setDescription(document1.select(".teaser").text());
+                if (game.getDescription() != null && game.getDescription().trim().length()>0) {
+                    game = gameDaoImplementation.create(game);
+                    String genreString="";
+                    try {
+                        genreString = document1.select("ul.release-info:nth-child(5) > li:nth-child(2)").text();
+                        if(!genreString.contains("Genre:"))
+                            genreString = document1.select("ul.release-info:nth-child(4) > li:nth-child(2)").text();
+                        if(!genreString.contains("Genre:"))
+                            genreString = document1.select("ul.release-info:nth-child(6) > li:nth-child(2)").text();
+                        genreString = genreString.substring(6);
+                    }catch (Exception e){
+                        System.out.println(game);
+                    }
+
+                    String[] genres = genreString.split("/");
+                    for(String genreText:genres){
+                        Genre genre = genreDaoImplementation.getGenreByName(genreText.trim());
+                        if (genre==null){
+                            genre = new Genre();
+                            genre.setName(genreText.trim());
+                            genre = genreDaoImplementation.create(genre);
+                        }
+                        GameGenre gameGenre = new GameGenre();
+                        gameGenre.setGenre(genre);
+                        gameGenre.setGame(game);
+                        gameGenreDaoImplementation.create(gameGenre);
+                    }
+                }else game = null;
+            }else game = games.get(0);
+            if (game != null) {
+                GamePlatform gamePlatform = new GamePlatform();
+                gamePlatform.setGame(game);
+                gamePlatform.setPlatform(platformDaoImplementation.getPlatformByName(platformName));
+                gamePlatformDaoImplementation.create(gamePlatform);
+            }
+        }
+    }
+
     public static void main(String[] args) throws Exception {
-        CityDaoImplementation cdi = new CityDaoImplementation();
-        System.out.println(cdi.getCitiesById(1));
+
+        PlatformDaoImplementation platformDaoImplementation = new PlatformDaoImplementation();
+
+        Platform platform;
+        if (platformDaoImplementation.getPlatformByName("PS4") == null) {
+            platform = new Platform();
+            platform.setName("PS4");
+            platformDaoImplementation.create(platform);
+        }
+        if (platformDaoImplementation.getPlatformByName("PS3") == null) {
+            platform = new Platform();
+            platform.setName("PS3");
+            platformDaoImplementation.create(platform);
+        }
+        if (platformDaoImplementation.getPlatformByName("PS Vita") == null) {
+            platform = new Platform();
+            platform.setName("PS Vita");
+            platformDaoImplementation.create(platform);
+        }
+
+        load("ps3.html","PS3");
+        load("ps4.html","PS4");
+        load("vita.html","PS Vita");
+
+        System.exit(0);
 /*
         //WARNING!!!! RUN IT ONLY ONCE!!!
 
@@ -34,13 +136,7 @@ public class Main {
         JSONArray jsonArray = jsonObject.getJSONObject("applist").getJSONArray("apps");
         Game game;
         News news;
-        GameDaoImplementation gameDaoImplementation = new GameDaoImplementation();
-        PlatformDaoImplementation platformDaoImplementation = new PlatformDaoImplementation();
-        GamePlatformDaoImplementation gamePlatformDaoImplementation = new GamePlatformDaoImplementation();
-        GameScreenshotDaoImplementation gameScreenshotDaoImplementation = new GameScreenshotDaoImplementation();
-        GenreDaoImplementation genreDaoImplementation = new GenreDaoImplementation();
-        GameGenreDaoImplementation gameGenreDaoImplementation = new GameGenreDaoImplementation();
-        NewsDaoImplementation newsDaoImplementation = new NewsDaoImplementation();
+
 
         //PLATFORM INIT
         Platform platform;

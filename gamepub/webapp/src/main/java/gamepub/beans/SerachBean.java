@@ -45,7 +45,7 @@ public class SerachBean {
     @EJB
     PlatformService platformService;
 
-    String platform;
+    String[] platform;
     String myGenre;
     String myGame;
     Date date;
@@ -58,7 +58,7 @@ public class SerachBean {
         parametersList = new ArrayList<HashMap.Entry<String, Object>>();
         Map.Entry<String, Object> param;
         FacesContext context = FacesContext.getCurrentInstance();
-        if (context.getExternalContext().getSessionMap().containsKey("genre")) {
+        if (context.getExternalContext().getSessionMap().containsKey("genre") && !context.getExternalContext().getSessionMap().get("genre").toString().equals("0")) {
             genre = context.getExternalContext().getSessionMap().get("genre").toString();
             param = new HashMap.SimpleEntry<String, Object>("genre", genreService.getGenreById(Integer.parseInt(genre)));
             parametersList.add(param);
@@ -71,9 +71,13 @@ public class SerachBean {
             parametersList.add(param);
             //context.getExternalContext().getSessionMap().remove("name");
         }
-        if (context.getExternalContext().getSessionMap().containsKey("platform")) {
-            String platform = context.getExternalContext().getSessionMap().get("platform").toString();
-            param = new HashMap.SimpleEntry<String, Object>("platform", platformService.getPlatformById(Integer.parseInt(platform)));
+        if (context.getExternalContext().getSessionMap().containsKey("platform") && context.getExternalContext().getSessionMap().get("platform")!= null && ((String[])context.getExternalContext().getSessionMap().get("platform")).length>0) {
+            String[] platform = (String[])context.getExternalContext().getSessionMap().get("platform");
+            List<Platform> platforms = new ArrayList<Platform>();
+            for(String p:platform){
+                platforms.add(platformService.getPlatformById(Integer.parseInt(p)));
+            }
+            param = new HashMap.SimpleEntry<String, Object>("platform", platforms);
             parametersList.add(param);
         }
         if (context.getExternalContext().getSessionMap().containsKey("dateGame")) {
@@ -86,7 +90,13 @@ public class SerachBean {
     }
 
     public List<Genre> getGenre() {
-        return genreService.findAll();
+        List<Genre> genres = new ArrayList<Genre>();
+        Genre genre = new Genre();
+        genre.setName("None");
+        genre.setId(0);
+        genres.add(genre);
+        genres.addAll(genreService.findAll());
+        return genres;
     }
 
     public List<Platform> getPlatforms() {
@@ -105,7 +115,6 @@ public class SerachBean {
         }
 
         if (platform != null) {
-            System.out.println("itssplatform" + platform);
             facesContext.getExternalContext().getSessionMap().put("platform", platform);
         }
         if (date != null) {
@@ -136,11 +145,11 @@ public class SerachBean {
         this.myGame = myGame;
     }
 
-    public String getPlatform() {
+    public String[] getPlatform() {
         return platform;
     }
 
-    public void setPlatform(String platform) {
+    public void setPlatform(String[] platform) {
         this.platform = platform;
     }
 

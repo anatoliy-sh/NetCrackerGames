@@ -23,7 +23,6 @@
 
                             <h3 style="margin-top:0px">Genre</h3>
                             <b:selectOneMenu   id="console1" value="#{serachBean.myGenre}"  style="width:125px">
-                                <f:selectItem itemLabel="None" itemValue="#{null}" />
                                 <f:selectItems value="#{serachBean.genre}" var="genre" itemLabel="#{genre.name}"
                                                itemValue="#{genre.id}"/>
                             </b:selectOneMenu>
@@ -32,10 +31,11 @@
 
                         <h:panelGrid columns="1" style="margin:20px" cellpadding="5">
                             <h3 style="margin-top:0px">Platforms</h3>
-                            <p:selectOneRadio id="platformRadio" value="#{serachBean.platform}" columns="3">
+                            <p:selectManyCheckbox id="platformRadio" value="#{serachBean.platform}" columns="3">
                                 <f:selectItems value="#{serachBean.platforms}" var="platform" itemLabel="#{platform.name}"
                                                itemValue="#{platform.id}"/>
-                            </p:selectOneRadio>
+                            </p:selectManyCheckbox>
+
                             <h3 style="margin-top:0px">Data</h3>
                             <p:calendar id="mask"  pattern="dd-MM-yyyy" value="#{serachBean.date}" mask="true" />
                         </h:panelGrid>

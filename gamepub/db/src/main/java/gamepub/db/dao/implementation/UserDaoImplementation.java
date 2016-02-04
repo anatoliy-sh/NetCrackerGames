@@ -30,11 +30,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserByLogin(String login) {
@@ -43,11 +47,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("login"), login));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserByLoginAndPassword(String login, String password) {
@@ -56,11 +64,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("login"), login),cb.equal(root.<String>get("password"), password));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserByEmail(String email) {
@@ -69,11 +81,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("email"), email));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserByVkInfo(String vkInfo) {
@@ -82,11 +98,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("vkInfo"), vkInfo));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserBySteamInfo(String steamInfo) {
@@ -95,11 +115,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("steamInfo"), steamInfo));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public User getUserByFbInfo(String fbInfo) {
@@ -108,11 +132,15 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         Root<User> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("fbInfo"), fbInfo));
+        User result;
         try {
-            return (User)getEntityManager().createQuery(cq).getSingleResult();
+            result = (User)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<User> getUsersByUserRoleId(Integer id) {
@@ -122,7 +150,9 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<UserRole>get("userRole").<Integer>get("id"), id));
         cq.orderBy(cb.asc(root.<String>get("login")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<User> getUsersByCityId(Integer id) {
@@ -132,7 +162,9 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<City>get("city").<Integer>get("id"), id));
         cq.orderBy(cb.asc(root.<String>get("login")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<User> getUsersByCountryId(Integer id) {
@@ -142,7 +174,9 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<City>get("city").<Country>get("country").<Integer>get("id"), id));
         cq.orderBy(cb.asc(root.<String>get("login")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<User> getUsersByCustomParams(List<HashMap.Entry<String, Object>> parameterList) {
@@ -168,6 +202,8 @@ public class UserDaoImplementation extends BaseDaoImplementation<User,Integer> i
             cq.where(p);
         }
         cq.orderBy(cb.asc(root.<String>get("login")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

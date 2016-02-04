@@ -25,10 +25,14 @@ public class CountryDaoImplementation extends BaseDaoImplementation<Country, Int
         Root<Country> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Country result;
         try {
-            return (Country)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Country)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 }
