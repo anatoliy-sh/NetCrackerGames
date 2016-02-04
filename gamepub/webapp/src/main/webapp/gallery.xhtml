@@ -4,7 +4,8 @@
       xmlns:h="http://xmlns.jcp.org/jsf/html"
       xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
       xmlns:f="http://xmlns.jcp.org/jsf/core"
-      xmlns:p="http://primefaces.org/ui">
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:b="http://bootsfaces.net/ui">
     <h:head>
         <title>#{loginBean.name}'s Gallery</title>
     </h:head>
@@ -12,25 +13,25 @@
     <h:body>
 
 <ui:composition template="/Template/template.xhtml">
-            <ui:define name="content">        
-        
-        <div align="center">
+            <ui:define name="content">     
+                <div align="center">
+     <h:form enctype="multipart/form-data">        
             <h2>#{loginBean.name}'s Gallery  </h2>
-        <p:galleria value="#{GalleryBean.images}" var="image" panelWidth="1000"
+ 
+            <p:galleria  value="#{galleryBean.images}" var="image" panelWidth="1000"
                     panelHeight="700" showCaption="true">
             <p:graphicImage value ="#{image}"                           
                             alt="desc for #{image}"
                             title="#{image}" />
         </p:galleria> 
-    <div align="justify">
-        <p:panel>
-    <h:form enctype="multipart/form-data">
+            
+   
+      
+    
     <p:growl id="messages" showDetail="true" />
-    <p:fileUpload value="#{GalleryBean.file}" mode="simple" skinSimple="true"/>
-    <p:commandButton value="add" ajax="false" actionListener="#{GalleryBean.upload}" />
-    </h:form>
-        </p:panel>
-        </div>
+    <p:fileUpload fileUploadListener="#{galleryBean.upload}" mode="advanced" skinSimple="true"
+               oncomplete="window.location.reload();" />
+    </h:form>    
         </div>
             </ui:define>
 </ui:composition>

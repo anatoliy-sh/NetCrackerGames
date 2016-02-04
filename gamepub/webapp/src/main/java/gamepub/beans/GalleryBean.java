@@ -30,13 +30,15 @@ import javax.faces.bean.ViewScoped;
 import javax.faces.context.FacesContext;
 import javax.servlet.http.HttpSession;
 import org.apache.commons.io.IOUtils;
+import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 import org.primefaces.model.UploadedFile;
 
 /**
  *
  * @author fitok
  */
-@ManagedBean(name = "GalleryBean")
+@ManagedBean
 @SessionScoped
 public class GalleryBean {
    
@@ -58,15 +60,14 @@ public UploadedFile getFile() {
         this.file = file;
     }
      
-    public void upload() throws IOException {
-        if(getFile() != null) {
-      cloudUpload upload = new cloudUpload(getFile());                          
+    public void upload(FileUploadEvent event) throws IOException {
+       if(event.getFile()!= null) {  
+      cloudUpload upload = new cloudUpload(event.getFile());                          
                  UserScreenshot uScreen = new UserScreenshot();
-                    uScreen.setLink((String)upload.getUploadResult().get("url"));           
+                    uScreen.setLink((String)upload.getUploadResult().get("url"));      
                     Date curDate = new Date();            
                     uScreen.setDate(curDate);   
-                    uScreen.setUser(userService.getUserById(SessionBean.getUserId()));
-                             
+                    uScreen.setUser(userService.getUserById(SessionBean.getUserId()));                     
                 userScreenshotService.create(uScreen);
             FacesMessage message = new FacesMessage("Succesful", getFile().getFileName() + " is uploaded.");
             FacesContext.getCurrentInstance().addMessage(null, message);
