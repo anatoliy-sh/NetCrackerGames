@@ -69,7 +69,7 @@ public class SchedulerJob implements Job {
         List<Game> games = gameService.findAll();
         for (Game game : games) {
             try {
-                String json = sendGet(NEWS_URL + game.getSteamId() + "\"");
+                String json = sendGet(NEWS_URL + game.getSteamId() + "/");
                 List<News> newses = newsService.getNewsByGameId(game.getId());
                 if (json != null) {
                     jsonObject = new JSONObject(json);
