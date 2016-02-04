@@ -26,11 +26,15 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
         Root<PrivateMessage> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        PrivateMessage result;
         try {
-            return (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
+            result = (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public PrivateMessage getPrivateMessageBySenderIdAndReceiverIdAndDate(Integer senderId, Integer receiverId, Date date) {
@@ -41,11 +45,15 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
         cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), senderId),
                 cb.equal(root.<User>get("receiver").<Integer>get("id"), receiverId),
                 cb.equal(root.<Date>get("date"), date));
+        PrivateMessage result;
         try {
-            return (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
+            result = (PrivateMessage)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<PrivateMessage> getSendedPrivateMessagesBySenderId(Integer id) {
@@ -54,7 +62,9 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
         Root<PrivateMessage> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<PrivateMessage> getReceivedPrivateMessagesByReceiverId(Integer id) {
@@ -63,7 +73,9 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
         Root<PrivateMessage> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("receiver").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<PrivateMessage> getPrivateMessagesBySenderIdAndReceiverId(Integer senderId, Integer receiverId) {
@@ -73,6 +85,8 @@ public class PrivateMessagesDaoImplementation extends BaseDaoImplementation<Priv
         cq.select(root);
         cq.where(cb.equal(root.<User>get("sender").<Integer>get("id"), senderId),
                 cb.equal(root.<User>get("receiver").<Integer>get("id"), receiverId));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

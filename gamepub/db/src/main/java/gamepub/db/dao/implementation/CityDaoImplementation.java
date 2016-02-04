@@ -27,11 +27,15 @@ public class CityDaoImplementation extends BaseDaoImplementation<City,Integer> i
         Root<City> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"),id));
+        City result;
         try {
-            return (City)getEntityManager().createQuery(cq).getSingleResult();
+            result = (City)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
 
     }
 
@@ -42,6 +46,8 @@ public class CityDaoImplementation extends BaseDaoImplementation<City,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<Country>get("country").<Integer>get("id"), id));
         cq.orderBy(cb.asc(root.<String>get("name")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List<City> result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

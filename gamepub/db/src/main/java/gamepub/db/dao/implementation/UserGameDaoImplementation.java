@@ -27,11 +27,15 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         Root<UserGame> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        UserGame result;
         try {
-            return (UserGame)getEntityManager().createQuery(cq).getSingleResult();
+            result = (UserGame)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public UserGame getUserGameByUserIdAndGameId(Integer userId, Integer gameId) {
@@ -41,11 +45,15 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<Game>get("game").<Integer>get("id"), gameId));
+        UserGame result;
         try {
-            return (UserGame)getEntityManager().createQuery(cq).getSingleResult();
+            result = (UserGame)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<UserGame> getUserGamesByUserId(Integer userId) {
@@ -54,7 +62,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         Root<UserGame> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getUserGamesByUserId(Integer userId, Integer gameStatusId) {
@@ -64,7 +74,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<GameStatus>get("gameStatus").<Integer>get("id"), gameStatusId));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getUserGamesByGameId(Integer gameId) {
@@ -73,7 +85,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         Root<UserGame> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getUserGamesByGameId(Integer gameId, Integer gameStatusId) {
@@ -83,7 +97,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
                 cb.equal(root.<GameStatus>get("gameStatus").<Integer>get("id"), gameStatusId));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getFavoriteUserGamesByUserId(Integer userId) {
@@ -92,8 +108,10 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         Root<UserGame> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
-                cb.equal(root.<Boolean>get("favorite"),true));
-        return getEntityManager().createQuery(cq).getResultList();
+                cb.equal(root.<Boolean>get("favorite"), true));
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getFavoriteUserGamesByGameId(Integer gameId) {
@@ -103,7 +121,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
                 cb.equal(root.<Boolean>get("favorite"), true));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getWantedUserGamesByUserId(Integer userId) {
@@ -113,7 +133,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<Boolean>get("wanted"), true));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getWantedUserGamesByGameId(Integer gameId) {
@@ -123,7 +145,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
                 cb.equal(root.<Boolean>get("wanted"), true));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getCanExchangeUserGamesByUserId(Integer userId) {
@@ -133,7 +157,9 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<Boolean>get("canExchange"), true));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<UserGame> getCanExchangeUserGamesByGameId(Integer gameId) {
@@ -143,6 +169,8 @@ public class UserGameDaoImplementation extends BaseDaoImplementation<UserGame,In
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), gameId),
                 cb.equal(root.<Boolean>get("canExchange"), true));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

@@ -23,11 +23,15 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
         Root<Platform> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("name"), name));
+        Platform result;
         try {
-            return (Platform)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Platform)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public Platform getPlatformById(Integer id) {
@@ -36,10 +40,14 @@ public class PlatformDaoImplementation extends BaseDaoImplementation<Platform,In
         Root<Platform> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Platform result;
         try {
-            return (Platform)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Platform)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 }

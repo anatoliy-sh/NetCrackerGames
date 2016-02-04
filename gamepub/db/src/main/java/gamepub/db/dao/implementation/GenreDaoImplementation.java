@@ -23,11 +23,15 @@ public class GenreDaoImplementation extends BaseDaoImplementation<Genre,Integer>
         Root<Genre> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("name"), name));
+        Genre result;
         try {
-            return (Genre)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Genre)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public Genre getGenreById(Integer id) {
@@ -36,10 +40,14 @@ public class GenreDaoImplementation extends BaseDaoImplementation<Genre,Integer>
         Root<Genre> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Genre result;
         try {
-            return (Genre)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Genre)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 }

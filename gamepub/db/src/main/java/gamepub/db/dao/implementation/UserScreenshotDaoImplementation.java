@@ -25,11 +25,15 @@ public class UserScreenshotDaoImplementation extends BaseDaoImplementation<UserS
         Root<UserScreenshot> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        UserScreenshot result;
         try {
-            return (UserScreenshot)getEntityManager().createQuery(cq).getSingleResult();
+            result = (UserScreenshot)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<UserScreenshot> getScreenshotsByUserId(Integer id) {
@@ -38,6 +42,8 @@ public class UserScreenshotDaoImplementation extends BaseDaoImplementation<UserS
         Root<UserScreenshot> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

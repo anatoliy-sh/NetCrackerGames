@@ -41,11 +41,15 @@ public class CommentDaoImplementation extends BaseDaoImplementation<Comment,Inte
         cq.where(cb.equal(root.<News>get("news").<Integer>get("id"), newsId),
                 cb.equal(root.<News>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<Date>get("date"), date));
+        Comment result;
         try {
-            return (Comment)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Comment)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<Comment> getCommentsByNewsId(Integer id) {
@@ -54,7 +58,8 @@ public class CommentDaoImplementation extends BaseDaoImplementation<Comment,Inte
         Root<Comment> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<News>get("news").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        return result;
     }
 
     public List<Comment> getCommentsByUserId(Integer id) {
@@ -63,6 +68,8 @@ public class CommentDaoImplementation extends BaseDaoImplementation<Comment,Inte
         Root<Comment> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<News>get("user").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

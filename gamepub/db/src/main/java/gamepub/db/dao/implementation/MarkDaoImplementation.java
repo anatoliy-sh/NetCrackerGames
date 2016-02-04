@@ -26,11 +26,15 @@ public class MarkDaoImplementation extends BaseDaoImplementation<Mark,Integer> i
         Root<Mark> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Mark result;
         try {
-            return (Mark)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Mark)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public Mark getMarkByUserAndGameId(Integer userId, Integer gameId) {
@@ -40,11 +44,15 @@ public class MarkDaoImplementation extends BaseDaoImplementation<Mark,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), userId),
                 cb.equal(root.<Game>get("game").<Integer>get("id"), gameId));
+        Mark result;
         try {
-            return (Mark)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Mark)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<Mark> getMarksByUserId(Integer id) {
@@ -53,7 +61,9 @@ public class MarkDaoImplementation extends BaseDaoImplementation<Mark,Integer> i
         Root<Mark> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("user").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<Mark> getMarksByGameId(Integer id) {
@@ -62,6 +72,8 @@ public class MarkDaoImplementation extends BaseDaoImplementation<Mark,Integer> i
         Root<Mark> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

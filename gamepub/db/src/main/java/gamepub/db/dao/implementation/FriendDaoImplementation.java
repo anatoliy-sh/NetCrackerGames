@@ -39,12 +39,15 @@ public class FriendDaoImplementation extends BaseDaoImplementation<Friend, Integ
         cq.select(root);
         cq.where(cb.equal(root.<User>get("subscribedTo").<Integer>get("id"), subToId),
                 cb.equal(root.<User>get("subscriber").<Integer>get("id"), subId));
-
+        Friend result;
         try {
-            return (Friend)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Friend)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
 
@@ -54,7 +57,9 @@ public class FriendDaoImplementation extends BaseDaoImplementation<Friend, Integ
         Root<Friend> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("subscribedTo").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<Friend> getSubscribedToByUserId(Integer id) {
@@ -63,6 +68,8 @@ public class FriendDaoImplementation extends BaseDaoImplementation<Friend, Integ
         Root<Friend> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<User>get("subscriber").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }
