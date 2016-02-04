@@ -38,7 +38,7 @@ public class Main {
         NewsDaoImplementation newsDaoImplementation = new NewsDaoImplementation();
 
         Main main = new Main();
-        Path file = Paths.get(main.getClass().getClassLoader().getResource(filename).getPath());
+        Path file = Paths.get("/home/"+filename);
         InputStream is = Files.newInputStream(file);
         BufferedReader reader = new BufferedReader(new InputStreamReader(is));
         StringBuffer html = new  StringBuffer();
