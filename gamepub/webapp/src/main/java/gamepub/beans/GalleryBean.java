@@ -6,6 +6,7 @@
 package gamepub.beans;
 import com.cloudinary.*;
 import com.cloudinary.utils.ObjectUtils;
+import gamepub.cloud.cloudUpload;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserScreenshot;
 import gamepub.db.service.UserScreenshotService;
@@ -47,6 +48,7 @@ private User user;
 private List<String> images;
 private UploadedFile file;
 private Map uploadResult;
+private boolean noScreensForUser;
 
 public UploadedFile getFile() {
         return file;
@@ -58,15 +60,9 @@ public UploadedFile getFile() {
      
     public void upload() throws IOException {
         if(getFile() != null) {
-      
-            Map options = ObjectUtils.asMap(
-  "cloud_name", "dtx5nrsak",
-  "api_key", "152549788856848",
-  "api_secret", "yJVWUKhjo_3tr9wEnOndydIEGtY");
-            Cloudinary cloudinary = new Cloudinary(options);
-              uploadResult = cloudinary.uploader().upload(stream2file(getFile().getInputstream()), options);
+      cloudUpload upload = new cloudUpload(getFile());                          
                  UserScreenshot uScreen = new UserScreenshot();
-                    uScreen.setLink((String)uploadResult.get("url"));           
+                    uScreen.setLink((String)upload.getUploadResult().get("url"));           
                     Date curDate = new Date();            
                     uScreen.setDate(curDate);   
                     uScreen.setUser(userService.getUserById(SessionBean.getUserId()));
@@ -85,25 +81,34 @@ public UploadedFile getFile() {
      * @return the images
      */
     public List<String> getImages() {
-    
-    List<UserScreenshot> userScreens = userScreenshotService.getScreenshotsByUserId(SessionBean.getUserId());
-        
-            images = new ArrayList<String>();         
+        images = new ArrayList<String>();  
+        List<UserScreenshot> userScreens = userScreenshotService.getScreenshotsByUserId(SessionBean.getUserId());
+    if (userScreens.isEmpty()){
+        images.add("/Template/404g.png");
+    }else{                              
             for(UserScreenshot u:userScreens){
             images.add(u.getLink()); 
             }
-            
+    }
              
         return images;
     }
-    
-         public File stream2file (InputStream in) throws IOException {
-        final File tempFile = File.createTempFile("stream2file", ".tmp");
-        tempFile.deleteOnExit();
-        FileOutputStream out = new FileOutputStream(tempFile);
-            IOUtils.copy(in, out);      
-        return tempFile;
+
+    /**
+     * @return the noScreensForUser
+     */
+    public boolean isNoScreensForUser() {
+        return noScreensForUser;
     }
+
+    /**
+     * @param noScreensForUser the noScreensForUser to set
+     */
+    public void setNoScreensForUser(boolean noScreensForUser) {
+        this.noScreensForUser = noScreensForUser;
+    }
+    
+      
     
     
 }

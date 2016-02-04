@@ -73,8 +73,7 @@ private boolean logged;
         user = userService.getUserByLoginAndPassword(name, hashPass); 
             setLogged(true);
             ses.setAttribute("userid", user.getId());
-            ses.setAttribute("username", getName());
-                    
+            ses.setAttribute("username", getName());                  
          }        
        
         else{
