@@ -10,99 +10,127 @@
     <h:body>
         <ui:composition template="/Template/template.xhtml">
             <ui:define name="content">
+                <h:outputStylesheet name="theme.css"/>
+                
+                <h1 align="center">#{aboutGameBean.game.name}</h1>
+                <b:row>
+                    <b:column span="3" offset="2">
+                        <p:graphicImage value="#{aboutGameBean.game.poster}"/>
+                    </b:column>
+                    <b:column span="4" offset="1">
+                        <b>Platform and system requirements:</b>
+                        <br/>
+                        <p:dataList value="#{aboutGameBean.gamePlatforms}" var="gameplatform" styleClass="dataList">
+                            <b>#{gameplatform.platform.name}:</b> #{gameplatform.systemRequirements}
+                        </p:dataList>
+                        <b>Genres:</b>
+                        <br/>
+                        <p:dataList value="#{aboutGameBean.gameGenres}" var="gamegenre" styleClass="dataList">
+                            #{gamegenre.genre.name}
+                        </p:dataList>
+                        <b>Release date:</b> #{aboutGameBean.game.releaseDate}                      
+                    </b:column>
+                </b:row>
+                <b:row>
+                    <b:column span="8" offset="2">
+                        <b>Description:</b>
+                        <br/>
+                        #{aboutGameBean.game.description}
+                    </b:column>
+                </b:row>
+                <br/>
 
-                 <b:row>
-                     <b:column span="10" offset="1">
-                    <h1 align="center">#{aboutGameBean.game.name}</h1>
-                    <div style="float:left"><p:graphicImage value="#{aboutGameBean.game.poster}"/></div>
-                    <div>#{aboutGameBean.game.description}</div>
-                     </b:column>
-                 </b:row>
-                 <b:row>
-                     <b:column span="8" offset="2">
-                         <br/><br/><br/>
-                    <h:form id="addBut">
+                <b:row>
+                    <b:column span="8" offset="2">
 
-                        <b:commandButton value="Add to favourite" id="favourite" update="addBut" actionListener="#{aboutGameBean.addToFavourite()}" />
-                        <b:commandButton value="Add to wanted" id="wanted" update="addBut" actionListener="#{aboutGameBean.addToWanted()}" />
-                        <b:commandButton value="Add to exchange" id="exchange" update="addBut" actionListener="#{aboutGameBean.addToExchange()}" />
-                    </h:form>
-                    <br/>
+                        <h:form id="statusForm">
+                            <b:selectOneMenu   id="console1" value="#{aboutGameBean.myStatus}"  style="width:20%">
+                                <f:selectItems value="#{aboutGameBean.status}" var="status" itemLabel="#{status.name}"
+                                               itemValue="#{status.id}"/>
+                            </b:selectOneMenu>
 
-                    <h:form id="tableReviews">
-                        <p:growl id="commentsMessage" showDetail="true" life="1000" />
+                            <b:commandButton style="width:20%" value="Add to favourite" id="favourite" update="statusForm:favourite" actionListener="#{aboutGameBean.addToFavourite()}" />                                                       
+                            <b:commandButton style="width:20%" value="Add to wanted" id="wanted" update="statusForm:wanted" actionListener="#{aboutGameBean.addToWanted()}" />                                                       
+                            <b:commandButton style="width:20%" value="Add to exchange" id="exchange" update="statusForm:exchange" actionListener="#{aboutGameBean.addToExchange()}" />
 
-                        <p:panel styleClass="comments-container">
-                            <p:dataGrid var="mark"
-                                        id="marks"
-                                        value="#{aboutGameBean.marksAndReviews}"
-                                        emptyMessage="No reviews"
-                                        columns="1"
-                                        rows = "10"
-                                        paginator="true"
-                                        paginatorTemplate="{CurrentPageReport} {PageLinks}">
-                                <p:panel id="mark" 
-                                         header="#{mark.user.login}"
-                                         style="text-align: left; ">
-                                    
-                                    <f:facet name="actions">
-                                        <p:commandLink
-                                            styleClass="ui-panel-titlebar-icon ui-corner-all 
-                                            ui-state-default ui-icon ui-icon-close"
-                                            actionListener="#{aboutGameBean.deleteMarkAndReview(mark)}"
-                                            update="tableReviews">
-                                            <p:confirm
-                                                header="Confirm deletion"
-                                                message="Are you sure you want to delete this mark and review?"
-                                                icon="ui-icon-alert"/>
-                                        </p:commandLink>
-                                    </f:facet>
+                        </h:form>                       
 
-                                    <p:rating value="#{mark.mark}" readonly="true" />
-                                    <br/>
-                                    <h:outputText id="commentContent"
-                                                  value="#{mark.review}"
-                                                  style=" white-space: pre-wrap; word-break: break-all;
-                                                  word-wrap: break-word; "/>
-                                </p:panel>
-                            </p:dataGrid>
-                        </p:panel>
-                    </h:form>
+                        <br/>
 
-                    <p:confirmDialog
-                        global="true"
-                        widgetVar="confirm">
-                        <p:commandButton
-                            styleClass="ui-confirmdialog-yes"
-                            value="Yes"
-                            type="button"/>
-                        <p:commandButton
-                            styleClass="ui-confirmdialog-no"
-                            value="No"
-                            type="button"/>
-                    </p:confirmDialog>
+                        <h:form id="tableReviews">
+                            <p:growl id="commentsMessage" showDetail="true" life="1000" />
 
-                    <p:panel 
-                        id="markAdder" 
-                        header="Your review..." 
-                        styleClass="comments-container">
-                        <h:form id="markAdderForm">
-                            <h:outputText value="Your mark:" />
-                            <p:rating id="markAdderNewMark" cancel="false" stars="5" />
-                            <br/>
-                            <p:inputTextarea 
-                                id="markAdderNewComment" 
-                                style="width:100%"/>
-                            <br/>
-                            <p:commandButton 
-                                id="markAdderSubmit" 
-                                value="Send"
-                                actionListener="#{aboutGameBean.addMarkAndReview}"
-                                update="tableReviews markAdderForm"/>
+                            <p:panel styleClass="comments-container" header="Reviews">
+                                <p:dataGrid var="mark"
+                                            id="marks"
+                                            value="#{aboutGameBean.marksAndReviews}"
+                                            emptyMessage="No reviews"
+                                            columns="1"
+                                            rows = "10"
+                                            paginator="true"
+                                            paginatorTemplate="{CurrentPageReport} {PageLinks}">
+                                    <p:panel id="mark" 
+                                             header="#{mark.user.login}"
+                                             style="text-align: left; ">
+
+                                        <f:facet name="actions">
+                                            <p:commandLink
+                                                styleClass="ui-panel-titlebar-icon ui-corner-all 
+                                                ui-state-default ui-icon ui-icon-close"
+                                                actionListener="#{aboutGameBean.deleteMarkAndReview(mark)}"
+                                                update="tableReviews">
+                                                <p:confirm
+                                                    header="Confirm deletion"
+                                                    message="Are you sure you want to delete this mark and review?"
+                                                    icon="ui-icon-alert"/>
+                                            </p:commandLink>
+                                        </f:facet>
+
+                                        <p:rating value="#{mark.mark}" readonly="true" />
+                                        <br/>
+                                        <h:outputText id="commentContent"
+                                                      value="#{mark.review}"
+                                                      style=" white-space: pre-wrap; word-break: break-all;
+                                                      word-wrap: break-word; "/>
+                                    </p:panel>
+                                </p:dataGrid>
+                            </p:panel>
                         </h:form>
-                    </p:panel>
-                     </b:column>
-            </b:row>
+
+                        <p:confirmDialog
+                            global="true"
+                            widgetVar="confirm">
+                            <p:commandButton
+                                styleClass="ui-confirmdialog-yes"
+                                value="Yes"
+                                type="button"/>
+                            <p:commandButton
+                                styleClass="ui-confirmdialog-no"
+                                value="No"
+                                type="button"/>
+                        </p:confirmDialog>
+
+                        <p:panel 
+                            id="markAdder" 
+                            header="Your review..." 
+                            styleClass="comments-container">
+                            <h:form id="markAdderForm">
+                                <h:outputText value="Your mark:" />
+                                <p:rating id="markAdderNewMark" cancel="false" stars="5" />
+                                <br/>
+                                <p:inputTextarea 
+                                    id="markAdderNewComment" 
+                                    style="width:100%"/>
+                                <br/>
+                                <p:commandButton 
+                                    id="markAdderSubmit" 
+                                    value="Send"
+                                    actionListener="#{aboutGameBean.addMarkAndReview}"
+                                    update="tableReviews markAdderForm"/>
+                            </h:form>
+                        </p:panel>
+                    </b:column>
+                </b:row>
             </ui:define>
         </ui:composition>
     </h:body>

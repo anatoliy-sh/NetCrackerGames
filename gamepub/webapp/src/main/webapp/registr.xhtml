@@ -12,9 +12,7 @@
         <ui:define name="content">
             <b:column span="12">
                 <h:form>
-                 
-                    
-                    <p:panel id="panel" header="Registration">
+                    <b:panel id="panel" title="Registration">
                      <p:messages id="msgs" /> 
                      <h:panelGrid columns="3" cellpadding="5">
                             <p:outputLabel for="name" value="Name:" />
@@ -25,17 +23,24 @@
                             <p:message for="name" style ="color:red" /> 
                             
                             <p:outputLabel for="password" value="Password:" />
-                            <p:password id="password" value="#{registrBean.password}" label="Password" required="true" 
+                            <p:password id="password" value="#{registrBean.password}" label="Password" match ="confirm" required="true" 
                                         requiredMessage = "Please enter your password">
                                 <f:validateLength minimum="2" />                                
                             </p:password>
                                 <p:message for="password" style="color: red" /> 
+                               
+                                <p:outputLabel for="confirm" value="Confirm:" />
+                            <p:password id="confirm" value="#{registrBean.password}" label="Confirm" required="true" 
+                                        requiredMessage = "Please confirm your password">
+                                <f:validateLength minimum="2" />                                
+                            </p:password>
+                                <p:message for="confirm" style="color: red" /> 
                                 
                                  <p:outputLabel for="email" value="Email:" />
                                  <p:inputText id="email" value="#{registrBean.email}" label="Email" required="true"
                                          requiredMessage="Please enter your email">
                                 <f:validateLength minimum="5" />                                
-                            </p:inputText>
+                                 </p:inputText>
                                 <p:message for="email" style="color:red" />
                                 
                             <p:outputLabel for="console" value="City:" />
@@ -45,9 +50,11 @@
                                 
                             </p:selectOneMenu>
                     </h:panelGrid>
-                    
-                     <p:commandButton value="Save" ajax="false" actionListener="#{registrBean.save}" icon="ui-icon-check" update="panel"/>                    
-                    </p:panel>
+                    <p:captcha label="Captcha" />
+                     <b:commandButton value="Apply" ajax="false" actionListener="#{registrBean.save}" icon="ui-icon-check" update="panel"/>                        
+                        
+                    </b:panel>
+                     
                 </h:form>
             </b:column>
         </ui:define>

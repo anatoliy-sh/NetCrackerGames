@@ -26,7 +26,7 @@ import org.primefaces.context.RequestContext;
  */
 @ManagedBean
 @SessionScoped
-public class LoginBean {    
+public class LoginBean{    
     @EJB
     UserService userService; 
 private User user;    
@@ -73,12 +73,7 @@ private boolean logged;
         user = userService.getUserByLoginAndPassword(name, hashPass); 
             setLogged(true);
             ses.setAttribute("userid", user.getId());
-            ses.setAttribute("username", getName());
-       /*FacesMessage successMes= new FacesMessage(FacesMessage.SEVERITY_WARN,
-                        "Success",
-                    "You've been successfully logged in!!");       
-               RequestContext.getCurrentInstance().showMessageInDialog(successMes);*/
-                    
+            ses.setAttribute("username", getName());                  
          }        
        
         else{
@@ -103,7 +98,7 @@ private boolean logged;
     /**
      * @return the logged
      */
-    public boolean isLogged() {
+    public boolean isLogged() {   
         return logged;
     }
 

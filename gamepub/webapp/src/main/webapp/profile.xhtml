@@ -30,7 +30,7 @@
                                                itemValue="#{city.id}"/>
                             </b:selectOneMenu>
                             <p:outputLabel for="email" value="Email:"/>
-                             <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
+                            <p:inputText id="email" value="#{profileBean.email}" label="Email" required="true">
                             <f:validateLength minimum="5"/>
                         </p:inputText>
                             <p:outputLabel for="fbInfo" value="FbInfo:"/>
@@ -77,14 +77,18 @@
             <b:row>
                 <!-- Buttons and games-->
                 <b:column span="10" offset="1">
-                    <b:button outcome="gallery" value="My gallery" rendered="#{profileBean.isMy}"/>
+                    <b:button class="btn btn-primary" outcome="gallery" value="My gallery" rendered="#{profileBean.isMy}"/>
                     <b:button outcome="tradingPage" value="Trading page" rendered="#{profileBean.isMy}"/>
+                    <b:button class="btn btn-info" outcome="allMessages" value="Messages" rendered="#{profileBean.isMy}"/>
                     <!-- Follow -->
                     <h:form id="follow" rendered="#{!profileBean.isMy}">
                         <b:commandButton class="btn btn-primary" value="Follow" ajax="false"
                                          actionListener="#{profileBean.follow()}" rendered="#{!profileBean.isSubscribedTo}" />
                         <b:commandButton class="btn btn-danger" value="UnFollow" ajax="false"
                                          actionListener="#{profileBean.unfollow()}" rendered="#{profileBean.isSubscribedTo}" />
+                        <b:commandButton class="btn btn-info" value="Write" ajax="false"
+                                        action="#{profileBean.goToMessage}" rendered="#{profileBean.isSubscribedTo}" />
+
                     </h:form>
                     <!-- Games -->
                     <b:tabView id="tabView">
@@ -153,7 +157,7 @@
                                             paginatorTemplate="{CurrentPageReport}  {FirstPageLink} {PreviousPageLink} {PageLinks} {NextPageLink} {LastPageLink} {RowsPerPageDropdown}"
                                             rowsPerPageTemplate="6,12,18">
 
-                                    <p:panel style="text-align:center">
+                                    <p:panel style="text-align:center" header="">
                                         <f:facet name="actions">
                                             <p:commandLink
                                                     styleClass="gameIcon btn btn-danger"

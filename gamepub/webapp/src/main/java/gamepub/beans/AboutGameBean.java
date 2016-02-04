@@ -9,14 +9,19 @@ import gamepub.dto.GameDto;
 import gamepub.db.entity.Comment;
 import gamepub.db.entity.Game;
 import gamepub.db.entity.GameGenre;
+import gamepub.db.entity.GamePlatform;
+import gamepub.db.entity.GameStatus;
 import gamepub.db.entity.Mark;
+import gamepub.db.entity.Platform;
 import gamepub.db.entity.User;
 import gamepub.db.entity.UserGame;
 import gamepub.db.service.CommentService;
 import gamepub.db.service.GameGenreService;
+import gamepub.db.service.GamePlatformService;
 import gamepub.db.service.GameService;
 import gamepub.db.service.GameStatusService;
 import gamepub.db.service.MarkService;
+import gamepub.db.service.PlatformService;
 import gamepub.db.service.UserGameService;
 import gamepub.db.service.UserService;
 import java.util.ArrayList;
@@ -59,9 +64,27 @@ public class AboutGameBean {
     GameStatusService gameStatusService;
     @EJB
     MarkService markService;
+    @EJB
+    GamePlatformService gamePlatformService;
+    @EJB
+    GameGenreService gameGenreService;
 
     Game game;
     List<Mark> marksAndReviews;
+
+    String myStatus;
+
+    public String getMyStatus() {
+        return myStatus;
+    }
+
+    public void setMyStatus(String myStatus) {
+        this.myStatus = myStatus;
+    }
+
+    public List<GameStatus> getStatus() {
+        return gameStatusService.findAll();
+    }
 
     public Game getGame() {
         HttpSession ses = SessionBean.getSession();
@@ -80,6 +103,14 @@ public class AboutGameBean {
         return marksAndReviews;
     }
 
+    public List<GamePlatform> getGamePlatforms() {
+        return gamePlatformService.getGamePlatformsByGameId(SessionBean.getGameId());
+    }
+
+    public List<GameGenre> getGameGenres() {
+        return gameGenreService.getGameGenresByGameId(SessionBean.getGameId());
+    }
+
     public void addMarkAndReview() {
         FacesContext context = FacesContext.getCurrentInstance();
 
@@ -90,35 +121,33 @@ public class AboutGameBean {
         rating = (Rating) uiViewRoot.findComponent("markAdderForm:markAdderNewMark");
         int mrk = Integer.valueOf((String) rating.getValue());
         String review = (String) inputText.getValue();
-        
+
         FacesMessage errMes;
         if (review == null || review.isEmpty() || review.length() >= 501) {
-             errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "write a riview");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "write a riview");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         if (mrk == 0) {
-            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "rate this game");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "rate this game");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark m = null;
-        try{
+        try {
             m = markService.getMarkByUserAndGameId(SessionBean.getUserId(),
                     SessionBean.getGameId());
-        }
-        catch (NullPointerException e){
+        } catch (NullPointerException e) {
             System.out.println(e.getMessage());
         }
         if (m != null) {
-            errMes= new FacesMessage(FacesMessage.SEVERITY_INFO, "", "you've already left a review");
-             RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+            errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "you've already left a review");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
             return;
         }
         Mark mark = new Mark();
         mark.setDate(new java.util.Date());
         mark.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         mark.setMark(mrk);
         mark.setReview(review);
         mark.setUser(userService.getUserById(SessionBean.getUserId()));
@@ -132,10 +161,9 @@ public class AboutGameBean {
     public void deleteMarkAndReview(Mark mark) {
         if (mark.getUser().getId() == SessionBean.getUserId()) {//��� ����� ������������ ���������
             markService.delete(mark.getId());
-        }
-        else{
-            FacesMessage errMes= new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
-               RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+        } else {
+            FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_WARN, "error", "no rights to delete");
+            RequestContext.getCurrentInstance().showMessageInDialog(errMes);
         }
     }
 
@@ -149,9 +177,9 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
+        
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(false);
@@ -179,16 +207,20 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
 
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
         if (!exist) {
             userGame.setCanExchange(false);
             userGame.setWanted(true);
             userGame.setFavorite(false);
             userGameService.create(userGame);
         } else {
+            if (userGame.isCanExchange()) {
+                FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "the game can not be directly on the exchange and wanted");
+                RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+                return;
+            }
             userGame.setWanted(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -197,11 +229,11 @@ public class AboutGameBean {
     }
 
     public void addToExchange() {
-        
+
         boolean exist = true;
         UserGame userGame = null;
         try {
-            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(),SessionBean.getGameId() );
+            userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), SessionBean.getGameId());
         } catch (Exception e) {
 
         }
@@ -210,16 +242,20 @@ public class AboutGameBean {
             userGame = new UserGame();
         }
         userGame.setGame(gameService.getGameById(SessionBean.getGameId()));
-        //context.getExternalContext().getSessionMap().remove("id");
         userGame.setUser(userService.getUserById(SessionBean.getUserId()));
+        userGame.setGameStatus(gameStatusService.getGameStatusById(Integer.valueOf(myStatus)));
 
-        userGame.setGameStatus(gameStatusService.getGameStatusById(1));
         if (!exist) {
             userGame.setCanExchange(true);
             userGame.setWanted(false);
             userGame.setFavorite(false);
             userGameService.create(userGame);
         } else {
+            if (userGame.isWanted()) {
+                FacesMessage errMes = new FacesMessage(FacesMessage.SEVERITY_INFO, "", "the game can not be directly on the exchange and wanted");
+                RequestContext.getCurrentInstance().showMessageInDialog(errMes);
+                return;
+            }
             userGame.setCanExchange(true);
             userGameService.delete(userGame.getId());
             userGameService.update(userGame);
@@ -236,7 +272,7 @@ public class AboutGameBean {
     }
 
     private UserGame getUserGame() {
-        
+
         UserGame userGame = null;
         try {
             userGame = userGameService.getUserGameByUserIdAndGameId(SessionBean.getUserId(), SessionBean.getGameId());
@@ -251,15 +287,15 @@ public class AboutGameBean {
         UIViewRoot uiViewRoot = context.getViewRoot();
         CommandButton commandButton;
         if (userGame.isFavorite()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:favourite");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:favourite");
             commandButton.setDisabled(true);
         }
         if (userGame.isWanted()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:wanted");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:wanted");
             commandButton.setDisabled(true);
         }
         if (userGame.isCanExchange()) {
-            commandButton = (CommandButton) uiViewRoot.findComponent("addBut:exchange");
+            commandButton = (CommandButton) uiViewRoot.findComponent("statusForm:exchange");
             commandButton.setDisabled(true);
         }
 
