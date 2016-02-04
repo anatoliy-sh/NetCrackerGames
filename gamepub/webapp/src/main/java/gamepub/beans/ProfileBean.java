@@ -1,7 +1,9 @@
 package gamepub.beans;
 
+import gamepub.cloud.cloudUpload;
 import gamepub.db.entity.*;
 import gamepub.db.service.*;
+import java.io.IOException;
 import org.hibernate.Session;
 import org.hibernate.jpa.criteria.expression.function.AggregationFunction;
 
@@ -13,13 +15,15 @@ import javax.faces.context.FacesContext;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import javax.faces.application.FacesMessage;
 
 import org.primefaces.context.RequestContext;
+import org.primefaces.event.FileUploadEvent;
 
 /**
- * Created by Анатолий on 06.01.2016.
+ * Created by пїЅпїЅпїЅпїЅпїЅпїЅпїЅпїЅ on 06.01.2016.
  */
 @ManagedBean
 @SessionScoped
@@ -45,7 +49,7 @@ public class ProfileBean {
     CountryService countryService;
     @EJB
     FriendService friendService;
-
+    
     private String userId;
 
     @PostConstruct
@@ -222,4 +226,15 @@ public class ProfileBean {
         }
 
     }
+    public void upload(FileUploadEvent event) throws IOException{
+         if(event.getFile()!= null) {  
+      cloudUpload upload = new cloudUpload(event.getFile());                          
+                 User u = userService.getUserById(id);
+                 u.setAvatarUrl((String)upload.getUploadResult().get("url"));
+                 userService.update(u);
+            
+        }
+    }
+    
+    
 }
