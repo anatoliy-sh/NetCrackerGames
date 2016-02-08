@@ -26,11 +26,15 @@ public class GameGenreDaoImplementation extends BaseDaoImplementation<GameGenre,
         Root<GameGenre> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        GameGenre result;
         try {
-            return (GameGenre)getEntityManager().createQuery(cq).getSingleResult();
+            result = (GameGenre)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<GameGenre> getGameGenresByGameId(Integer id) {
@@ -39,7 +43,9 @@ public class GameGenreDaoImplementation extends BaseDaoImplementation<GameGenre,
         Root<GameGenre> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<GameGenre> getGameGenresByGenreId(Integer id) {
@@ -48,6 +54,8 @@ public class GameGenreDaoImplementation extends BaseDaoImplementation<GameGenre,
         Root<GameGenre> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Genre>get("genre").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

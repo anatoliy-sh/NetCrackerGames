@@ -29,11 +29,15 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         Root<News> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        News result;
         try {
-            return (News)getEntityManager().createQuery(cq).getSingleResult();
+            result = (News)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<News> getNewsByName(String name) {
@@ -43,7 +47,9 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         cq.select(root);
         cq.where(cb.like(root.<String>get("name"), "%" + name + "%"));
         cq.orderBy(cb.desc(root.<Date>get("date")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<News> getNewsByGameId(Integer id) {
@@ -53,7 +59,9 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
         cq.orderBy(cb.desc(root.<Date>get("date")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<News> getNewsOrderByDate() {
@@ -62,7 +70,9 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         Root<News> root = cq.from(instance);
         cq.select(root);
         cq.orderBy(cb.desc(root.<Date>get("date")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<News> getNewsByDate(Date date) {
@@ -72,7 +82,9 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
         cq.select(root);
         cq.where(cb.equal(root.<Date>get("date"), date));
         cq.orderBy(cb.desc(root.<Date>get("date")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<News> getNewsByCustomParams(List<HashMap.Entry<String, Object>> parameterList){
@@ -99,6 +111,8 @@ public class NewsDaoImplementation extends BaseDaoImplementation<News,Integer> i
             cq.where(p);
         }
         cq.orderBy(cb.desc(root.<Date>get("date")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

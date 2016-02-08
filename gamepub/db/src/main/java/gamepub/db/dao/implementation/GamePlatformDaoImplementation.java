@@ -26,11 +26,15 @@ public class GamePlatformDaoImplementation extends BaseDaoImplementation<GamePla
         Root<GamePlatform> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        GamePlatform result;
         try {
-            return (GamePlatform)getEntityManager().createQuery(cq).getSingleResult();
+            result = (GamePlatform)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<GamePlatform> getGamePlatformsByGameId(Integer id) {
@@ -39,7 +43,9 @@ public class GamePlatformDaoImplementation extends BaseDaoImplementation<GamePla
         Root<GamePlatform> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
 
     }
 
@@ -49,6 +55,8 @@ public class GamePlatformDaoImplementation extends BaseDaoImplementation<GamePla
         Root<GamePlatform> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Platform>get("platform").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

@@ -24,10 +24,14 @@ public class UserRoleDaoImplementation extends BaseDaoImplementation<UserRole,In
         Root<UserRole> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        UserRole result;
         try {
-            return (UserRole)getEntityManager().createQuery(cq).getSingleResult();
+            result = (UserRole)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 }

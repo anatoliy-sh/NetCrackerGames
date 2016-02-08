@@ -2,6 +2,7 @@ package gamepub.db.dao.implementation;
 
 import gamepub.db.dao.GameDao;
 import gamepub.db.entity.Game;
+import gamepub.db.entity.Platform;
 
 import javax.persistence.NoResultException;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -26,11 +27,15 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
         Root<Game> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Game result;
         try {
-            return (Game)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Game)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<Game> getGamesByName(String name) {
@@ -40,7 +45,9 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
         cq.select(root);
         cq.where(cb.equal(root.<String>get("name"), name));
         cq.orderBy(cb.asc(root.<String>get("name")));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<Game> getGamesByCustomParams(List<HashMap.Entry<String, Object>> parameterList) {
@@ -55,11 +62,27 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
                 parameters.put(param.getKey(), "%" + param.getValue() + "%");
             } else {
                 if (param.getKey().equals("platform")) {
-                    jpa += " AND gp.platform= :platform";
-                } else if (param.getKey().equals("genre")) {
-                    jpa += " AND g.genre= :genre";
-                } else jpa += " AND g.game.releaseDate<= :dateGame";
-                parameters.put(param.getKey(),param.getValue());
+                    List<Platform> platforms = (List<Platform>)param.getValue();
+                    if (platforms.size()==0){
+                        jpa += " AND gp.platform= :platform";
+                        parameters.put(param.getKey(), platforms.get(0));
+                    }else{
+                        jpa += " AND ( gp.platform= :platform";
+                        parameters.put("platform",platforms.get(0));
+                        for(int i=1; i<platforms.size(); i++){
+                            jpa+= " OR gp.platform= :platform"+i;
+                            parameters.put("platform"+i,platforms.get(i));
+                        }
+                        jpa+=" )";
+                    }
+
+                } else {
+                    if (param.getKey().equals("genre")) {
+                        jpa += " AND g.genre= :genre";
+                    } else jpa += " AND g.game.releaseDate<= :dateGame";
+                    parameters.put(param.getKey(), param.getValue());
+                }
+
             }
         }
         return this.ExecuteQuery(jpa, parameters);
@@ -74,6 +97,7 @@ public class GameDaoImplementation extends BaseDaoImplementation<Game, Integer> 
         List<Game> queryResult = getEntityManager().createQuery(cq).setMaxResults(maxValue).getResultList();
         List<Game> result = new ArrayList<Game>();
         result = queryResult;
+        closeEntityManager();
     /*    for(int i = 1; i<=10 && queryResult.size()<maxValue+i; i++)
             result.add(queryResult.get(maxValue+i));*/
         return result;

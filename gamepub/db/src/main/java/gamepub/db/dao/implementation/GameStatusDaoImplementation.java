@@ -23,10 +23,14 @@ public class GameStatusDaoImplementation extends BaseDaoImplementation<GameStatu
         Root<GameStatus> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        GameStatus result;
         try {
-            return (GameStatus)getEntityManager().createQuery(cq).getSingleResult();
+            result = (GameStatus)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 }

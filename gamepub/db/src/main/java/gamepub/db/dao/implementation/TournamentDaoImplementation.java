@@ -25,11 +25,15 @@ public class TournamentDaoImplementation extends BaseDaoImplementation<Tournamen
         Root<Tournament> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        Tournament result;
         try {
-            return (Tournament)getEntityManager().createQuery(cq).getSingleResult();
+            result = (Tournament)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
     }
 
     public List<Tournament> getTournamentsByName(String name) {
@@ -38,7 +42,9 @@ public class TournamentDaoImplementation extends BaseDaoImplementation<Tournamen
         Root<Tournament> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<String>get("name"), name));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 
     public List<Tournament> getTournamentsByGameId(Integer id) {
@@ -47,6 +53,8 @@ public class TournamentDaoImplementation extends BaseDaoImplementation<Tournamen
         Root<Tournament> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }

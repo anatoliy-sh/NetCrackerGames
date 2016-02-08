@@ -3,6 +3,7 @@ package gamepub.scheduler;
 /**
  * Created by roman on 24.01.16.
  */
+
 import gamepub.db.dao.implementation.GameDaoImplementation;
 import gamepub.db.dao.implementation.NewsDaoImplementation;
 import gamepub.db.entity.Game;
@@ -20,6 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.Date;
 import java.util.List;
+
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -59,45 +61,45 @@ public class SchedulerJob implements Job {
         return response.toString();
     }
 
-    public void execute(JobExecutionContext context) throws JobExecutionException{
+    public void execute(JobExecutionContext context) throws JobExecutionException {
         News news;
         JSONObject jsonObject;
         JSONArray jsonArray;
-        while (true){
-            List<Game> games = gameService.findAll();
-            for(Game game:games){
-                try {
-                    String json = sendGet(NEWS_URL + game.getSteamId() + "\"");
-                    List<News> newses = newsService.getNewsByGameId(game.getId());
-                    if (json != null) {
-                        jsonObject = new JSONObject(json);
-                        jsonArray = jsonObject.getJSONObject("appnews").getJSONArray("newsitems");
-                        if (newses == null || newses.size() == 0) {
-                            for (int j = 0; j < jsonArray.length(); j++) {
-                                news = new News();
-                                news.setGame(game);
-                                news.setName(jsonArray.getJSONObject(j).getString("title"));
-                                news.setLink(jsonArray.getJSONObject(j).getString("url"));
-                                news.setDate(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000));
-                                newsService.create(news);
-                            }
-                        } else {
-                            int j = 0;
-                            while (!newses.get(0).getDate().equals(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000))) {
-                                news = new News();
-                                news.setGame(game);
-                                news.setName(jsonArray.getJSONObject(j).getString("title"));
-                                news.setLink(jsonArray.getJSONObject(j).getString("url"));
-                                news.setDate(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000));
-                                newsService.create(news);
-                            }
+
+        List<Game> games = gameService.findAll();
+        for (Game game : games) {
+            try {
+                String json = sendGet(NEWS_URL + game.getSteamId() + "/");
+                List<News> newses = newsService.getNewsByGameId(game.getId());
+                if (json != null) {
+                    jsonObject = new JSONObject(json);
+                    jsonArray = jsonObject.getJSONObject("appnews").getJSONArray("newsitems");
+                    if (newses == null || newses.size() == 0) {
+                        for (int j = 0; j < jsonArray.length(); j++) {
+                            news = new News();
+                            news.setGame(game);
+                            news.setName(jsonArray.getJSONObject(j).getString("title"));
+                            news.setLink(jsonArray.getJSONObject(j).getString("url"));
+                            news.setDate(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000));
+                            newsService.create(news);
+                        }
+                    } else {
+                        int j = 0;
+                        while (!newses.get(0).getDate().equals(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000))) {
+                            news = new News();
+                            news.setGame(game);
+                            news.setName(jsonArray.getJSONObject(j).getString("title"));
+                            news.setLink(jsonArray.getJSONObject(j).getString("url"));
+                            news.setDate(new Date(jsonArray.getJSONObject(j).getLong("date") * 1000));
+                            newsService.create(news);
                         }
                     }
-                    Thread.sleep(1000);
-                }catch (Exception e) {
-                    e.printStackTrace();
                 }
+                Thread.sleep(1000);
+            } catch (Exception e) {
+                e.printStackTrace();
             }
+
         }
     }
 

@@ -25,11 +25,15 @@ public class GameScreenshotDaoImplementation extends BaseDaoImplementation<GameS
         Root<GameScreenshot> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Integer>get("id"), id));
+        GameScreenshot result;
         try {
-            return (GameScreenshot)getEntityManager().createQuery(cq).getSingleResult();
+            result = (GameScreenshot)getEntityManager().createQuery(cq).getSingleResult();
         }catch (NoResultException e){
-            return null;
+            result = null;
+        }finally {
+            closeEntityManager();
         }
+        return result;
 
     }
 
@@ -39,6 +43,8 @@ public class GameScreenshotDaoImplementation extends BaseDaoImplementation<GameS
         Root<GameScreenshot> root = cq.from(instance);
         cq.select(root);
         cq.where(cb.equal(root.<Game>get("game").<Integer>get("id"), id));
-        return getEntityManager().createQuery(cq).getResultList();
+        List result = getEntityManager().createQuery(cq).getResultList();
+        closeEntityManager();
+        return result;
     }
 }
